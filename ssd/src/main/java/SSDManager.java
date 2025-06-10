@@ -18,4 +18,15 @@ class SSDManager {
         fileManager.writeFile(lbaLocation, value);
 
     }
+    public void cmdExecute() {
+        if (action.equals("R")) {
+            fileRead(lbaLocation);
+        }
+        else if (action.equals("W")) {
+            fileWrite(lbaLocation, value);
+        }
+        else {
+            throw new RuntimeException("ERROR");
+        }
+    }
 }
