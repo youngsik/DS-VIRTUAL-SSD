@@ -10,11 +10,11 @@ class SSDManager {
         this.value = value;
     }
 
-    public void fileRead(int labLocation) {
+    public void fileRead(int lbaLocation) {
 
     }
 
-    public void fileWrite(int labLocation, String value) {
+    public void fileWrite(int lbaLocation, String value) {
 
     }
 }
