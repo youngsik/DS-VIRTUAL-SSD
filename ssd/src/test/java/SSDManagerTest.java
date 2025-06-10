@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 import org.mockito.InjectMocks;
@@ -17,25 +19,57 @@ public class SSDManagerTest {
     FileManager fileManager;
 
     @InjectMocks
-    SSDManager ssdManager = new SSDManager("W", LBA_WRITE_LOCATION, WRITE_VALUE);
+    SSDManager writeSsdManager = new SSDManager("W", LBA_WRITE_LOCATION, WRITE_VALUE);
+
+    @InjectMocks
+    SSDManager readSsdManager = new SSDManager("R", LBA_WRITE_LOCATION, WRITE_VALUE);
+
+    @InjectMocks
+    SSDManager errorSsdManager = new SSDManager("w", LBA_WRITE_LOCATION, WRITE_VALUE);
 
     @Test
     public void readTest() {
-        ssdManager.fileRead(LBA_LOCATION);
+        readSsdManager.fileRead(LBA_LOCATION);
         verify(fileManager, times(1)).readFile(LBA_WRITE_LOCATION);
     }
 
     @Test
     public void writeTest() {
-        ssdManager.fileWrite(LBA_WRITE_LOCATION, WRITE_VALUE);
+        writeSsdManager.fileWrite(LBA_WRITE_LOCATION, WRITE_VALUE);
         verify(fileManager, times(1)).writeFile(LBA_WRITE_LOCATION, WRITE_VALUE);
     }
 
     @Test
     public void readTwiceTest() {
-        ssdManager.fileRead(LBA_LOCATION);
-        ssdManager.fileRead(LBA_LOCATION);
+        readSsdManager.fileRead(LBA_LOCATION);
+        readSsdManager.fileRead(LBA_LOCATION);
         verify(fileManager, times(2)).readFile(LBA_WRITE_LOCATION);
     }
 
+    @Test
+    void cmdExecuteWritePass() {
+        writeSsdManager.cmdExecute();
+        verify(fileManager, times(1)).writeFile(LBA_WRITE_LOCATION, WRITE_VALUE);
+    }
+
+    @Test
+    void cmdExecuteWriteFail() {
+        SSDManager newSsdManager = new SSDManager("w", LBA_WRITE_LOCATION, WRITE_VALUE);
+        assertThrows(RuntimeException.class, () -> {
+            newSsdManager.cmdExecute();
+        });
+    }
+
+    @Test
+    void cmdExecuteReadPass() {
+        readSsdManager.cmdExecute();
+        verify(fileManager, times(1)).readFile(LBA_WRITE_LOCATION);
+    }
+
+    @Test
+    void cmdExecuteReadFail() {
+        assertThrows(RuntimeException.class, () -> {
+            errorSsdManager.cmdExecute();
+        });
+    }
 }
