@@ -1,8 +1,8 @@
 class FileManager {
-    public void readFile() {
+    public void readFile(int index) {
     }
 
-    public void writeFile() {
+    public void writeFile(int index, int value) {
     }
 
 }
