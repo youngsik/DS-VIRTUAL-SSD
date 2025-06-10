@@ -1,4 +1,5 @@
-public class SSDManager {
+class SSDManager {
+
     private String action;
     private int lbaLocation;
     private String value;
@@ -9,11 +10,11 @@ public class SSDManager {
         this.value = value;
     }
 
-    public void fileRead() {
+    public void fileRead(int lbaLocation) {
 
     }
 
-    public void fileWrite() {
+    public void fileWrite(int lbaLocation, String value) {
 
     }
 }
