@@ -1,9 +1,8 @@
-public class FileManager {
-    public String read() {
-        return null;
+class FileManager {
+    public void readFile(int index) {
     }
 
-    public void write(String content) {
-
+    public void writeFile(int index, String value) {
     }
+
 }
