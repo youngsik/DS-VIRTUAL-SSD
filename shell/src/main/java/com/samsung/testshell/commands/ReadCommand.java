@@ -13,6 +13,6 @@ public class ReadCommand implements ShellCommand {
 
     @Override
     public void execute(Integer index, String value) {
-
+        testShellManager.read(index);
     }
 }
