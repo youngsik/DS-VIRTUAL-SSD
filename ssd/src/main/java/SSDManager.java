@@ -1,13 +1,24 @@
 class SSDManager {
-    private String action;
-    private int LBA;
-    private String value;
+    private String command = "";
+    private int LBA = -1;
+    private String value = "";
     private FileManager fileManager;
 
-    public SSDManager(String action, int LBA, String value) {
-        this.action = action;
+    public SSDManager(String command, int LBA, String value) {
+        this.command = command;
         this.LBA = LBA;
         this.value = value;
+        this.fileManager = new FileManager();
+    }
+
+    public void cmdExecute() {
+        if (command.equals("ERROR")) fileThrowExcpetion();
+        else if (command.equals("R")) fileRead(LBA);
+        else if (command.equals("W")) fileWrite(LBA, value);
+    }
+
+    private void fileThrowExcpetion() {
+        fileManager.throwExcpetion(value);
     }
 
     public void fileRead(int lbaLocation) {
@@ -16,16 +27,5 @@ class SSDManager {
 
     public void fileWrite(int lbaLocation, String value) {
         fileManager.writeFile(lbaLocation, value);
-
-    }
-    public void cmdExecute() {
-        if ("R".equals(action)) {
-            fileRead(LBA);
-            return;
-        }
-        if ("W".equals(action)) {
-            fileWrite(LBA, value);
-            return;
-        }
     }
 }
