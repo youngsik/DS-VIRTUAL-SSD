@@ -25,12 +25,12 @@ class MainTest {
     @Test
     @DisplayName("parsing 함수 테스트 - 쓰기")
     void testParsing() {
-        String[] args = {"W", "3", "0x00000000"};
+        String[] args = {"W", "3", "0x00000001"};
         main.parsing(args);
 
         assertEquals("W", main.command);
         assertEquals(3, main.lba);
-        assertEquals("0x00000000", main.value);
+        assertEquals("0x00000001", main.value);
     }
 
     @Test
@@ -91,6 +91,16 @@ class MainTest {
     @DisplayName("Command에 잘못된 value 쓰기")
     void valueErrorTest() {
         main.parsing(new String[]{"W", "0", "0x0000000011"});
+        assertEquals("ERROR", main.command);
+        assertEquals("ERROR", main.value);
+    }
+
+    @Test
+    @DisplayName("parsing 함수 테스트 - 쓰기")
+    void testParsing16() {
+        String[] args = {"W", "3", "0xG(GGGGG,"};
+        main.parsing(args);
+
         assertEquals("ERROR", main.command);
         assertEquals("ERROR", main.value);
     }

@@ -80,7 +80,7 @@ class Main {
     }
 
     private static boolean checkValueFormatFail(String[] cmdParam) {
-        if (cmdParam.length > 2 && cmdParam[2].matches("0x[0-9A-Z]{8}")) return false;
+        if (cmdParam.length > 2 && cmdParam[2].matches("^0x[0-9A-F]{8}$")) return false;
         if (cmdParam.length == 2) return false;
         setErrorCommand();
         return true;
