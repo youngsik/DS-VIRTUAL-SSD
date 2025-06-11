@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
+import static com.github.stefanbirkner.systemlambda.SystemLambda.catchSystemExit;
 
 @ExtendWith(MockitoExtension.class)
 class TestShellManagerTest {
@@ -172,6 +173,19 @@ class TestShellManagerTest {
         assertThat(normalizedActual).isEqualTo(normalizedExpected);
 
     }
+
+    @Test
+    @DisplayName("testSheel EXIT")
+    void testShellFullEXIT() throws Exception {
+        TestShellManager testShellManager= new TestShellManager(mockSsdApplication, fileManager);
+
+        int statusCode = catchSystemExit(() -> {
+            testShellManager.exit(); // exit() 호출
+        });
+
+        assertThat(statusCode).isEqualTo(0);
+    }
+
 
 
 

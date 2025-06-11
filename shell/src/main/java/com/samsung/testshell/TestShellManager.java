@@ -4,6 +4,7 @@ import com.samsung.SsdApplication;
 import com.samsung.file.FileManager;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 public class TestShellManager {
@@ -42,10 +43,15 @@ public class TestShellManager {
 
     public void exit() {
         // exit 실행
+        System.exit(0);
     }
 
     public void help() {
-        // help 실행
+        System.out.println("DeviceSolution");
+        System.out.println("김영식, 박준경, 권희정, 권성민, 이상훈, 오시훈, 추준성");
+        System.out.println("사용법");
+        System.out.println("write 3 0xAAAABBBB");
+
     }
 
     public void fullwrite(String value) {
@@ -59,8 +65,6 @@ public class TestShellManager {
     }
 
     public void fullread() {
-        String head = "[Full Read] LBA ";
-
         File file = fileManager.getOrCreateFile(SSD_NAND_FILE_NAME);
         List<String> listvalues = fileManager.getDataFromNandFile(file);
 
