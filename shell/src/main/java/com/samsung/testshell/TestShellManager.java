@@ -40,7 +40,6 @@ public class TestShellManager {
         System.out.println(output);
     }
 
-
     public void exit() {
         // exit 실행
         System.exit(0);
