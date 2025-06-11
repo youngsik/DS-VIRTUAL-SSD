@@ -9,10 +9,12 @@ public class JarExecutor {
                     "java", "-jar",
                     getSsdJarPath(),
                     "W", lba.toString(), value);
+
             System.out.println(pb.command());
             pb.inheritIO();
             pb.start();
-        } catch (IOException e) {
+            Thread.sleep(1000);
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }

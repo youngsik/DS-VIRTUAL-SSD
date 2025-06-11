@@ -14,8 +14,8 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class FullWriteCommandTest {
 
-    public static final Integer INDEX = 1;
-    public static final String VALUE = "0XFFFFFF";
+    public static final String VALUE = "0xFFFFFFFF";
+    public static final String[] cmdArgs = new String[2];
 
     @Mock
     TestShellManager testShellManager;
@@ -26,7 +26,8 @@ class FullWriteCommandTest {
     @DisplayName("execute 실행 테스트")
     @Test
     void executeTest() {
-        fullWriteCommand.execute(INDEX, VALUE);
+        cmdArgs[1] = VALUE;
+        fullWriteCommand.execute(cmdArgs);
         verify(testShellManager, times(1)).fullwrite(VALUE);
     }
 }

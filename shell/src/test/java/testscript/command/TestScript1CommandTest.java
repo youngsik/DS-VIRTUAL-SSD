@@ -12,7 +12,7 @@ import com.samsung.testscript.ScriptManager;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class TestScript1CommandTest1 {
+public class TestScript1CommandTest {
     @Mock
     ScriptManager scriptManager;
     @InjectMocks
@@ -21,7 +21,7 @@ public class TestScript1CommandTest1 {
     @Test
     @DisplayName("TestScript1 실행 테스트")
     void callTestScript1Command() {
-        testScript1Command.execute();
+        testScript1Command.execute(new String[1]);
 
         verify(scriptManager).testScript1();
     }

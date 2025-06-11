@@ -10,7 +10,12 @@ public class TestScript3Command implements ScriptCommand {
     }
 
     @Override
-    public void execute() {
+    public void execute(String[] cmdArgs) {
+        // 명령어 길이 체크
+        if (cmdArgs.length != 1) {
+            throw new RuntimeException("INVALID COMMAND");
+        }
+
         scriptManager.testScript3();
     }
 }
