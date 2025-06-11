@@ -1,3 +1,6 @@
+package com.samsung.testshell.commands;
+
+import com.samsung.testshell.TestShellManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

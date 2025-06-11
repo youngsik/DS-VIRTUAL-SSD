@@ -1,10 +1,12 @@
+package com.samsung.testshell;
+
 public class TestShellManager {
 
-    public void write() {
+    public void write(int index, String value) {
         // write 실행
     }
 
-    public void read() {
+    public void read(int index) {
         // read 실행
     }
 
