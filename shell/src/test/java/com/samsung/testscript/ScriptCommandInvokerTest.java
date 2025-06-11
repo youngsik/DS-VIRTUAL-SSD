@@ -1,6 +1,6 @@
 package com.samsung.testscript;
 
-import com.samsung.testscript.command.ScriptCommand;
+import com.samsung.testshell.ShellCommand;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,14 +18,14 @@ class ScriptCommandInvokerTest {
 
     public static final String VALID_COMMAND_NAME = "write";
     public static final String INVALID_COMMAND_NAME = "abcde";
-    public static final ScriptCommand EMPTY_COMMAND = null;
+    public static final ShellCommand EMPTY_COMMAND = null;
     public static final String[] cmdArgs = new String[1];
 
     @Mock
-    private Map<String, ScriptCommand> mockCommandMap;
+    private Map<String, ShellCommand> mockCommandMap;
 
     @Mock
-    private ScriptCommand mockScriptCommand;
+    private ShellCommand mockScriptCommand;
 
     @InjectMocks
     private ScriptCommandInvoker invoker;
