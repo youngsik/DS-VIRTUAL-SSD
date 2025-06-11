@@ -3,7 +3,6 @@ package com.samsung.testscript;
 import com.samsung.file.FileManager;
 import com.samsung.file.JarExecutor;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
