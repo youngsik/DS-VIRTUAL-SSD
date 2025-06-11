@@ -13,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class SSDManagerTest {
     public static final int LBA_LOCATION = 0;
     public static final int LBA_WRITE_LOCATION = 0;
-    public static final String WRITE_VALUE = "0x0000000000";
+    public static final String WRITE_VALUE = "0x00000000";
 
     @Mock
     FileManager fileManager;
