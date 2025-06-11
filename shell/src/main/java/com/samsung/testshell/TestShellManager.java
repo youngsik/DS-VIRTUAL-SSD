@@ -44,7 +44,13 @@ public class TestShellManager {
     }
 
     public void fullwrite(String value) {
-        // fullwrite 실행
+        String head = "[Full Write]";
+        String pass = "Done";
+
+        for(int i=0; i<100; i++) {
+            ssdApplicatioin.execute("W" + " " + i + " " + value);
+        }
+        System.out.println(head + " " + pass);
     }
 
     public void fullread() {
