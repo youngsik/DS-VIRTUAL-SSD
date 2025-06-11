@@ -1,32 +1,32 @@
 class Main {
 
     public static String command;
-    public static int lbaLocation;
+    public static int LBA;
     public static String value;
 
     public static void main(String[] args) {
         parsing(args);
-        run(command, lbaLocation, value);
+        run(command, LBA, value);
     }
 
-    public static void run(String command, int lbaLocation, String value) {
-        SSDManager ssdManager = new SSDManager(command, lbaLocation, value);
+    public static void run(String command, int LBA, String value) {
+        SSDManager ssdManager = new SSDManager(command, LBA, value);
         ssdManager.cmdExecute();
     }
 
-    public static void parsing(String[] args) {
-        if (parsePreCondCheck(args)) return;
+    public static void parsing(String[] cmdParam) {
+        if (parsePreCondCheck(cmdParam)) return;
 
-        command = args[0];
-        lbaLocation = Integer.parseInt(args[1]);
-        value = args.length > 2 ? args[2] : null;
+        command = cmdParam[0];
+        LBA = Integer.parseInt(cmdParam[1]);
+        value = cmdParam.length > 2 ? cmdParam[2] : null;
 
         parsePostCondCheck();
     }
 
-    private static boolean parsePreCondCheck(String[] args) {
+    private static boolean parsePreCondCheck(String[] cmdParam) {
         try {
-            lbaLocation = Integer.parseInt(args[1]);
+            LBA = Integer.parseInt(cmdParam[1]);
         } catch (NumberFormatException e) {
             value = "ERROR";
             return true;
