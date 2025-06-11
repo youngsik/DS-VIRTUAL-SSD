@@ -64,6 +64,6 @@ public class SSDManagerTest {
     @DisplayName("ERROR 처리 테스트")
     void valueErrorTest() {
         invalidValueSsdManager.cmdExecute();
-        verify(fileManager, times(1)).throwExcpetion(ERROR_VALUE);
+        verify(fileManager, times(1)).writeOnOutputFile(ERROR_VALUE);
     }
 }
