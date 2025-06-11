@@ -39,6 +39,16 @@ class FileManagerTest {
         assertByReadingSpecificIndexFile(INDEX, CORRECT_VALUE);
     }
 
+    @DisplayName("nand 텍스트 파일에 2개 이상의 데이터 쓰기")
+    @Test
+    void write_success_2() {
+        fileManager.writeFile(INDEX, CORRECT_VALUE);
+        fileManager.writeFile(INDEX+1, CORRECT_VALUE);
+
+        assertByReadingSpecificIndexFile(INDEX, CORRECT_VALUE);
+        assertByReadingSpecificIndexFile(INDEX+1, CORRECT_VALUE);
+    }
+
     private void resetTestOutputFile(){
         try {
             File file = new File(TEST_SSD_OUTPUT_TXT_FILE_NAME);

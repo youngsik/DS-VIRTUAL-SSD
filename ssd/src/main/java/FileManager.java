@@ -13,16 +13,22 @@ class FileManager {
     private Map<Integer, String> hashmap = new HashMap<>();
 
     public void readFile(int index) {
-        String result = readNandFile(index);
+        settingHashMapFromNandFile();
+        String result = getValue(index);
         File file = getOrCreateFile(SSD_OUTPUT_FILE_NAME);
         writeOnOutputFile(file, result);
     }
 
     public void writeFile(int index, String value) {
+        settingHashMapFromNandFile();
         hashmap.put(index,value);
+        writeOnNandFile();
+    }
 
+    private void settingHashMapFromNandFile() {
         File file = getOrCreateFile(SSD_NAND_FILE_NAME);
-        writeOnFile(file);
+        List<String> data = getDataFromNandFile(file);
+        updateHashMap(data);
     }
 
     private File getOrCreateFile(String fileName) {
@@ -31,7 +37,7 @@ class FileManager {
             try {
                 file.createNewFile();
             } catch (IOException e) {
-                System.out.println("파일 생성 오류 발생");
+
             }
         }
         return file;
@@ -46,15 +52,12 @@ class FileManager {
                 data.add(line);
             }
         } catch (IOException e) {
-            System.out.println("파일 읽기 오류 발생");
+
         }
         return data;
     }
 
-    private String readNandFile(int index) {
-        File file = getOrCreateFile(SSD_NAND_FILE_NAME);
-        List<String> data = getDataFromNandFile(file);
-        updateHashMap(data);
+    private String getValue(int index) {
         return hashmap.getOrDefault(index, BLANK_DATA);
     }
 
@@ -65,7 +68,8 @@ class FileManager {
         }
     }
 
-    private void writeOnFile(File file) {
+    private void writeOnNandFile() {
+        File file = getOrCreateFile(SSD_NAND_FILE_NAME);
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
             for (Entry<Integer, String> entry : hashmap.entrySet()) {
@@ -75,7 +79,7 @@ class FileManager {
             writer.flush();
             writer.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+
         }
     }
 
@@ -86,7 +90,7 @@ class FileManager {
             writer.flush();
             writer.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+
         }
     }
 
