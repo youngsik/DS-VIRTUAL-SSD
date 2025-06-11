@@ -11,10 +11,14 @@ public class ScriptManager {
     private static final String WRITE_PREFIX_COMMAND = "W ";
     private static final String TEST_VALUE = "0xAAAABBBB";
 
-    private static final int SCRIPT1_LOOP = 100;
-    private static final int SCRIPT1_TERM = 4;
+    private static final int TEST_LOOP = 100;
+    private static final int VERIFY_TERM = 4;
 
-    private final List<Integer> script2LbaOrder = new ArrayList<>(List.of(4, 0, 3, 1, 2));
+    public static final int MAX_RAND_BOUND = 1000;
+    public static final int LBA_FIRST = 0;
+    public static final int LBA_LAST = 99;
+
+    private final List<Integer> script2LbaOrder = new ArrayList<>(List.of(4, LBA_FIRST, 3, 1, 2));
 
     private final SsdApplication ssdApplication;
 
@@ -24,18 +28,18 @@ public class ScriptManager {
     public Random random = new Random();
 
     public boolean testScript1(){
-        int indexHeader = 0;
+        int indexHeader = LBA_FIRST;
         boolean isSuccess = false;
-        while (indexHeader <= SCRIPT1_LOOP - SCRIPT1_TERM) {
+        while (indexHeader <= TEST_LOOP - VERIFY_TERM) {
             isSuccess = verifyEachFourTimes(indexHeader, TEST_VALUE);
-            indexHeader += SCRIPT1_TERM;
+            indexHeader += VERIFY_TERM;
         }
         return isSuccess;
     }
 
     private boolean verifyEachFourTimes(int indexHeader, String verifyValue) {
         boolean isSuccess = false;
-        for (int i = indexHeader; i < indexHeader + SCRIPT1_TERM; i++){
+        for (int i = indexHeader; i < indexHeader + VERIFY_TERM; i++){
             write(i, verifyValue);
             isSuccess = readAndCompare(i, verifyValue);
         }
@@ -48,7 +52,7 @@ public class ScriptManager {
         }
 
         boolean isSuccess = false;
-        for (int i = 0; i <= 4; i++){
+        for (int i = 0; i <= VERIFY_TERM; i++){
             isSuccess = readAndCompare(i, TEST_VALUE);
         }
 
@@ -57,19 +61,25 @@ public class ScriptManager {
 
     public boolean testScript3(){
         boolean isSuccess = false;
-        for (int i = 0; i < 100; i++){
-            int randInt = random.nextInt(1000);
-            String randHex = String.format("0x%08X", randInt);
+        for (int i = 0; i < TEST_LOOP; i++){
+            String randHex = getRandomHex();
 
-            write(0, randHex);
-            write(99, randHex);
-
-            boolean isSuccessLbaFirst = readAndCompare(0, randHex);
-            boolean isSuccessLbaLast = readAndCompare(99, randHex);
+            boolean isSuccessLbaFirst = writeAndVerify(LBA_FIRST, randHex);
+            boolean isSuccessLbaLast = writeAndVerify(LBA_LAST, randHex);
 
             isSuccess = isSuccessLbaFirst && isSuccessLbaLast;
         }
         return isSuccess;
+    }
+
+    private boolean writeAndVerify(Integer lba, String randHex) {
+        write(lba, randHex);
+        return readAndCompare(lba, randHex);
+    }
+
+    private String getRandomHex() {
+        int randInt = random.nextInt(MAX_RAND_BOUND);
+        return String.format("0x%08X", randInt);
     }
 
     private String read(Integer lba){
