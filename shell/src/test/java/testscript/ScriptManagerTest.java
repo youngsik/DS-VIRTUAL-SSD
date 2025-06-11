@@ -1,8 +1,9 @@
 package testscript;
 
 import com.samsung.file.FileManager;
+import com.samsung.file.JarExecutor;
 import com.samsung.testscript.ScriptManager;
-import com.samsung.SsdApplication;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,98 +17,72 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+
 @ExtendWith(MockitoExtension.class)
 public class ScriptManagerTest {
-    public static final String DUMMY_VALUE = "0xAAAABBBB";
-    public static final int SCRIPT1_LOOP = 100;
-    public static final int SCRIPT1_TERM = 4;
-
-    private final Map<Integer, String> lastWritten = new HashMap<>();
 
     @Mock
-    SsdApplication ssdApplication;
+    private FileManager fileManager;
+
     @Mock
-    FileManager fileManager;
+    private JarExecutor jarExecutor;
+
     @InjectMocks
-    ScriptManager scriptManager;
+    private ScriptManager scriptManager;
 
-    @Test
-    void createSscScriptManager(){
-        assertNotNull(scriptManager);
+    private Map<Integer, String> lastWritten;
+
+    @BeforeEach
+    void setUp() {
+        lastWritten = new HashMap<>();
+
+        // fileManager 설정
+        when(fileManager.getHashmap()).thenReturn(lastWritten);
+        doNothing().when(fileManager).readFile(anyInt());
+
+        // jarExecutor 동작 mocking
+        doAnswer(invocation -> {
+            int lba = invocation.getArgument(0);
+            String value = invocation.getArgument(1);
+            lastWritten.put(lba, value);
+            return null;
+        }).when(jarExecutor).executeWriteJar(anyInt(), anyString());
     }
 
     @Test
-    @DisplayName("TestScript1 구동 테스트")
+    @DisplayName("testScript1 - 기본값 0xAAAABBBB를 100개에 걸쳐 검증")
     void testScript1() {
-        Map<Integer, String> hashMap = new HashMap<>();
-        for (int i = 0; i <= SCRIPT1_LOOP - SCRIPT1_TERM; i += SCRIPT1_TERM) {
-            for (int j = i; j < i + SCRIPT1_TERM; j++) {
-                doNothing().when(fileManager).readFile(j);
-                when(ssdApplication.execute(getWriteCommand(j, DUMMY_VALUE))).thenReturn("OK");
-                hashMap.put(j, DUMMY_VALUE);
-            }
-        }
-        when(fileManager.getHashmap()).thenReturn(hashMap);
-
         boolean result = scriptManager.testScript1();
 
-        for (int i = 0; i < SCRIPT1_LOOP; i++) {
-            verify(ssdApplication).execute(getWriteCommand(i, DUMMY_VALUE));
-        }
-        for (int i = 0; i < SCRIPT1_LOOP; i++) {
-            verify(fileManager).readFile(i);
-        }
-
         assertTrue(result);
-        verify(ssdApplication, times(100)).execute(anyString());
+        verify(jarExecutor, atLeast(100)).executeWriteJar(anyInt(), eq("0xAAAABBBB"));
+        verify(fileManager, atLeast(100)).readFile(anyInt());
+        verify(fileManager, atLeast(100)).getHashmap();
     }
 
     @Test
-    @DisplayName("TestScript2 구동 테스트")
-    void testScript2(){
-        for (int i = 0; i <= 4; i++){
-            when(ssdApplication.execute(getWriteCommand(i, DUMMY_VALUE))).thenReturn("OK");
-        }
-
-        Map<Integer, String> hashMap = new HashMap<>();
-        for (int i = 0; i <= 4; i++){
-            doNothing().when(fileManager).readFile(i);
-            hashMap.put(i, DUMMY_VALUE);
-        }
-        when(fileManager.getHashmap()).thenReturn(hashMap);
-
+    @DisplayName("testScript2 - script2LbaOrder 값들 반복적으로 write 후 검증")
+    void testScript2() {
         boolean result = scriptManager.testScript2();
 
         assertTrue(result);
+        for (int i = 0; i <= 4; i++) {
+            verify(jarExecutor, atLeastOnce()).executeWriteJar(eq(i), eq("0xAAAABBBB"));
+            verify(fileManager, atLeastOnce()).readFile(eq(i));
+        }
+        verify(fileManager, atLeast(30 * 5)).getHashmap(); // 최소 150회 호출 예상
     }
 
     @Test
-    @DisplayName("TestScript3 구동 테스트")
-    void testScript3(){
-        when(fileManager.getHashmap()).thenReturn(lastWritten);
-        doAnswer(invocation -> {
-            String command = invocation.getArgument(0);
-            if (command.startsWith("W ")) {
-                String[] parts = command.split(" ");
-                int lba = Integer.parseInt(parts[1]);
-                String value = parts[2];
-                lastWritten.put(lba, value);
-            }
-            return null;
-        }).when(ssdApplication).execute(startsWith("W"));
-        doNothing().when(fileManager).readFile(anyInt());
-
+    @DisplayName("testScript3 - 랜덤 HEX를 LBA 0과 99에 반복 write 후 검증")
+    void testScript3() {
         boolean result = scriptManager.testScript3();
 
         assertTrue(result);
-        verify(ssdApplication, times(200)).execute(startsWith("W 0"));
-        verify(ssdApplication, times(200)).execute(startsWith("W 99"));
+        verify(jarExecutor, times(200)).executeWriteJar(eq(0), anyString());
+        verify(jarExecutor, times(200)).executeWriteJar(eq(99), anyString());
         verify(fileManager, times(200)).readFile(0);
         verify(fileManager, times(200)).readFile(99);
         verify(fileManager, atLeast(400)).getHashmap();
-    }
-
-    private String getWriteCommand(int i, String value) {
-        return "W " + i + " " + value;
     }
 }

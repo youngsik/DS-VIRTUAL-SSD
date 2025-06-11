@@ -1,14 +1,13 @@
 package com.samsung.testscript;
 
-import com.samsung.SsdApplication;
 import com.samsung.file.FileManager;
+import com.samsung.file.JarExecutor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class ScriptManager {
-    private static final String WRITE_PREFIX_COMMAND = "W ";
     private static final String TEST_VALUE = "0xAAAABBBB";
 
     private static final int TEST_LOOP_30 = 30;
@@ -21,12 +20,12 @@ public class ScriptManager {
 
     private final List<Integer> script2LbaOrder = new ArrayList<>(List.of(4, 0, 3, 1, 2));
 
-    private final SsdApplication ssdApplication;
     private final FileManager fileManager;
+    private final JarExecutor jarExecutor;
 
-    public ScriptManager(SsdApplication ssdApplication, FileManager fileManager) {
-        this.ssdApplication = ssdApplication;
+    public ScriptManager(FileManager fileManager, JarExecutor jarExecutor) {
         this.fileManager = fileManager;
+        this.jarExecutor = jarExecutor;
     }
     public Random random = new Random();
 
@@ -94,12 +93,7 @@ public class ScriptManager {
     }
 
     private void write(Integer lba, String value){
-        String command = getWriteCommand(lba, value);
-        ssdApplication.execute(command);
-    }
-
-    private String getWriteCommand(Integer lba, String value) {
-        return WRITE_PREFIX_COMMAND + lba + " " + value;
+        jarExecutor.executeWriteJar(lba, value);
     }
 
     private boolean readAndCompare(Integer lba, String compareValue){
