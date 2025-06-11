@@ -29,7 +29,7 @@ class MainTest {
         main.parsing(args);
 
         assertEquals("W", main.command);
-        assertEquals(3, main.LBA);
+        assertEquals(3, main.lba);
         assertEquals("0x00000000", main.value);
     }
 
@@ -40,7 +40,7 @@ class MainTest {
         main.parsing(args);
 
         assertEquals("R", main.command);
-        assertEquals(3, main.LBA);
+        assertEquals(3, main.lba);
         assertEquals(null, main.value);
     }
 
