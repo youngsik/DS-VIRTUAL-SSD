@@ -1,6 +1,7 @@
 package testscript.command;
 
 import com.samsung.testscript.command.TestScript1Command;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,6 +19,7 @@ public class TestScript1CommandTest1 {
     TestScript1Command testScript1Command;
 
     @Test
+    @DisplayName("TestScript1 실행 테스트")
     void callTestScript1Command() {
         testScript1Command.execute();
 

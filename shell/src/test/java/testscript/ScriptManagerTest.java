@@ -2,6 +2,7 @@ package testscript;
 
 import com.samsung.testscript.ScriptManager;
 import main.SsdApplication;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,6 +35,7 @@ public class ScriptManagerTest {
     }
 
     @Test
+    @DisplayName("TestScript1 구동 테스트")
     void testScript1() {
         for (int i = 0; i <= SCRIPT1_LOOP - SCRIPT1_TERM; i += SCRIPT1_TERM) {
             for (int j = i; j < i + SCRIPT1_TERM; j++) {
@@ -56,6 +58,7 @@ public class ScriptManagerTest {
     }
 
     @Test
+    @DisplayName("TestScript2 구동 테스트")
     void testScript2(){
         for (int i = 0; i <= 4; i++){
             when(ssdApplication.execute(getWriteCommand(i, DUMMY_VALUE))).thenReturn("OK");
@@ -70,6 +73,7 @@ public class ScriptManagerTest {
     }
 
     @Test
+    @DisplayName("TestScript3 구동 테스트")
     void testScript3(){
         doAnswer(invocation -> {
             String command = invocation.getArgument(0);
