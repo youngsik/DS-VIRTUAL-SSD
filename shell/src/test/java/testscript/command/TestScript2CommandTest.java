@@ -23,5 +23,4 @@ public class TestScript2CommandTest {
 
         verify(scriptManager).testScript2();
     }
-
 }

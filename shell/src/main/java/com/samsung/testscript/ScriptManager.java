@@ -5,6 +5,10 @@ import main.SsdApplication;
 public class ScriptManager {
     private static final String READ_PREFIX_COMMAND = "R ";
     private static final String WRITE_PREFIX_COMMAND = "W ";
+
+    public static final int SCRIPT1_LOOP = 100;
+    public static final int SCRIPT1_TERM = 4;
+
     private final SsdApplication ssdApplication;
 
     public ScriptManager(SsdApplication ssdApplication) {
@@ -14,14 +18,14 @@ public class ScriptManager {
     public void testScript1(){
         int indexHeader = 0;
         String verifyValue = "0xAAAABBBB";
-        while (indexHeader <= 96) {
+        while (indexHeader <= SCRIPT1_LOOP - SCRIPT1_TERM) {
             verifyEachFourTimes(indexHeader, verifyValue);
-            indexHeader += 4;
+            indexHeader += SCRIPT1_TERM;
         }
     }
 
     private void verifyEachFourTimes(int indexHeader, String verifyValue) {
-        for (int i = indexHeader; i < indexHeader + 4; i++){
+        for (int i = indexHeader; i < indexHeader + SCRIPT1_TERM; i++){
             write(i, verifyValue);
             boolean compareResult = readAndCompare(i, verifyValue);
             if(!compareResult){
@@ -45,6 +49,6 @@ public class ScriptManager {
         return compareValue.equals(readValue);
     }
 
-    public void testScript2() { 
+    public void testScript2() {
     }
 }
