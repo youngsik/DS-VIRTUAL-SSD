@@ -1,4 +1,4 @@
-package com.samsung;
+package com.samsung.file;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -17,7 +17,8 @@ public class FileManager {
     public void readFile(int index) {
         settingHashMapFromNandFile();
         String result = getValue(index);
-        writeOnOutputFile(result);
+        File file = getOrCreateFile(SSD_OUTPUT_FILE_NAME);
+        writeOnOutputFile(file, result);
     }
 
     public void writeFile(int index, String value) {
@@ -27,11 +28,12 @@ public class FileManager {
     }
 
     private void settingHashMapFromNandFile() {
-        List<String> data = getDataFromNandFile();
+        File file = getOrCreateFile(SSD_NAND_FILE_NAME);
+        List<String> data = getDataFromNandFile(file);
         updateHashMap(data);
     }
 
-    private File getOrCreateFile(String fileName) {
+    public File getOrCreateFile(String fileName) {
         File file = new File(fileName);
         if (!file.exists()) {
             try {
@@ -43,8 +45,7 @@ public class FileManager {
         return file;
     }
 
-    private List<String> getDataFromNandFile() {
-        File file = getOrCreateFile(SSD_NAND_FILE_NAME);
+    public List<String> getDataFromNandFile(File file) {
         List<String> data = new ArrayList<>();
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
@@ -58,7 +59,7 @@ public class FileManager {
         return data;
     }
 
-    private String getValue(int index) {
+    public String getValue(int index) {
         return hashmap.getOrDefault(index, BLANK_DATA);
     }
 
@@ -84,8 +85,7 @@ public class FileManager {
         }
     }
 
-    public void writeOnOutputFile(String result) {
-        File file = getOrCreateFile(SSD_OUTPUT_FILE_NAME);
+    private void writeOnOutputFile(File file, String result) {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
             writer.write(result);
@@ -95,4 +95,9 @@ public class FileManager {
 
         }
     }
+
+    public void throwExcpetion(String result) {
+
+    }
+
 }
