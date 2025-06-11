@@ -14,11 +14,11 @@ public class ScriptManager {
     private static final int TEST_LOOP = 100;
     private static final int VERIFY_TERM = 4;
 
-    public static final int MAX_RAND_BOUND = 1000;
-    public static final int LBA_FIRST = 0;
-    public static final int LBA_LAST = 99;
+    private static final int MAX_RAND_BOUND = 1000;
+    private static final int LBA_FIRST = 0;
+    private static final int LBA_LAST = 99;
 
-    private final List<Integer> script2LbaOrder = new ArrayList<>(List.of(4, LBA_FIRST, 3, 1, 2));
+    private final List<Integer> script2LbaOrder = new ArrayList<>(List.of(4, 0, 3, 1, 2));
 
     private final SsdApplication ssdApplication;
 
