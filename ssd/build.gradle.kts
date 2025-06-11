@@ -5,6 +5,13 @@ plugins {
 group = "org.example"
 version = "unspecified"
 
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "com.samsung.Main" // ← 실제 main 클래스 FQCN
+    }
+}
+
+
 repositories {
     mavenCentral()
 }
