@@ -13,7 +13,7 @@ class MainTest {
     FileManager mockFileManager;
 
     @Test
-    @DisplayName("parsing 함수 테스트")
+    @DisplayName("parsing 함수 테스트 - 쓰기")
     void testParsing() {
         Main main = new Main();
         String[] args = {"W", "3", "0x12345678"};
@@ -25,7 +25,7 @@ class MainTest {
     }
 
     @Test
-    @DisplayName("parsing 함수 테스트2")
+    @DisplayName("parsing 함수 테스트2 - 읽기")
     void testParsing2() {
         Main main = new Main();
         String[] args = {"R", "3"};
