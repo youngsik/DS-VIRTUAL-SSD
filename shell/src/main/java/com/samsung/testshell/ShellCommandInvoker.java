@@ -1,5 +1,7 @@
 package com.samsung.testshell;
 
+import com.samsung.Command;
+
 import java.util.HashMap;
 import java.util.Map;
 

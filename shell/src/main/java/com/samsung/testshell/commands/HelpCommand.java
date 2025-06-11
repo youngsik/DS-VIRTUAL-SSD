@@ -1,6 +1,6 @@
 package com.samsung.testshell.commands;
 
-import com.samsung.testshell.Command;
+import com.samsung.Command;
 import com.samsung.testshell.TestShellManager;
 
 public class HelpCommand implements Command {

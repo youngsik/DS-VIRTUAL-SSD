@@ -1,6 +1,6 @@
 package com.samsung.testscript;
 
-import com.samsung.testshell.Command;
+import com.samsung.Command;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
