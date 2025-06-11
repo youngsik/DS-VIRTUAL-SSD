@@ -1,5 +1,7 @@
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -35,33 +37,31 @@ class FileManager {
         return file;
     }
 
-    private String readNandFile(int index) {
-        File file = getOrCreateFile(SSD_NAND_FILE_NAME);
-        updateHashMapForNandFile(file);
-        return hashmap.getOrDefault(index, BLANK_DATA);
-    }
-
-    private void updateHashMapForNandFile(File file) {
+    private List<String> getDataFromNandFile(File file) {
+        List<String> data = new ArrayList<>();
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
             String line = null;
             while ((line = bufferedReader.readLine()) != null) {
-                String[] tmp = line.split(" ");
-                hashmap.put(Integer.parseInt(tmp[0]), tmp[1]);
+                data.add(line);
             }
         } catch (IOException e) {
             System.out.println("파일 읽기 오류 발생");
         }
+        return data;
     }
 
-    private void writeOnOutputFile(File file, String result) {
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            writer.write(result);
-            writer.flush();
-            writer.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    private String readNandFile(int index) {
+        File file = getOrCreateFile(SSD_NAND_FILE_NAME);
+        List<String> data = getDataFromNandFile(file);
+        updateHashMap(data);
+        return hashmap.getOrDefault(index, BLANK_DATA);
+    }
+
+    private void updateHashMap(List<String> data) {
+        for(String d : data){
+            String[] tmp = d.split(" ");
+            hashmap.put(Integer.parseInt(tmp[0]), tmp[1]);
         }
     }
 
@@ -72,6 +72,17 @@ class FileManager {
                 writer.write(entry.getKey() + " " + entry.getValue());
                 writer.newLine();
             }
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void writeOnOutputFile(File file, String result) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            writer.write(result);
             writer.flush();
             writer.close();
         } catch (IOException e) {

@@ -25,14 +25,14 @@ class FileManagerTest {
     }
 
     @Test
-    void write_success() {
-        fileManager.writeFile(INDEX, CORRECT_VALUE);
-
+    void read_success() {
         assertByReadingSpecificIndexFile(INDEX, CORRECT_VALUE);
     }
 
     @Test
-    void read_success() {
+    void write_success() {
+        fileManager.writeFile(INDEX, CORRECT_VALUE);
+
         assertByReadingSpecificIndexFile(INDEX, CORRECT_VALUE);
     }
 
