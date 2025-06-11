@@ -28,11 +28,19 @@ class Main {
     }
 
     private static boolean parsePreCondCheck(String[] cmdParam) {
+        if (checkInputNull(cmdParam)) return true;
         if (parseParamCountCheckFail(cmdParam)) return true;
         if (parseNumFail(cmdParam)) return true;
         if (checkValueFormatFail(cmdParam)) return true;
         if (checkCmdFail(cmdParam)) return true;
         return false;
+    }
+
+    private static boolean checkInputNull(String[] cmdParam) {
+        if (cmdParam.length != 0) return false;
+        setErrorCommand();
+        return true;
+
     }
 
     private static boolean parseNumFail(String[] cmdParam) {
@@ -50,20 +58,18 @@ class Main {
     }
 
     private static boolean parseParamCountCheckFail(String[] cmdParam) {
-        if (checkReadParamCountFail(cmdParam) || checkWriteParamCountFail(cmdParam)) {
-            setErrorCommand();
-            return true;
-        }
+        if (checkReadParamCount(cmdParam) || checkWriteParamCount(cmdParam)) return false;
+        setErrorCommand();
+        return true;
+    }
+
+    private static boolean checkWriteParamCount(String[] cmdParam) {
+        if (cmdParam[0].equals("W") && cmdParam.length == 3) return true;
         return false;
     }
 
-    private static boolean checkWriteParamCountFail(String[] cmdParam) {
-        if (cmdParam[0].equals("W") && cmdParam.length != 3) return true;
-        return false;
-    }
-
-    private static boolean checkReadParamCountFail(String[] cmdParam) {
-        if (cmdParam[0].equals("R") && cmdParam.length != 2) return true;
+    private static boolean checkReadParamCount(String[] cmdParam) {
+        if (cmdParam[0].equals("R") && cmdParam.length == 2) return true;
         return false;
     }
 
