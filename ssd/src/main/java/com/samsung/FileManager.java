@@ -14,10 +14,6 @@ public class FileManager {
 
     private Map<Integer, String> hashmap = new HashMap<>();
 
-    public Map<Integer, String> getHashmap() {
-        return hashmap;
-    }
-
     public void readFile(int index) {
         settingHashMapFromNandFile();
         String result = getValue(index);

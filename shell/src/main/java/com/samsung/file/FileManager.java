@@ -20,14 +20,11 @@ public class FileManager {
     public void readFile(int index) {
         settingHashMapFromNandFile();
         String result = getValue(index);
-        File file = getOrCreateFile(SSD_OUTPUT_FILE_NAME);
-        writeOnOutputFile(file, result);
+        writeOnOutputFile(result);
     }
 
-
     private void settingHashMapFromNandFile() {
-        File file = getOrCreateFile(SSD_NAND_FILE_NAME);
-        List<String> data = getDataFromNandFile(file);
+        List<String> data = getDataFromNandFile();
         updateHashMap(data);
     }
 
@@ -43,7 +40,8 @@ public class FileManager {
         return file;
     }
 
-    private List<String> getDataFromNandFile(File file) {
+    private List<String> getDataFromNandFile() {
+        File file = getOrCreateFile(SSD_NAND_FILE_NAME);
         List<String> data = new ArrayList<>();
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
@@ -68,7 +66,8 @@ public class FileManager {
         }
     }
 
-    private void writeOnOutputFile(File file, String result) {
+    public void writeOnOutputFile(String result) {
+        File file = getOrCreateFile(SSD_OUTPUT_FILE_NAME);
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
             writer.write(result);
