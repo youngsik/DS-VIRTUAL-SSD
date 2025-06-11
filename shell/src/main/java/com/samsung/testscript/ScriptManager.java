@@ -93,7 +93,7 @@ public class ScriptManager {
         return fileManager.getHashmap().get(lba);
     }
 
-    public void write(Integer lba, String value){
+    private void write(Integer lba, String value){
         jarExecutor.executeWriteJar(lba, value);
     }
 
