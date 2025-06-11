@@ -25,13 +25,13 @@ class FileManagerTest {
         resetTestOutputFile();
     }
 
-    @DisplayName("특정 인덱스 위치의 파일 읽고 output 텍스트 파일 쓰기 테스트")
+    @DisplayName("특정 인덱스 위치의 파일 읽고, output 텍스트 파일에 결과 쓰기")
     @Test
     void read_success() {
         assertByReadingSpecificIndexFile(INDEX, CORRECT_VALUE);
     }
 
-    @DisplayName("nana 파일에 새로운 데이터 쓰기 테스트")
+    @DisplayName("nand 텍스트 파일에 새로운 데이터 쓰기")
     @Test
     void write_success() {
         fileManager.writeFile(INDEX, CORRECT_VALUE);
