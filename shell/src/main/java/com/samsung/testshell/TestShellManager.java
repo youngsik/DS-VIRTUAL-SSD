@@ -15,7 +15,12 @@ public class TestShellManager {
     }
 
     public void write(int index, String value) {
-        // write 실행
+        String head = "[Write]";
+        String pass = "Done";
+        ssdApplicatioin.execute("W" + " " + index + " " + value );
+
+        String output = head + " " + pass;
+        System.out.println(output);
     }
 
     public void read(int index) {
