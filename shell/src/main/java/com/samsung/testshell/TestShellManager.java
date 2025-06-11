@@ -6,11 +6,14 @@ import com.samsung.file.FileManager;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class TestShellManager {
 
-    SsdApplication ssdApplicatioin;
-    FileManager fileManager;
+    public static final String writeCmd = "W";
+    public static final String ReadCmd = "R";
+    private final SsdApplication ssdApplicatioin;
+    private final FileManager fileManager;
 
     public static final String BLANK_DATA = "0x00000000";
     public static final String SSD_NAND_FILE_NAME = "ssd_nand.txt";
@@ -23,7 +26,15 @@ public class TestShellManager {
     public void write(int index, String value) {
         String head = "[Write]";
         String pass = "Done";
-        ssdApplicatioin.execute("W" + " " + index + " " + value );
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(writeCmd)
+                .append(" ")
+                .append(index)
+                .append(" ")
+                .append(value);
+
+        ssdApplicatioin.execute(sb.toString() );
 
         String output = head + " " + pass;
         System.out.println(output);
@@ -33,8 +44,16 @@ public class TestShellManager {
         String head = "[Read] LBA";
         String location = String.format("%02d", index);
         String value;
-        ssdApplicatioin.execute("R" + " " + index);
-        value = fileManager.getValue(index);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(ReadCmd)
+                .append(" ")
+                .append(index);
+
+        ssdApplicatioin.execute(sb.toString() );
+
+        fileManager.readFile(index);
+        value = fileManager.getHashmap().get(index);
 
         String output = head + " " + location + " " + value;
         System.out.println(output);
@@ -64,12 +83,16 @@ public class TestShellManager {
     }
 
     public void fullread() {
-        File file = fileManager.getOrCreateFile(SSD_NAND_FILE_NAME);
-        List<String> listvalues = fileManager.getDataFromNandFile(file);
+        String head = "[Full Read] LBA";
 
-        for (String value : listvalues) {
-            System.out.println(value);
+        for (int index = 0; index < 100; index++) {
+            fileManager.readFile(index);
+            String value = fileManager.getHashmap().getOrDefault(index, BLANK_DATA);
+
+            String location = String.format("%02d", index);
+            String output = head + " " + location + " " + value;
+
+            System.out.println(output);
         }
-
     }
 }

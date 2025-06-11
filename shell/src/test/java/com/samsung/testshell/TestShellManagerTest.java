@@ -12,8 +12,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,6 +27,8 @@ class TestShellManagerTest {
 
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
+
+    public static final String DUMMY_VALUE = "0xFFFFFFFF";
 
     @Mock
     SsdApplication mockSsdApplication;
@@ -38,7 +42,7 @@ class TestShellManagerTest {
     }
 
     @Test
-    @DisplayName("testSheel 읽기 실행")
+    @DisplayName("testShell 읽기 실행")
     void testShellReadExecute() {
 
         int index = 3;
@@ -48,11 +52,11 @@ class TestShellManagerTest {
         testShellManager.read(index);
 
         verify(mockSsdApplication, times(1)).execute(inputCommand);
-        verify(fileManager, times(1)).getValue(index);
+
     }
 
     @Test
-    @DisplayName("testSheel 읽기 출력")
+    @DisplayName("testShell 읽기 출력")
     void testShellReadValue() {
 
         int index = 3;
@@ -60,7 +64,13 @@ class TestShellManagerTest {
         String expected = "[Read] LBA 03 0xFFFFFFFF";
 
         TestShellManager testShellManager= new TestShellManager(mockSsdApplication, fileManager);
-        when(fileManager.getValue(index)).thenReturn("0xFFFFFFFF");
+
+        Map<Integer, String> hashMap = new HashMap<>();
+        doNothing().when(fileManager).readFile(index);
+        hashMap.put(index, DUMMY_VALUE);
+
+        when(fileManager.getHashmap()).thenReturn(hashMap);
+
         testShellManager.read(index);
 
         assertThat(outContent.toString().trim())
@@ -68,7 +78,7 @@ class TestShellManagerTest {
     }
 
     @Test
-    @DisplayName("testSheel 쓰기 실행")
+    @DisplayName("testShell 쓰기 실행")
     void testShellWriteExecute() {
 
         int index = 3;
@@ -82,7 +92,7 @@ class TestShellManagerTest {
     }
 
     @Test
-    @DisplayName("testSheel 쓰기 출력")
+    @DisplayName("testShell 쓰기 출력")
     void testShellWriteValue() {
 
         int index = 3;
@@ -99,7 +109,7 @@ class TestShellManagerTest {
 
     }
     @Test
-    @DisplayName("testSheel 전체쓰기 실행")
+    @DisplayName("testShell 전체쓰기 실행")
     void testShellFullWriteExecute() {
         String value = "0xFFFFFFFF";
 
@@ -110,7 +120,7 @@ class TestShellManagerTest {
     }
 
     @Test
-    @DisplayName("testSheel 전체쓰기 출력")
+    @DisplayName("testShell 전체쓰기 출력")
     void testShellFullWrite() {
         String expected = "[Full Write] Done";
         String value = "0xFFFFFFFF";
@@ -123,33 +133,43 @@ class TestShellManagerTest {
     }
 
     @Test
-    @DisplayName("testSheel 전체읽기 실행")
-    void testShellFullReadExecute() {
-        String value = "0xFFFFFFFF";
-        List<String> listvalues = Arrays.asList("1 0xFFFFFFFF", "2 0xFFFFFFFE");
+    @DisplayName("testShell fullread")
+    void testFullreadOutput() {
 
+        Map<Integer, String> fakeData = new HashMap<>();
+        fakeData.put(0, "0xFFFFFFFF");
+        fakeData.put(1, "0xFFFFFFFE");
+        fakeData.put(99, "0x12345678");
+
+        when(fileManager.getHashmap()).thenReturn(fakeData);
         TestShellManager testShellManager= new TestShellManager(mockSsdApplication, fileManager);
 
-        File file = fileManager.getOrCreateFile(anyString());
-        when(fileManager.getDataFromNandFile(file)).thenReturn(listvalues);
-
         testShellManager.fullread();
-        String expectedOutput = String.join("\n", listvalues).trim();
-        String actualOutput = outContent.toString().trim();
 
-        String normalizedExpected = Arrays.stream(expectedOutput.split("\n"))
-                .map(String::trim)
-                .collect(Collectors.joining("\n"));
+        String[] outputLines = outContent.toString().trim().split("\n");
 
-        String normalizedActual = Arrays.stream(actualOutput.split("\n"))
-                .map(String::trim)
-                .collect(Collectors.joining("\n"));
+        assertThat(outputLines).hasSize(100);
 
-        assertThat(normalizedActual).isEqualTo(normalizedExpected);
+        assertThat(outputLines[0].replace("\n", "").replace("\r", "").trim())
+                .isEqualTo("[Full Read] LBA 00 0xFFFFFFFF");
+
+
+        for (int i = 2; i < 99; i++) {
+            String expected = String.format("[Full Read] LBA %02d 0x00000000", i);
+            assertThat(outputLines[i].replace("\n", "").replace("\r", "").trim())
+                    .isEqualTo(expected);
+        }
+
+        assertThat(outputLines[99].replace("\n", "").replace("\r", "").trim())
+                .isEqualTo("[Full Read] LBA 99 0x12345678");
+
+        for (int i = 0; i < 100; i++) {
+            verify(fileManager).readFile(i);
+        }
     }
 
     @Test
-    @DisplayName("testSheel help")
+    @DisplayName("testShell help")
     void testShellFullHelp() {
 
         List<String> listvalues = Arrays.asList("DeviceSolution", "김영식, 박준경, 권희정, 권성민, 이상훈, 오시훈, 추준성","사용법","write 3 0xAAAABBBB" );
@@ -175,7 +195,7 @@ class TestShellManagerTest {
     }
 
     @Test
-    @DisplayName("testSheel EXIT")
+    @DisplayName("testShell EXIT")
     void testShellFullEXIT() throws Exception {
         TestShellManager testShellManager= new TestShellManager(mockSsdApplication, fileManager);
 
