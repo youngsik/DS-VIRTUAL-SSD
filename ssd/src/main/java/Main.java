@@ -1,7 +1,8 @@
-class Main {
+public class Main {
 
     public static String command;
     public static int lba;
+    public static int LBA;
     public static String value;
 
     public static void main(String[] args) {
@@ -9,50 +10,56 @@ class Main {
         run(command, lba, value);
     }
 
-    public static void run(String command, int lba, String value) {
-        SSDManager ssdManager = new SSDManager(command, lba, value);
+    public static void run(String command, int LBA, String value) {
+        SSDManager ssdManager = new SSDManager(command, LBA, value);
         ssdManager.cmdExecute();
     }
 
-    public static void parsing(String[] args) {
-        if (parsePreCondCheck(args)) return;
+    public static void parsing(String[] cmdParam) {
+        if (parsePreCondCheck(cmdParam)) return;
 
-        command = args[0];
-        lba = Integer.parseInt(args[1]);
-        value = args.length > 2 ? args[2] : null;
+        command = cmdParam[0];
+        LBA = Integer.parseInt(cmdParam[1]);
+        value = cmdParam.length > 2 ? cmdParam[2] : null;
 
         parsePostCondCheck();
     }
 
-    private static boolean parsePreCondCheck(String[] args) {
-        if(args == null || args.length == 0) {
+    private static boolean parsePreCondCheck(String[] cmdParam) {
+        if(cmdParam == null || cmdParam.length == 0) {
+
+        }
+        try {
+            LBA = Integer.parseInt(cmdParam[1]);
+        } catch (NumberFormatException e) {
+            command = "ERROR";
             value = "ERROR";
             return true;
         }
 
-        if("R".equals(args[0])) {
-            if(args.length != 2) {
+        if("R".equals(cmdParam[0])) {
+            if(cmdParam.length != 2) {
                 value = "ERROR";
                 return true;
             }
 
-            if(!isDigit(args[1])) {
+            if(!isDigit(cmdParam[1])) {
                 value = "ERROR";
                 return true;
             }
         }
-        else if("W".equals(args[0])) {
-            if(args.length != 3) {
+        else if("W".equals(cmdParam[0])) {
+            if(cmdParam.length != 3) {
                 value = "ERROR";
                 return true;
             }
 
-            if(!isDigit(args[1])) {
+            if(!isDigit(cmdParam[1])) {
                 value = "ERROR";
                 return true;
             }
 
-            if(!isValidValue(args[2])) {
+            if(!isValidValue(cmdParam[2])) {
                 value = "ERROR";
                 return true;
             }
@@ -63,6 +70,7 @@ class Main {
 
     private static void parsePostCondCheck() {
         if (!"W".equals(command) && !"R".equals(command)) {
+            command = "ERROR";
             value = "ERROR";
         }
     }
@@ -92,11 +100,12 @@ class Main {
         }
     }
 
+    /*
     public static void main(String[] args) {
         SSDManager ssdManager = new SSDManager("W", 0, "0x00000002");
         ssdManager.cmdExecute();
 
         ssdManager = new SSDManager("W", 0, "0x00000001");
         ssdManager.cmdExecute();
-    }
+    } */
 }
