@@ -15,6 +15,9 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class WriteCommandTest {
 
+    public static final Integer INDEX = 1;
+    public static final String VALUE = "0XFFFFFF";
+
     @Mock
     TestShellManager testShellManager;
 
@@ -24,7 +27,7 @@ class WriteCommandTest {
     @DisplayName("execute 실행 테스트")
     @Test
     void executeTest() {
-        writeCommand.execute(1, "0XFFFFFF");
-        verify(testShellManager, times(1)).write(1, "0XFFFFFF");
+        writeCommand.execute(INDEX, VALUE);
+        verify(testShellManager, times(1)).write(INDEX, VALUE);
     }
 }
