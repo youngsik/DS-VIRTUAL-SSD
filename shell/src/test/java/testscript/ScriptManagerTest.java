@@ -95,11 +95,11 @@ public class ScriptManagerTest {
         boolean result = scriptManager.testScript3();
 
         assertTrue(result);
-        verify(ssdApplication, times(100)).execute(startsWith("W 0"));
-        verify(ssdApplication, times(100)).execute(startsWith("W 99"));
-        verify(ssdApplication, times(100)).execute(startsWith("R 0"));
-        verify(ssdApplication, times(100)).execute(startsWith("R 99"));
-        verify(ssdApplication, times(400)).execute(anyString());
+        verify(ssdApplication, times(200)).execute(startsWith("W 0"));
+        verify(ssdApplication, times(200)).execute(startsWith("W 99"));
+        verify(ssdApplication, times(200)).execute(startsWith("R 0"));
+        verify(ssdApplication, times(200)).execute(startsWith("R 99"));
+        verify(ssdApplication, times(800)).execute(anyString());
     }
 
     private String getReadCommand(int i) {
