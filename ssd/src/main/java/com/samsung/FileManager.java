@@ -59,7 +59,7 @@ public class FileManager {
         return data;
     }
 
-    private String getValue(int index) {
+    public String getValue(int index) {
         return hashmap.getOrDefault(index, BLANK_DATA);
     }
 
@@ -100,6 +100,4 @@ public class FileManager {
 
     }
 
-    public void readNandFile(int index) {
-    }
 }

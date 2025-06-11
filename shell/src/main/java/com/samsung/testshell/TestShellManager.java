@@ -8,7 +8,10 @@ public class TestShellManager {
     SsdApplication ssdApplicatioin;
     FileManager fileManager;
 
-    public TestShellManager(SsdApplication mockSsdApplicatioin, FileManager fileManager) {
+
+    public TestShellManager(SsdApplication ssdApplicatioin, FileManager fileManager) {
+        this.ssdApplicatioin = ssdApplicatioin;
+        this.fileManager =fileManager;
     }
 
     public void write(int index, String value) {
@@ -16,8 +19,16 @@ public class TestShellManager {
     }
 
     public void read(int index) {
-        // read 실행
+        String head = "[Read] LBA";
+        String location = String.format("%02d", index);
+        String value;
+        ssdApplicatioin.execute("R" + " " + index);
+        value = fileManager.getValue(index);
+
+        String output = head + " " + location + " " + value;
+        System.out.println(output);
     }
+
 
     public void exit() {
         // exit 실행
