@@ -1,6 +1,5 @@
 package com.samsung.testshell;
 
-import com.samsung.SsdApplication;
 import com.samsung.file.FileManager;
 import com.samsung.file.JarExecutor;
 import org.junit.jupiter.api.BeforeEach;
