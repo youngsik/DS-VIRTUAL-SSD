@@ -171,25 +171,30 @@ class TestShellManagerTest {
     @Test
     @DisplayName("testShell help")
     void testShellFullHelp() {
+        // given
+        TestShellManager testShellManager = new TestShellManager(mockSsdApplication, fileManager);
 
-        List<String> listvalues = Arrays.asList("DeviceSolution",
-                "김영식, 박준경, 권희정, 권성민, 이상훈, 오시훈, 추준성",
-                "사용법",
-                "write 3 0xAAAABBBB",
-                "read 3",
-                "fullwrite 0xAAAABBBB",
-                "fullread",
-                "help",
-                "exit");
-
-        TestShellManager testShellManager= new TestShellManager(mockSsdApplication, fileManager);
-
+        // when
         testShellManager.help();
 
-
+        // then
         String actualOutput = outContent.toString().trim();
 
-        String expectedOutput = String.join("\n", listvalues).trim();
+        String expectedOutput = String.join("\n",
+                "DeviceSolution",
+                "",
+                "명령어:",
+                "  write <index> <value>     지정된 index에 value를 기록합니다. 예: write 3 0xAAAABBBB",
+                "  read <index>              지정된 index의 값을 읽어옵니다. 예: read 3",
+                "  fullwrite <value>         전체 영역에 value를 기록합니다. 예: fullwrite 0xAAAABBBB",
+                "  fullread                  전체 영역을 읽어옵니다.",
+                "  help                      사용 가능한 명령어를 출력합니다.",
+                "  exit                      프로그램을 종료합니다.",
+                "",
+                "개발자: 김영식, 박준경, 권희정, 권성민, 이상훈, 오시훈, 추준성"
+        ).trim();
+
+        // 공백문자/라인 간 공백 문제를 방지
         String normalizedExpected = Arrays.stream(expectedOutput.split("\n"))
                 .map(String::trim)
                 .collect(Collectors.joining("\n"));
@@ -199,7 +204,6 @@ class TestShellManagerTest {
                 .collect(Collectors.joining("\n"));
 
         assertThat(normalizedActual).isEqualTo(normalizedExpected);
-
     }
 
     @Test

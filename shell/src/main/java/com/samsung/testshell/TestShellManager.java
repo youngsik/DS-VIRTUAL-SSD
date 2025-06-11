@@ -65,14 +65,17 @@ public class TestShellManager {
 
     public void help() {
         System.out.println("DeviceSolution");
-        System.out.println("김영식, 박준경, 권희정, 권성민, 이상훈, 오시훈, 추준성");
-        System.out.println("사용법");
-        System.out.println("write 3 0xAAAABBBB");
-        System.out.println("read 3");
-        System.out.println("fullwrite 0xAAAABBBB");
-        System.out.println("fullread");
-        System.out.println("help");
-        System.out.println("exit");
+        System.out.println();
+        System.out.println("명령어:");
+        System.out.println("  write <index> <value>     지정된 index에 value를 기록합니다. 예: write 3 0xAAAABBBB");
+        System.out.println("  read <index>              지정된 index의 값을 읽어옵니다. 예: read 3");
+        System.out.println("  fullwrite <value>         전체 영역에 value를 기록합니다. 예: fullwrite 0xAAAABBBB");
+        System.out.println("  fullread                  전체 영역을 읽어옵니다.");
+        System.out.println("  help                      사용 가능한 명령어를 출력합니다.");
+        System.out.println("  exit                      프로그램을 종료합니다.");
+        System.out.println();
+        System.out.println("개발자: 김영식, 박준경, 권희정, 권성민, 이상훈, 오시훈, 추준성");
+
     }
 
     public void fullwrite(String value) {
