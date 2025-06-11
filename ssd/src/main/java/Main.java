@@ -19,7 +19,7 @@ class Main {
 
         command = args[0];
         lbaLocation = Integer.parseInt(args[1]);
-        value = args[2];
+        value = args.length > 2 ? args[2] : null;
 
         parsePostCondCheck();
     }
