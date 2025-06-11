@@ -89,4 +89,8 @@ class FileManager {
             throw new RuntimeException(e);
         }
     }
+
+    public void throwExcpetion(String result) {
+
+    }
 }
