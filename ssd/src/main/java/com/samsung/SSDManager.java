@@ -14,13 +14,13 @@ class SSDManager {
     }
 
     public void cmdExecute() {
-        if (command.equals("ERROR")) fileThrowExcpetion();
+        if (command.equals("ERROR")) fileErrorOutput();
         else if (command.equals("R")) fileRead(LBA);
         else if (command.equals("W")) fileWrite(LBA, value);
     }
 
-    private void fileThrowExcpetion() {
-        fileManager.throwException(value);
+    private void fileErrorOutput() {
+        fileManager.writeOnOutputFile(value);
     }
 
     public void fileRead(int lbaLocation) {

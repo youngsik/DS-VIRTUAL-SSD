@@ -57,7 +57,7 @@ class FileManagerTest {
     void error(){
         resetTestOutputFile(ERROR_MESSAGE);
 
-        fileManager.throwException(ERROR_MESSAGE);
+        fileManager.writeOnOutputFile(ERROR_MESSAGE);
 
         assertFromOutputFile(ERROR_MESSAGE);
     }

@@ -26,10 +26,6 @@ class FileManager {
         writeOnNandFile();
     }
 
-    public void throwException(String result) {
-        writeOnOutputFile(result);
-    }
-
     private void settingHashMapFromNandFile() {
         List<String> data = getDataFromNandFile();
         updateHashMap(data);
@@ -88,7 +84,7 @@ class FileManager {
         }
     }
 
-    private void writeOnOutputFile(String result) {
+    public void writeOnOutputFile(String result) {
         File file = getOrCreateFile(SSD_OUTPUT_FILE_NAME);
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
