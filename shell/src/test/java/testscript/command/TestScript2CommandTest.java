@@ -21,7 +21,8 @@ public class TestScript2CommandTest {
     @Test
     @DisplayName("TestScript2 실행 테스트")
     void callTestScript2Command(){
-        testScript2Command.execute();
+        String[] cmdArgs = new String[1];
+        testScript2Command.execute(cmdArgs);
 
         verify(scriptManager).testScript2();
     }

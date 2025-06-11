@@ -41,14 +41,20 @@ class ScriptCommandInvokerTest {
     void execute_pass_test() {
         doReturn(mockScriptCommand).when(mockCommandMap).get(VALID_COMMAND_NAME);
 
-        invoker.execute(VALID_COMMAND_NAME);
-        verify(mockScriptCommand, times(1)).execute();
+        String[] cmdArgs = new String[1];
+        cmdArgs[0] = VALID_COMMAND_NAME;
+        invoker.execute(cmdArgs);
+
+        verify(mockScriptCommand, times(1)).execute(cmdArgs);
     }
 
     @DisplayName("ScriptCommand exectue 메서드 실행 예외 테스트")
     @Test
     void execute_exception_test() {
         doReturn(EMPTY_COMMAND).when(mockCommandMap).get(INVALID_COMMAND_NAME);
-        assertThrows(RuntimeException.class, () -> invoker.execute(INVALID_COMMAND_NAME));
+        String[] cmdArgs = new String[1];
+        cmdArgs[0] = INVALID_COMMAND_NAME;
+
+        assertThrows(RuntimeException.class, () -> invoker.execute(cmdArgs));
     }
 }

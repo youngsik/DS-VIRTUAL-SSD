@@ -15,8 +15,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class ReadCommandTest {
 
-    public static final Integer INDEX = 1;
-    public static final String VALUE = "0XFFFFFF";
+    public static final String INDEX = "1";
 
     @Mock
     TestShellManager testShellManager;
@@ -27,7 +26,9 @@ class ReadCommandTest {
     @DisplayName("execute 실행 테스트")
     @Test
     void executeTest() {
-        readCommand.execute(INDEX, VALUE);
-        verify(testShellManager, times(1)).read(INDEX);
+        String[] cmdArgs = new String[2];
+        cmdArgs[1] = INDEX;
+        readCommand.execute(cmdArgs);
+        verify(testShellManager, times(1)).read(Integer.parseInt(INDEX));
     }
 }

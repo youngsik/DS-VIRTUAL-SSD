@@ -22,7 +22,8 @@ public class TestScript3CommandTest {
     @Test
     @DisplayName("TestScript3 실행 테스트")
     void callTestScript3Command(){
-        testScript3Command.execute();
+        String[] cmdArgs = new String[1];
+        testScript3Command.execute(cmdArgs);
 
         verify(scriptManager).testScript3();
     }

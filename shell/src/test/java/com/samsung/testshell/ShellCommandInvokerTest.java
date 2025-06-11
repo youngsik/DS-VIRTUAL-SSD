@@ -42,14 +42,20 @@ class ShellCommandInvokerTest {
     void execute_pass_test() {
         doReturn(mockShellCommand).when(mockCommandMap).get(VALID_COMMAND_NAME);
 
-        invoker.execute(VALID_COMMAND_NAME, INDEX, VALUE);
-        verify(mockShellCommand, times(1)).execute(INDEX, VALUE);
+        String[] cmdArgs = new String[1];
+        cmdArgs[0] = VALID_COMMAND_NAME;
+        invoker.execute(cmdArgs);
+
+        verify(mockShellCommand, times(1)).execute(cmdArgs);
     }
 
     @DisplayName("ShellCommand exectue 메서드 실행 예외 테스트")
     @Test
     void execute_exception_test() {
         doReturn(EMPTY_COMMAND).when(mockCommandMap).get(INVALID_COMMAND_NAME);
-        assertThrows(RuntimeException.class, () -> invoker.execute(INVALID_COMMAND_NAME, INDEX, VALUE));
+        String[] cmdArgs = new String[1];
+        cmdArgs[0] = INVALID_COMMAND_NAME;
+
+        assertThrows(RuntimeException.class, () -> invoker.execute(cmdArgs));
     }
 }

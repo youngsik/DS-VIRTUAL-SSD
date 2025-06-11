@@ -26,7 +26,8 @@ class HelpCommandTest {
     @DisplayName("execute 실행 테스트")
     @Test
     void executeTest() {
-        helpCommand.execute(INDEX, VALUE);
+        String[] cmdArgs = new String[1];
+        helpCommand.execute(cmdArgs);
         verify(testShellManager, times(1)).help();
     }
 }
