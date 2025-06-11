@@ -1,6 +1,7 @@
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -19,10 +20,11 @@ class FileManagerTest {
     public static final String CORRECT_VALUE = "0x1298CDEF";
     public static final int INDEX = 1;
 
+    @InjectMocks
+    private FileManager fileManager;
+
     @Test
     void write_success() {
-        FileManager fileManager = new FileManager();
-
         fileManager.writeFile(INDEX, CORRECT_VALUE);
         String ret = fileManager.readNandFile(INDEX);
 
@@ -31,14 +33,13 @@ class FileManagerTest {
 
     @Test
     void read_success() {
-        FileManager fileManager = new FileManager();
         fileManager.writeFile(INDEX, CORRECT_VALUE);
         String expect = CORRECT_VALUE;
 
         fileManager.readFile(INDEX);
 
         try {
-            File file = new File(FileManager.SSD_OUTPUT_FILE_NAME);
+            File file = new File("src/test/resources/test_ssd_output.txt");
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
             String ret = null;
             while ((ret = bufferedReader.readLine()) != null) {
