@@ -1,13 +1,13 @@
 import java.io.*;
-import java.sql.SQLOutput;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
 class FileManager {
     public static final String BLANK_DATA = "0x00000000";
-    Map<Integer, String> hashmap = new HashMap<>();
+    public static final String SSD_NAND_FILE_NAME = "ssd_nand.txt";
+
+    private Map<Integer, String> hashmap = new HashMap<>();
 
     public void readFile(int index) {
     }
@@ -15,9 +15,13 @@ class FileManager {
     public void writeFile(int index, String value) {
         hashmap.put(index,value);
 
-        File file = getOrCreateFile();
+        File file = getOrCreateFile(SSD_NAND_FILE_NAME);
+        writeOnFile(file);
+    }
+
+    private void writeOnFile(File file) {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
             for (Entry<Integer, String> entry : hashmap.entrySet()) {
                 writer.write(entry.getKey() + " " + entry.getValue());
                 writer.newLine();
@@ -30,9 +34,21 @@ class FileManager {
     }
 
     public String readNandFile(int index) {
-        File file = getOrCreateFile();
+        File file = getOrCreateFile(SSD_NAND_FILE_NAME);
         updateHashMapForNandFile(file);
         return hashmap.getOrDefault(index, BLANK_DATA);
+    }
+
+    private File getOrCreateFile(String fileName) {
+        File file = new File(fileName);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                System.out.println("파일 생성 오료");
+            }
+        }
+        return file;
     }
 
     private void updateHashMapForNandFile(File file) {
@@ -46,18 +62,5 @@ class FileManager {
         } catch (IOException e) {
             System.out.println("파일 읽기 오류 발생");
         }
-    }
-
-    private File getOrCreateFile() {
-        File file = new File("ssd_nand.txt");
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                System.out.println("파일 생성 오료");
-                ;
-            }
-        }
-        return file;
     }
 }
