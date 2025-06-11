@@ -19,6 +19,7 @@ class ScriptCommandInvokerTest {
     public static final String VALID_COMMAND_NAME = "write";
     public static final String INVALID_COMMAND_NAME = "abcde";
     public static final ScriptCommand EMPTY_COMMAND = null;
+    public static final String[] cmdArgs = new String[1];
 
     @Mock
     private Map<String, ScriptCommand> mockCommandMap;
@@ -40,9 +41,8 @@ class ScriptCommandInvokerTest {
     @Test
     void execute_pass_test() {
         doReturn(mockScriptCommand).when(mockCommandMap).get(VALID_COMMAND_NAME);
-
-        String[] cmdArgs = new String[1];
         cmdArgs[0] = VALID_COMMAND_NAME;
+
         invoker.execute(cmdArgs);
 
         verify(mockScriptCommand, times(1)).execute(cmdArgs);
@@ -52,7 +52,6 @@ class ScriptCommandInvokerTest {
     @Test
     void execute_exception_test() {
         doReturn(EMPTY_COMMAND).when(mockCommandMap).get(INVALID_COMMAND_NAME);
-        String[] cmdArgs = new String[1];
         cmdArgs[0] = INVALID_COMMAND_NAME;
 
         assertThrows(RuntimeException.class, () -> invoker.execute(cmdArgs));

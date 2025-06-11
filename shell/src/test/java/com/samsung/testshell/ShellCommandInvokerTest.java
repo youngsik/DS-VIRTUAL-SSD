@@ -17,9 +17,8 @@ class ShellCommandInvokerTest {
 
     public static final String VALID_COMMAND_NAME = "write";
     public static final String INVALID_COMMAND_NAME = "abcde";
-    public static final Integer INDEX = 1;
-    public static final String VALUE = "0XFFFFFF";
     public static final ShellCommand EMPTY_COMMAND = null;
+    public static final String[] cmdArgs = new String[1];
 
     @Mock
     private Map<String, ShellCommand> mockCommandMap;
@@ -41,9 +40,8 @@ class ShellCommandInvokerTest {
     @Test
     void execute_pass_test() {
         doReturn(mockShellCommand).when(mockCommandMap).get(VALID_COMMAND_NAME);
-
-        String[] cmdArgs = new String[1];
         cmdArgs[0] = VALID_COMMAND_NAME;
+
         invoker.execute(cmdArgs);
 
         verify(mockShellCommand, times(1)).execute(cmdArgs);
@@ -53,7 +51,6 @@ class ShellCommandInvokerTest {
     @Test
     void execute_exception_test() {
         doReturn(EMPTY_COMMAND).when(mockCommandMap).get(INVALID_COMMAND_NAME);
-        String[] cmdArgs = new String[1];
         cmdArgs[0] = INVALID_COMMAND_NAME;
 
         assertThrows(RuntimeException.class, () -> invoker.execute(cmdArgs));
