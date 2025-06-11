@@ -93,4 +93,27 @@ class TestShellManagerTest {
                 .isEqualTo(expected);
 
     }
+    @Test
+    @DisplayName("testSheel 전체쓰기 실행")
+    void testShellFullWriteExecute() {
+        String value = "0xFFFFFFFF";
+
+        TestShellManager testShellManager= new TestShellManager(mockSsdApplication, fileManager);
+
+        testShellManager.fullwrite(value);
+        verify(mockSsdApplication, times(100)).execute(anyString());
+    }
+
+    @Test
+    @DisplayName("testSheel 전체쓰기 출력")
+    void testShellFullWrite() {
+        String expected = "[Full Write] Done";
+        String value = "0xFFFFFFFF";
+
+        TestShellManager testShellManager= new TestShellManager(mockSsdApplication, fileManager);
+
+        testShellManager.fullwrite(value);
+        assertThat(outContent.toString().trim())
+                .isEqualTo(expected);
+    }
 }
