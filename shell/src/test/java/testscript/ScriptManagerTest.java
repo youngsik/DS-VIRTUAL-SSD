@@ -53,16 +53,17 @@ public class ScriptManagerTest {
         for (int i = 0; i <= 4; i++){
             when(ssdApplication.execute(getWriteCommand(i))).thenReturn("OK");
         }
-
-        boolean result = scriptManager.testScript2();
-
         for (int i = 0; i <= 4; i++){
             when(ssdApplication.execute(getReadCommand(i))).thenReturn(DUMMY_VALUE);
         }
+
+        boolean result = scriptManager.testScript2();
+
+        assertTrue(result);
     }
 
-    private String getReadCommand(int j) {
-        return "R " + j;
+    private String getReadCommand(int i) {
+        return "R " + i;
     }
 
     private String getWriteCommand(int i) {

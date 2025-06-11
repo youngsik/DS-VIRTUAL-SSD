@@ -2,12 +2,18 @@ package com.samsung.testscript;
 
 import main.SsdApplication;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ScriptManager {
     private static final String READ_PREFIX_COMMAND = "R ";
     private static final String WRITE_PREFIX_COMMAND = "W ";
+    private static final String TEST_VALUE = "0xAAAABBBB";
 
-    public static final int SCRIPT1_LOOP = 100;
-    public static final int SCRIPT1_TERM = 4;
+    private static final int SCRIPT1_LOOP = 100;
+    private static final int SCRIPT1_TERM = 4;
+
+    private final List<Integer> script2LbaOrder = new ArrayList<>(List.of(4, 0, 3, 1, 2));
 
     private final SsdApplication ssdApplication;
 
@@ -18,9 +24,8 @@ public class ScriptManager {
     public boolean testScript1(){
         int indexHeader = 0;
         boolean isSuccess = false;
-        String verifyValue = "0xAAAABBBB";
         while (indexHeader <= SCRIPT1_LOOP - SCRIPT1_TERM) {
-            isSuccess = verifyEachFourTimes(indexHeader, verifyValue);
+            isSuccess = verifyEachFourTimes(indexHeader, TEST_VALUE);
             indexHeader += SCRIPT1_TERM;
         }
         return isSuccess;
@@ -36,13 +41,21 @@ public class ScriptManager {
     }
 
     private String read(Integer lba){
-        String command = READ_PREFIX_COMMAND + lba;
+        String command = getReadCommand(lba);
         return ssdApplication.execute(command);
     }
 
+    private String getReadCommand(Integer lba) {
+        return READ_PREFIX_COMMAND + lba;
+    }
+
     private void write(Integer lba, String value){
-        String command = WRITE_PREFIX_COMMAND + lba + " " + value;
+        String command = getWriteCommand(lba, value);
         ssdApplication.execute(command);
+    }
+
+    private String getWriteCommand(Integer lba, String value) {
+        return WRITE_PREFIX_COMMAND + lba + " " + value;
     }
 
     private boolean readAndCompare(Integer lba, String compareValue){
@@ -50,4 +63,16 @@ public class ScriptManager {
         return compareValue.equals(readValue);
     }
 
+    public boolean testScript2() {
+        for (Integer lba : script2LbaOrder) {
+            write(lba, TEST_VALUE);
+        }
+
+        boolean isSuccess = false;
+        for (int i = 0; i <= 4; i++){
+            isSuccess = readAndCompare(i, TEST_VALUE);
+        }
+
+        return isSuccess;
+    }
 }
