@@ -10,6 +10,19 @@ class FileManager {
 
     private Map<Integer, String> hashmap = new HashMap<>();
 
+    public void readFile(int index) {
+        String result = readNandFile(index);
+        File file = getOrCreateFile(SSD_OUTPUT_FILE_NAME);
+        writeOnOutputFile(file, result);
+    }
+
+    public void writeFile(int index, String value) {
+        hashmap.put(index,value);
+
+        File file = getOrCreateFile(SSD_NAND_FILE_NAME);
+        writeOnFile(file);
+    }
+
     private File getOrCreateFile(String fileName) {
         File file = new File(fileName);
         if (!file.exists()) {
@@ -22,13 +35,7 @@ class FileManager {
         return file;
     }
 
-    public void readFile(int index) {
-        String result = readNandFile(index);
-        File file = getOrCreateFile(SSD_OUTPUT_FILE_NAME);
-        writeOnOutputFile(file, result);
-    }
-
-    public String readNandFile(int index) {
+    private String readNandFile(int index) {
         File file = getOrCreateFile(SSD_NAND_FILE_NAME);
         updateHashMapForNandFile(file);
         return hashmap.getOrDefault(index, BLANK_DATA);
@@ -56,13 +63,6 @@ class FileManager {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public void writeFile(int index, String value) {
-        hashmap.put(index,value);
-
-        File file = getOrCreateFile(SSD_NAND_FILE_NAME);
-        writeOnFile(file);
     }
 
     private void writeOnFile(File file) {
