@@ -26,16 +26,16 @@ class FileManagerTest {
     @Test
     void write_success() {
         fileManager.writeFile(INDEX, CORRECT_VALUE);
-        String ret = fileManager.readNandFile(INDEX);
 
-        assertThat(ret).isEqualTo(CORRECT_VALUE);
+        assertByReadingSpecificIndexFile(CORRECT_VALUE);
     }
 
     @Test
     void read_success() {
-        fileManager.writeFile(INDEX, CORRECT_VALUE);
-        String expect = CORRECT_VALUE;
+        assertByReadingSpecificIndexFile(CORRECT_VALUE);
+    }
 
+    private void assertByReadingSpecificIndexFile(String expect) {
         fileManager.readFile(INDEX);
 
         try {
