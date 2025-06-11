@@ -1,4 +1,5 @@
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,11 +25,13 @@ class FileManagerTest {
         resetTestOutputFile();
     }
 
+    @DisplayName("특정 인덱스 위치의 파일 읽고 output 텍스트 파일 쓰기 테스트")
     @Test
     void read_success() {
         assertByReadingSpecificIndexFile(INDEX, CORRECT_VALUE);
     }
 
+    @DisplayName("nana 파일에 새로운 데이터 쓰기 테스트")
     @Test
     void write_success() {
         fileManager.writeFile(INDEX, CORRECT_VALUE);
