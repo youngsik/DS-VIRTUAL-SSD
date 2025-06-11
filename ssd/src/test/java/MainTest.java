@@ -57,4 +57,35 @@ class MainTest {
         assertEquals("ERROR", main.value);
     }
 
+    @Test
+    @DisplayName("Command에 잘못된 개수의 인수 쓰기")
+    void testTwoParameters() {
+        Main main = new Main();
+        main.parsing(new String[]{"W", "0"});
+        assertEquals("ERROR", main.value);
+    }
+
+    @Test
+    @DisplayName("Command에 잘못된 개수의 인수 읽기")
+    void testThreeParameters() {
+        Main main = new Main();
+        main.parsing(new String[]{"R", "0", "0x00000000", "0"});
+        assertEquals("ERROR", main.value);
+    }
+
+    @Test
+    @DisplayName("Command에 음수 인수 입력")
+    void negativeParameter() {
+        Main main = new Main();
+        main.parsing(new String[]{"W", "-1", "0x00000000"});
+        assertEquals("ERROR", main.value);
+    }
+
+    @Test
+    @DisplayName("Command에 잘못된 value 쓰기")
+    void valueErrorTest() {
+        Main main = new Main();
+        main.parsing(new String[]{"W", "0", "0x0000000011"});
+        assertEquals("ERROR", main.value);
+    }
 }
