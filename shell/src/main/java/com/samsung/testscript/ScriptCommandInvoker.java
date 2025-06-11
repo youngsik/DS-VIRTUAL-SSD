@@ -1,28 +1,28 @@
 package com.samsung.testscript;
 
-import com.samsung.testshell.ShellCommand;
+import com.samsung.testshell.Command;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ScriptCommandInvoker {
-    private Map<String, ShellCommand> commandMap = new HashMap<>();
+    private Map<String, Command> commandMap = new HashMap<>();
 
-    public void register(String commandName, ShellCommand command) {
+    public void register(String commandName, Command command) {
         registerCommand(commandName, command);
     }
 
     public void execute(String[] cmdArgs) {
-        ShellCommand command = getCommand(cmdArgs[0]);
+        Command command = getCommand(cmdArgs[0]);
         command.execute(cmdArgs);
     }
 
-    private void registerCommand(String commandName, ShellCommand command) {
+    private void registerCommand(String commandName, Command command) {
         commandMap.put(commandName, command);
     }
 
-    private ShellCommand getCommand(String commandName) {
-        ShellCommand command = commandMap.get(commandName);
+    private Command getCommand(String commandName) {
+        Command command = commandMap.get(commandName);
 
         // 명령어 존재 여부 체크
         if (command == null) {

@@ -1,5 +1,5 @@
 package com.samsung.testshell;
 
-public interface ShellCommand {
+public interface Command {
     void execute(String[] cmdArgs);
 }

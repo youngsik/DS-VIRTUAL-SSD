@@ -1,9 +1,9 @@
 package com.samsung.testscript.command;
 
 import com.samsung.testscript.ScriptManager;
-import com.samsung.testshell.ShellCommand;
+import com.samsung.testshell.Command;
 
-public class TestScript2Command implements ShellCommand {
+public class TestScript2Command implements Command {
     private final ScriptManager scriptManager;
 
     public TestScript2Command(ScriptManager scriptManager) {
