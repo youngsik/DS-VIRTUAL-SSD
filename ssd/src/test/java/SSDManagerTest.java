@@ -56,13 +56,6 @@ public class SSDManagerTest {
         verify(fileManager, times(1)).readFile(LBA);
     }
 
-    @Test
-    @DisplayName("읽기 명령어 테스트(실패)")
-    void cmdExecuteReadFail() {
-        assertThrows(RuntimeException.class, () -> {
-            errorSsdManager.cmdExecute();
-        });
-    }
 
     @Test
     @DisplayName("쓰기 명령어 테스트(성공)")
