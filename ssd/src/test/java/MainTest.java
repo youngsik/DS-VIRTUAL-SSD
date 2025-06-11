@@ -28,4 +28,13 @@ class MainTest {
         assertEquals(5, main.lbaLocation);
         assertEquals("ERROR", main.value);
     }
+
+    @Test
+    @DisplayName("lbaLocation이 int가 아니면 value에 ERROR 할당 테스트")
+    void testParsingWithInvalidLbaLocation() {
+        Main main = new Main();
+        String[] args = {"W", "notInt", "0x12345678"};
+        main.parsing(args);
+        assertEquals("ERROR", main.value);
+    }
 }
