@@ -13,7 +13,7 @@ class SSDManager {
 
     public void cmdExecute() {
         if (command.equals("ERROR")) {
-            fileManager.errorResult(value);
+            fileManager.throwExcpetion(value);
             return;
         }
         if (command.equals("R")) {
