@@ -219,8 +219,4 @@ class TestShellManagerTest {
 
         assertThat(statusCode).isEqualTo(0);
     }
-
-
-
-
 }

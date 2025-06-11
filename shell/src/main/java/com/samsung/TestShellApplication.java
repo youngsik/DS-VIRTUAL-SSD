@@ -15,7 +15,6 @@ import com.samsung.testshell.commands.*;
 import java.util.Scanner;
 
 public class TestShellApplication {
-
     public static void main(String[] args) {
         ShellCommandInvoker shellCommandInvoker = new ShellCommandInvoker();
         ScriptCommandInvoker scriptCommandInvoker = new ScriptCommandInvoker();
