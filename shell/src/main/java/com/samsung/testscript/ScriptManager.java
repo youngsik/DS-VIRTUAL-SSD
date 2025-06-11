@@ -55,6 +55,22 @@ public class ScriptManager {
         return isSuccess;
     }
 
+    public boolean testScript3(){
+        boolean isSuccess = false;
+        for (int i = 0; i < 100; i++){
+            int randInt = random.nextInt(1000);
+            String randHex = String.format("0x%08X", randInt);
+
+            write(0, randHex);
+            write(99, randHex);
+
+            boolean isSuccessLbaFirst = readAndCompare(0, randHex);
+            boolean isSuccessLbaLast = readAndCompare(99, randHex);
+
+            isSuccess = isSuccessLbaFirst && isSuccessLbaLast;
+        }
+        return isSuccess;
+    }
 
     private String read(Integer lba){
         String command = getReadCommand(lba);
