@@ -1,11 +1,10 @@
-package com.samsung;
+package com.samsung.file;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 public class FileManager {
     public static final String BLANK_DATA = "0x00000000";
@@ -14,16 +13,14 @@ public class FileManager {
 
     private Map<Integer, String> hashmap = new HashMap<>();
 
+    public Map<Integer, String> getHashmap() {
+        return hashmap;
+    }
+
     public void readFile(int index) {
         settingHashMapFromNandFile();
         String result = getValue(index);
         writeOnOutputFile(result);
-    }
-
-    public void writeFile(int index, String value) {
-        settingHashMapFromNandFile();
-        hashmap.put(index,value);
-        writeOnNandFile();
     }
 
     private void settingHashMapFromNandFile() {
@@ -66,21 +63,6 @@ public class FileManager {
         for(String d : data){
             String[] tmp = d.split(" ");
             hashmap.put(Integer.parseInt(tmp[0]), tmp[1]);
-        }
-    }
-
-    private void writeOnNandFile() {
-        File file = getOrCreateFile(SSD_NAND_FILE_NAME);
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            for (Entry<Integer, String> entry : hashmap.entrySet()) {
-                writer.write(entry.getKey() + " " + entry.getValue());
-                writer.newLine();
-            }
-            writer.flush();
-            writer.close();
-        } catch (IOException e) {
-
         }
     }
 
