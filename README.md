@@ -19,11 +19,11 @@ Device Solution 팀의 가상 SSD 제작 프로젝트
     ./gradlew clean :DS-VIRTUAL-SSD:ssd -x test
 - LBA에 Value 저장하기
   ````shell
-  ssd.jar W {LBA} {Value}
+  java -jar ssd.jar W {LBA} {Value}
 
 - LBA에 있는 Value 읽어서 output.txt에 저장
     ````shell
-  ssd.jar R {LBA}
+  java -jar ssd.jar R {LBA}
 
 ## Test Shell
 ssd.jar 빌드 선행 후 실행
@@ -41,16 +41,16 @@ ssd.jar 빌드 선행 후 실행
 shell.jar 빌드 선행 후 실행
 - Testcase 1 실행
   ````shell
-  shell.jar
+  java -jar shell.jar
   SHEll> [1_FullWriteAndReadCompare|1_]
 
 - Testcase 2 실행
   ````shell
-  shell.jar
+  java -jar shell.jar
   SHEll> [2_PartialLBAWrite|2_]
 
 - Testcase 3 실행
   ````shell
-  shell.jar
+  java -jar shell.jar
   SHEll> [3_WriteReadAging|3_]
   

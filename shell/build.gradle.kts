@@ -6,6 +6,7 @@ group = "org.example"
 
 tasks.jar {
     manifest {
+        destinationDirectory = rootDir
         attributes["Main-Class"] = "com.samsung.TestShellApplication" // ← 실제 main 클래스 FQCN
     }
 }

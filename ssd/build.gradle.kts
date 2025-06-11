@@ -7,6 +7,7 @@ version = "unspecified"
 
 tasks.jar {
     manifest {
+        destinationDirectory = rootDir
         attributes["Main-Class"] = "com.samsung.Main" // ← 실제 main 클래스 FQCN
     }
 }
