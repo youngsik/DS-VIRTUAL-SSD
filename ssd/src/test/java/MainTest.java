@@ -17,4 +17,15 @@ class MainTest {
         assertEquals("0x12345678", main.value);
     }
 
+    @Test
+    @DisplayName("command가 W, R이 아닌 경우 value에 ERROR 할당 테스트")
+    void testParsingWithInvalidCommand() {
+        Main main = new Main();
+        String[] args = {"X", "5", "0x99999999"};
+        main.parsing(args);
+
+        assertEquals("X", main.command);
+        assertEquals(5, main.lbaLocation);
+        assertEquals("ERROR", main.value);
+    }
 }
