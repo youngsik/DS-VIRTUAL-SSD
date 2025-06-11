@@ -25,12 +25,12 @@ class MainTest {
     @Test
     @DisplayName("parsing 함수 테스트 - 쓰기")
     void testParsing() {
-        String[] args = {"W", "3", "0x00000000"};
+        String[] args = {"W", "3", "0x00000001"};
         main.parsing(args);
 
         assertEquals("W", main.command);
-        assertEquals(3, main.LBA);
-        assertEquals("0x00000000", main.value);
+        assertEquals(3, main.lba);
+        assertEquals("0x00000001", main.value);
     }
 
     @Test
@@ -40,7 +40,7 @@ class MainTest {
         main.parsing(args);
 
         assertEquals("R", main.command);
-        assertEquals(3, main.LBA);
+        assertEquals(3, main.lba);
         assertEquals(null, main.value);
     }
 
@@ -93,5 +93,83 @@ class MainTest {
         main.parsing(new String[]{"W", "0", "0x0000000011"});
         assertEquals("ERROR", main.command);
         assertEquals("ERROR", main.value);
+    }
+
+    @Test
+    @DisplayName("parsing 함수 테스트 - 쓰기")
+    void testParsing16() {
+        String[] args = {"W", "3", "0xG(GGGGG,"};
+        main.parsing(args);
+
+        assertEquals("ERROR", main.command);
+        assertEquals("ERROR", main.value);
+    }
+
+    @Test
+    void testW_0_0x00000000() {
+        Main.parsing(new String[]{"W", "0", "0x00000000"});
+        assertEquals("W", Main.command);
+        assertEquals(0, Main.lba);
+        assertEquals("0x00000000", Main.value);
+    }
+
+    @Test
+    void testW_99_0xFFFFFFFF() {
+        Main.parsing(new String[]{"W", "99", "0xFFFFFFFF"});
+        assertEquals("W", Main.command);
+        assertEquals(99, Main.lba);
+        assertEquals("0xFFFFFFFF", Main.value);
+    }
+
+    @Test
+    void testR_50_0x1234ABCD() {
+        Main.parsing(new String[]{"R", "50", "0x1234ABCD"});
+        assertEquals("ERROR", Main.command);
+        assertEquals("ERROR", Main.value);
+    }
+
+    @Test
+    void testR_1_0xA0B0C0D0() {
+        Main.parsing(new String[]{"R", "1", "0xA0B0C0D0"});
+        assertEquals("ERROR", Main.command);
+        assertEquals("ERROR", Main.value);
+    }
+
+    @Test
+    void testW_10_0x00FF00FF() {
+        Main.parsing(new String[]{"W", "10", "0x00FF00FF"});
+        assertEquals("W", Main.command);
+        assertEquals(10, Main.lba);
+        assertEquals("0x00FF00FF", Main.value);
+    }
+
+    @Test
+    void testNoSpaceBetweenWorkAndLba() {
+        Main.parsing(new String[]{"W10", "0x12345678"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test
+    void testValueMissing() {
+        Main.parsing(new String[]{"W", "10"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test
+    void testWorkMissing() {
+        Main.parsing(new String[]{"10", "0x12345678"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test
+    void testLbaAndValueMissing() {
+        Main.parsing(new String[]{"W"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test
+    void testEmptyInput() {
+        Main.parsing(new String[]{});
+        assertEquals("ERROR", Main.command);
     }
 }
