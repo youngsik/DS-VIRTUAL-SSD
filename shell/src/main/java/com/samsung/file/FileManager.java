@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FileManager {    public static final String BLANK_DATA = "0x00000000";
+public class FileManager {
+    public static final String BLANK_DATA = "0x00000000";
     public static final String SSD_NAND_FILE_NAME = "ssd_nand.txt";
     public static final String SSD_OUTPUT_FILE_NAME = "ssd_output.txt";
 
@@ -20,12 +21,6 @@ public class FileManager {    public static final String BLANK_DATA = "0x0000000
         settingHashMapFromNandFile();
         String result = getValue(index);
         writeOnOutputFile(result);
-    }
-
-    public void writeFile(int index, String value) {
-        settingHashMapFromNandFile();
-        hashmap.put(index,value);
-        writeOnNandFile();
     }
 
     private void settingHashMapFromNandFile() {
@@ -68,21 +63,6 @@ public class FileManager {    public static final String BLANK_DATA = "0x0000000
         for(String d : data){
             String[] tmp = d.split(" ");
             hashmap.put(Integer.parseInt(tmp[0]), tmp[1]);
-        }
-    }
-
-    private void writeOnNandFile() {
-        File file = getOrCreateFile(SSD_NAND_FILE_NAME);
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            for (Map.Entry<Integer, String> entry : hashmap.entrySet()) {
-                writer.write(entry.getKey() + " " + entry.getValue());
-                writer.newLine();
-            }
-            writer.flush();
-            writer.close();
-        } catch (IOException e) {
-
         }
     }
 
