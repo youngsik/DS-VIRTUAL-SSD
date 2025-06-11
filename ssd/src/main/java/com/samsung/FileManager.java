@@ -27,6 +27,11 @@ class FileManager {
         writeOnNandFile();
     }
 
+    public void throwException(String result) {
+        File file = getOrCreateFile(SSD_OUTPUT_FILE_NAME);
+        writeOnOutputFile(file, result);
+    }
+
     private void settingHashMapFromNandFile() {
         File file = getOrCreateFile(SSD_NAND_FILE_NAME);
         List<String> data = getDataFromNandFile(file);
@@ -94,9 +99,5 @@ class FileManager {
         } catch (IOException e) {
 
         }
-    }
-
-    public void throwExcpetion(String result) {
-
     }
 }

@@ -20,7 +20,7 @@ class SSDManager {
     }
 
     private void fileThrowExcpetion() {
-        fileManager.throwExcpetion(value);
+        fileManager.throwException(value);
     }
 
     public void fileRead(int lbaLocation) {
