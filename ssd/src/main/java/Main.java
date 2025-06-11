@@ -8,6 +8,13 @@ class Main {
     public String value;
 
     public void parsing(String[] args) {
+        try {
+            lbaLocation = Integer.parseInt(args[1]);
+        } catch (NumberFormatException e) {
+            value = "ERROR";
+            return;
+        }
+
         command = args[0];
         lbaLocation = Integer.parseInt(args[1]);
         value = args[2];
