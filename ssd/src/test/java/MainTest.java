@@ -27,6 +27,18 @@ class MainTest {
     }
 
     @Test
+    @DisplayName("parsing 함수 테스트2")
+    void testParsing2() {
+        Main main = new Main();
+        String[] args = {"R", "3"};
+        main.parsing(args);
+
+        assertEquals("R", main.command);
+        assertEquals(3, main.lbaLocation);
+        assertEquals(null, main.value);
+    }
+
+    @Test
     @DisplayName("command가 W, R이 아닌 경우 value에 ERROR 할당 테스트")
     void testParsingWithInvalidCommand() {
         Main main = new Main();
