@@ -44,4 +44,7 @@ public class ScriptManager {
         String readValue = read(lba);
         return compareValue.equals(readValue);
     }
+
+    public void testScript2() { 
+    }
 }
