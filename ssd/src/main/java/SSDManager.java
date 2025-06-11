@@ -19,14 +19,14 @@ class SSDManager {
 
     }
     public void cmdExecute() {
-        if (action.equals("R")) {
+        if ("R".equals(action)) {
             fileRead(lbaLocation);
+            return;
         }
-        else if (action.equals("W")) {
+        if ("W".equals(action)) {
             fileWrite(lbaLocation, value);
+            return;
         }
-        else {
-            throw new RuntimeException("ERROR");
-        }
+        throw new RuntimeException("ERROR");
     }
 }
