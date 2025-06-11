@@ -13,6 +13,6 @@ public class HelpCommand implements ShellCommand {
 
     @Override
     public void excute() {
-
+        testShellManager.help();
     }
 }
