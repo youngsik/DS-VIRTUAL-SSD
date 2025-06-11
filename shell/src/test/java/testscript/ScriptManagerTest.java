@@ -2,27 +2,31 @@ package testscript;
 
 import main.SsdApplication;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 public class ScriptManagerTest {
+    public static final String DUMMY_VALUE = "0xAAAABBBB";
     @Mock
     SsdApplication ssdApplication;
+    @InjectMocks
+    ScriptManager scriptManager;
 
     @Test
     void createSscScriptManager(){
-        ScriptManager scriptManager = new ScriptManager(ssdApplication);
-
         assertNotNull(scriptManager);
     }
 
     @Test
     void callSsdApplicationReadTest(){
-        String expected = "0xAAAABBBB";
-        ScriptManager scriptManager = new ScriptManager(ssdApplication);
+        String expected = DUMMY_VALUE;
         when(ssdApplication.execute("R 1")).thenReturn(expected);
 
         String result = scriptManager.read(1);
@@ -33,20 +37,16 @@ public class ScriptManagerTest {
 
     @Test
     void callSsdApplicationWriteTest(){
-        ScriptManager scriptManager = new ScriptManager(ssdApplication);
-
-        scriptManager.write(1, "0xAAAABBBB");
+        scriptManager.write(1, DUMMY_VALUE);
 
         verify(ssdApplication).execute("W 1 0xAAAABBBB");
     }
 
     @Test
     void callSsdApplicationReadAndCompareTest(){
-        String expected = "0xAAAABBBB";
-        ScriptManager scriptManager = new ScriptManager(ssdApplication);
-        when(ssdApplication.execute("R 1")).thenReturn(expected);
+        when(ssdApplication.execute("R 1")).thenReturn(DUMMY_VALUE);
 
-        boolean result = scriptManager.readAndCompare(1, "0xAAAABBBB");
+        boolean result = scriptManager.readAndCompare(1, DUMMY_VALUE);
 
         verify(ssdApplication).execute("R 1");
         assertTrue(result);
