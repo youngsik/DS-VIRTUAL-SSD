@@ -10,18 +10,19 @@ public class ShellCommandInvoker {
         commandMap.put(commandName, command);
     }
 
-    public void execute(String commandName, Integer index, String value) {
-        ShellCommand command = getCommand(commandName);
-        command.execute(index, value);
+    public void execute(String[] cmdArgs) {
+        ShellCommand command = getCommand(cmdArgs[0]);
+        command.execute(cmdArgs);
     }
 
     private ShellCommand getCommand(String commandName) {
         ShellCommand command = commandMap.get(commandName);
 
+        // 명령어 존재 여부 체크
         if (command == null) {
-            throw new RuntimeException("유효하지 않은 명령어입니다. 입력한 명령어: " + commandName);
-
+            throw new RuntimeException("INVALID COMMAND");
         }
+
         return command;
     }
 }
