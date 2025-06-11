@@ -5,4 +5,6 @@ class FileManager {
     public void writeFile(int index, String value) {
     }
 
+    public void errorResult(String vale) {}
+
 }
