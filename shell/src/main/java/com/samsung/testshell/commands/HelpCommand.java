@@ -5,7 +5,7 @@ import com.samsung.testshell.TestShellManager;
 
 public class HelpCommand implements ShellCommand {
 
-    private TestShellManager testShellManager;
+    private final TestShellManager testShellManager;
 
     public HelpCommand(TestShellManager testShellManager) {
         this.testShellManager = testShellManager;

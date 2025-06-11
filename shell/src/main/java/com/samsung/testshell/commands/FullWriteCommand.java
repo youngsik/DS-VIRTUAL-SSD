@@ -5,7 +5,7 @@ import com.samsung.testshell.TestShellManager;
 
 public class FullWriteCommand implements ShellCommand {
 
-    private TestShellManager testShellManager;
+    private final TestShellManager testShellManager;
 
     public FullWriteCommand(TestShellManager testShellManager) {
         this.testShellManager = testShellManager;

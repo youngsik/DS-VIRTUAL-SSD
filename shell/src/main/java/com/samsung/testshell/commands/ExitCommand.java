@@ -5,7 +5,7 @@ import com.samsung.testshell.TestShellManager;
 
 public class ExitCommand implements ShellCommand {
 
-    private TestShellManager testShellManager;
+    private final TestShellManager testShellManager;
 
     public ExitCommand(TestShellManager testShellManager) {
         this.testShellManager = testShellManager;

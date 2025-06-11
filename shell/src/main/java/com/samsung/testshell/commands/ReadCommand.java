@@ -5,7 +5,7 @@ import com.samsung.testshell.TestShellManager;
 
 public class ReadCommand implements ShellCommand {
 
-    private TestShellManager testShellManager;
+    private final TestShellManager testShellManager;
 
     public ReadCommand(TestShellManager testShellManager) {
         this.testShellManager = testShellManager;
