@@ -2,6 +2,7 @@ package com.samsung.testshell;
 
 import com.samsung.SsdApplication;
 import com.samsung.file.FileManager;
+import com.samsung.file.JarExecutor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,16 +30,19 @@ class TestShellManagerTest {
     private final PrintStream originalOut = System.out;
 
     public static final String DUMMY_VALUE = "0xFFFFFFFF";
+    TestShellManager testShellManager;
 
     @Mock
-    SsdApplication mockSsdApplication;
+    private JarExecutor jarExecutor;
 
     @Mock
     FileManager fileManager;
 
+
     @BeforeEach
     void setUp() {
         System.setOut(new PrintStream(outContent));
+        testShellManager = new TestShellManager(jarExecutor, fileManager);;
     }
 
     @Test
@@ -48,10 +52,9 @@ class TestShellManagerTest {
         int index = 3;
         String inputCommand ="R " + index;
 
-        TestShellManager testShellManager= new TestShellManager(mockSsdApplication, fileManager);
         testShellManager.read(index);
 
-        verify(mockSsdApplication, times(1)).execute(inputCommand);
+        verify(fileManager, times(1)).readFile(index);
 
     }
 
@@ -63,7 +66,6 @@ class TestShellManagerTest {
         String inputCommand ="R " + index;
         String expected = "[Read] LBA 03 0xFFFFFFFF";
 
-        TestShellManager testShellManager= new TestShellManager(mockSsdApplication, fileManager);
 
         Map<Integer, String> hashMap = new HashMap<>();
         doNothing().when(fileManager).readFile(index);
@@ -86,9 +88,9 @@ class TestShellManagerTest {
 
         String inputCommand ="W" + " " + index + " " + value;
 
-        TestShellManager testShellManager= new TestShellManager(mockSsdApplication, fileManager);testShellManager.write(index,value);
+        testShellManager.write(index,value);
 
-        verify(mockSsdApplication, times(1)).execute(inputCommand);
+        verify(jarExecutor, times(1)).executeWriteJar(index, value);
     }
 
     @Test
@@ -99,9 +101,6 @@ class TestShellManagerTest {
         String value = "0xFFFFFFFF";
         String expected = "[Write] Done";
 
-        String inputCommand ="W" + " " + index + " " + value;
-
-        TestShellManager testShellManager= new TestShellManager(mockSsdApplication, fileManager);
         testShellManager.write(index,value);
 
         assertThat(outContent.toString().trim())
@@ -112,11 +111,8 @@ class TestShellManagerTest {
     @DisplayName("testShell 전체쓰기 실행")
     void testShellFullWriteExecute() {
         String value = "0xFFFFFFFF";
-
-        TestShellManager testShellManager= new TestShellManager(mockSsdApplication, fileManager);
-
         testShellManager.fullwrite(value);
-        verify(mockSsdApplication, times(100)).execute(anyString());
+        verify(jarExecutor, times(100)).executeWriteJar(anyInt(),anyString());
     }
 
     @Test
@@ -124,8 +120,6 @@ class TestShellManagerTest {
     void testShellFullWrite() {
         String expected = "[Full Write] Done";
         String value = "0xFFFFFFFF";
-
-        TestShellManager testShellManager= new TestShellManager(mockSsdApplication, fileManager);
 
         testShellManager.fullwrite(value);
         assertThat(outContent.toString().trim())
@@ -142,7 +136,6 @@ class TestShellManagerTest {
         fakeData.put(99, "0x12345678");
 
         when(fileManager.getHashmap()).thenReturn(fakeData);
-        TestShellManager testShellManager= new TestShellManager(mockSsdApplication, fileManager);
 
         testShellManager.fullread();
 
@@ -171,13 +164,9 @@ class TestShellManagerTest {
     @Test
     @DisplayName("testShell help")
     void testShellFullHelp() {
-        // given
-        TestShellManager testShellManager = new TestShellManager(mockSsdApplication, fileManager);
 
-        // when
         testShellManager.help();
 
-        // then
         String actualOutput = outContent.toString().trim();
 
         String expectedOutput = String.join("\n",
@@ -211,7 +200,6 @@ class TestShellManagerTest {
     @Test
     @DisplayName("testShell EXIT")
     void testShellFullEXIT() throws Exception {
-        TestShellManager testShellManager= new TestShellManager(mockSsdApplication, fileManager);
 
         int statusCode = catchSystemExit(() -> {
             testShellManager.exit(); // exit() 호출

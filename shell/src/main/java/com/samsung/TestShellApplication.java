@@ -55,7 +55,7 @@ public class TestShellApplication {
     }
 
     private static void initShellCommand(ShellCommandInvoker shellCommandInvoker) {
-        TestShellManager testShellManager = new TestShellManager(new SsdApplication(), new FileManager());
+        TestShellManager testShellManager = new TestShellManager(new JarExecutor(), new FileManager());
         shellCommandInvoker.register("write", new WriteCommand(testShellManager));
         shellCommandInvoker.register("read", new ReadCommand(testShellManager));
         shellCommandInvoker.register("exit", new ExitCommand(testShellManager));
