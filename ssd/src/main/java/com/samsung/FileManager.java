@@ -59,7 +59,7 @@ public class FileManager {
         return data;
     }
 
-    public String getValue(int index) {
+    private String getValue(int index) {
         return hashmap.getOrDefault(index, BLANK_DATA);
     }
 

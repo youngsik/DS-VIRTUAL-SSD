@@ -1,7 +1,7 @@
 package com.samsung.testshell;
 
-import com.samsung.FileManager;
 import com.samsung.SsdApplication;
+import com.samsung.file.FileManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.PrintStream;
+import java.util.List;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -116,4 +120,31 @@ class TestShellManagerTest {
         assertThat(outContent.toString().trim())
                 .isEqualTo(expected);
     }
+
+    @Test
+    @DisplayName("testSheel 전체읽기 실행")
+    void testShellFullReadExecute() {
+        String value = "0xFFFFFFFF";
+        List<String> listvalues = Arrays.asList("1 0xFFFFFFFF", "2 0xFFFFFFFE");
+
+        TestShellManager testShellManager= new TestShellManager(mockSsdApplication, fileManager);
+
+        File file = fileManager.getOrCreateFile(anyString());
+        when(fileManager.getDataFromNandFile(file)).thenReturn(listvalues);
+
+        testShellManager.fullread();
+        String expectedOutput = String.join("\n", listvalues).trim();
+        String actualOutput = outContent.toString().trim();
+
+        String normalizedExpected = Arrays.stream(expectedOutput.split("\n"))
+                .map(String::trim)
+                .collect(Collectors.joining("\n"));
+
+        String normalizedActual = Arrays.stream(actualOutput.split("\n"))
+                .map(String::trim)
+                .collect(Collectors.joining("\n"));
+
+        assertThat(normalizedActual).isEqualTo(normalizedExpected);
+    }
+
 }

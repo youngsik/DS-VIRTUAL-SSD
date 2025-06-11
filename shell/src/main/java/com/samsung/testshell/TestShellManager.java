@@ -1,13 +1,18 @@
 package com.samsung.testshell;
 
-import com.samsung.FileManager;
 import com.samsung.SsdApplication;
+import com.samsung.file.FileManager;
+
+import java.io.File;
+import java.util.List;
 
 public class TestShellManager {
 
     SsdApplication ssdApplicatioin;
     FileManager fileManager;
 
+    public static final String BLANK_DATA = "0x00000000";
+    public static final String SSD_NAND_FILE_NAME = "ssd_nand.txt";
 
     public TestShellManager(SsdApplication ssdApplicatioin, FileManager fileManager) {
         this.ssdApplicatioin = ssdApplicatioin;
@@ -54,6 +59,7 @@ public class TestShellManager {
     }
 
     public void fullread() {
-        // fullread 실행
+
+
     }
 }
