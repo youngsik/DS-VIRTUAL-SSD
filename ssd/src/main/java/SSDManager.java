@@ -17,4 +17,14 @@ class SSDManager {
     public void fileWrite(int lbaLocation, String value) {
 
     }
+
+    public void cmdExecute() {
+        if ("read".equalsIgnoreCase(action)) {
+            fileRead(lbaLocation);
+        } else if ("write".equalsIgnoreCase(action)) {
+            fileWrite(lbaLocation, value);
+        } else {
+            System.out.println("Invalid command");
+        }
+    }
 }
