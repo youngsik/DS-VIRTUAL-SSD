@@ -157,6 +157,7 @@ class TestShellManagerTest {
 
         testShellManager.help();
 
+
         String actualOutput = outContent.toString().trim();
 
         String expectedOutput = String.join("\n", listvalues).trim();
