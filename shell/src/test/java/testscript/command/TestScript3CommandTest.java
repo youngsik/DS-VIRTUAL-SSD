@@ -2,6 +2,7 @@ package testscript.command;
 
 import com.samsung.testscript.ScriptManager;
 import com.samsung.testscript.command.TestScript2Command;
+import com.samsung.testscript.command.TestScript3Command;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
