@@ -7,12 +7,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-class FileManager {
+public class FileManager {
     public static final String BLANK_DATA = "0x00000000";
     public static final String SSD_NAND_FILE_NAME = "ssd_nand.txt";
     public static final String SSD_OUTPUT_FILE_NAME = "ssd_output.txt";
 
     private Map<Integer, String> hashmap = new HashMap<>();
+
+    public Map<Integer, String> getHashmap() {
+        return hashmap;
+    }
 
     public void readFile(int index) {
         settingHashMapFromNandFile();
