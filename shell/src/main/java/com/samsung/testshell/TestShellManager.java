@@ -41,7 +41,7 @@ public class TestShellManager {
         String value;
 
         fileManager.readFile(index);
-        value = fileManager.getHashmap().get(index);
+        value = fileManager.getHashmap().getOrDefault(index, BLANK_DATA);
 
         String output = head + " " + location + " " + value;
         System.out.println(output);

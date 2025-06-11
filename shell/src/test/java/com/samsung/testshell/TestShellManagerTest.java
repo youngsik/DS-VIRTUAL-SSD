@@ -101,8 +101,6 @@ class TestShellManagerTest {
         String value = "0xFFFFFFFF";
         String expected = "[Write] Done";
 
-        String inputCommand ="W" + " " + index + " " + value;
-
         testShellManager.write(index,value);
 
         assertThat(outContent.toString().trim())
