@@ -69,7 +69,11 @@ public class TestShellManager {
         System.out.println("김영식, 박준경, 권희정, 권성민, 이상훈, 오시훈, 추준성");
         System.out.println("사용법");
         System.out.println("write 3 0xAAAABBBB");
-
+        System.out.println("read 3");
+        System.out.println("fullwrite 0xAAAABBBB");
+        System.out.println("fullread");
+        System.out.println("help");
+        System.out.println("exit");
     }
 
     public void fullwrite(String value) {
