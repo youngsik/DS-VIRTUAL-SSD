@@ -4,6 +4,7 @@ import main.SsdApplication;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ScriptManager {
     private static final String READ_PREFIX_COMMAND = "R ";
@@ -20,6 +21,7 @@ public class ScriptManager {
     public ScriptManager(SsdApplication ssdApplication) {
         this.ssdApplication = ssdApplication;
     }
+    public Random random = new Random();
 
     public boolean testScript1(){
         int indexHeader = 0;
@@ -39,6 +41,20 @@ public class ScriptManager {
         }
         return isSuccess;
     }
+
+    public boolean testScript2() {
+        for (Integer lba : script2LbaOrder) {
+            write(lba, TEST_VALUE);
+        }
+
+        boolean isSuccess = false;
+        for (int i = 0; i <= 4; i++){
+            isSuccess = readAndCompare(i, TEST_VALUE);
+        }
+
+        return isSuccess;
+    }
+
 
     private String read(Integer lba){
         String command = getReadCommand(lba);
@@ -61,18 +77,5 @@ public class ScriptManager {
     private boolean readAndCompare(Integer lba, String compareValue){
         String readValue = read(lba);
         return compareValue.equals(readValue);
-    }
-
-    public boolean testScript2() {
-        for (Integer lba : script2LbaOrder) {
-            write(lba, TEST_VALUE);
-        }
-
-        boolean isSuccess = false;
-        for (int i = 0; i <= 4; i++){
-            isSuccess = readAndCompare(i, TEST_VALUE);
-        }
-
-        return isSuccess;
     }
 }
