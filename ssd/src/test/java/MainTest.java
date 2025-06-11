@@ -22,7 +22,7 @@ class MainTest {
         main.parsing(args);
 
         assertEquals("W", main.command);
-        assertEquals(3, main.lbaLocation);
+        assertEquals(3, main.lba);
         assertEquals("0x12345678", main.value);
     }
 
@@ -34,7 +34,7 @@ class MainTest {
         main.parsing(args);
 
         assertEquals("R", main.command);
-        assertEquals(3, main.lbaLocation);
+        assertEquals(3, main.lba);
         assertEquals(null, main.value);
     }
 
@@ -46,7 +46,7 @@ class MainTest {
         main.parsing(args);
 
         assertEquals("X", main.command);
-        assertEquals(5, main.lbaLocation);
+        assertEquals(5, main.lba);
         assertEquals("ERROR", main.value);
     }
 
@@ -88,6 +88,14 @@ class MainTest {
     void valueErrorTest() {
         Main main = new Main();
         main.parsing(new String[]{"W", "0", "0x0000000011"});
+        assertEquals("ERROR", main.value);
+    }
+
+    @Test
+    @DisplayName("Command에 null")
+    void nullParameterTest() {
+        Main main = new Main();
+        main.parsing(null);
         assertEquals("ERROR", main.value);
     }
 }
