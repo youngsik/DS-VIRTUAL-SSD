@@ -1,9 +1,8 @@
-package testscript.command;
+package com.samsung.testscript.command;
 
-import rootcommand.Command;
-import testscript.ScriptManager;
+import com.samsung.testscript.ScriptManager;
 
-public class TestScript1Command implements Command {
+public class TestScript1Command implements ScriptCommand {
     private final ScriptManager scriptManager;
     
     public TestScript1Command(ScriptManager scriptManager) {
@@ -12,6 +11,6 @@ public class TestScript1Command implements Command {
 
     @Override
     public void execute() {
-        
+        scriptManager.testScript1();
     }
 }

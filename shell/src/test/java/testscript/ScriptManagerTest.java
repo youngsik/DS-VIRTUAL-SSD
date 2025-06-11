@@ -1,6 +1,8 @@
 package testscript;
 
+import com.samsung.testscript.ScriptManager;
 import main.SsdApplication;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -8,8 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ScriptManagerTest {
@@ -25,30 +26,27 @@ public class ScriptManagerTest {
     }
 
     @Test
-    void callSsdApplicationReadTest(){
-        String expected = DUMMY_VALUE;
-        when(ssdApplication.execute("R 1")).thenReturn(expected);
+    void testScript1_shouldWriteAndReadCorrectly() {
+        for (int i = 0; i <= 96; i += 4) {
+            for (int j = i; j < i + 4; j++) {
+                when(ssdApplication.execute("R " + j)).thenReturn(DUMMY_VALUE);
+                when(ssdApplication.execute("W " + j + " " + DUMMY_VALUE)).thenReturn("OK");
+            }
+        }
 
-        String result = scriptManager.read(1);
+        scriptManager.testScript1();
 
-        verify(ssdApplication).execute("R 1");
-        assertEquals(expected, result);
-    }
+        // write 호출 검증
+        for (int i = 0; i < 99; i++) {
+            verify(ssdApplication).execute("W " + i + " " + DUMMY_VALUE);
+        }
 
-    @Test
-    void callSsdApplicationWriteTest(){
-        scriptManager.write(1, DUMMY_VALUE);
+        // read 호출 검증
+        for (int i = 0; i < 99; i++) {
+            verify(ssdApplication).execute("R " + i);
+        }
 
-        verify(ssdApplication).execute("W 1 0xAAAABBBB");
-    }
-
-    @Test
-    void callSsdApplicationReadAndCompareTest(){
-        when(ssdApplication.execute("R 1")).thenReturn(DUMMY_VALUE);
-
-        boolean result = scriptManager.readAndCompare(1, DUMMY_VALUE);
-
-        verify(ssdApplication).execute("R 1");
-        assertTrue(result);
+        // 호출 횟수까지 확인
+        verify(ssdApplication, times(200)).execute(anyString());
     }
 }
