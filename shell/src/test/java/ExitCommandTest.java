@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -14,7 +15,7 @@ class ExitCommandTest {
 
     @Test
     void excute() {
-        ExitCommand exitCommand = new ExitCommand();
+        ExitCommand exitCommand = new ExitCommand(testShellManager);
         exitCommand.excute();
         verify(testShellManager, times(1)).exit();
     }
