@@ -172,7 +172,15 @@ class TestShellManagerTest {
     @DisplayName("testShell help")
     void testShellFullHelp() {
 
-        List<String> listvalues = Arrays.asList("DeviceSolution", "김영식, 박준경, 권희정, 권성민, 이상훈, 오시훈, 추준성","사용법","write 3 0xAAAABBBB" );
+        List<String> listvalues = Arrays.asList("DeviceSolution",
+                "김영식, 박준경, 권희정, 권성민, 이상훈, 오시훈, 추준성",
+                "사용법",
+                "write 3 0xAAAABBBB",
+                "read 3",
+                "fullwrite 0xAAAABBBB",
+                "fullread",
+                "help",
+                "exit");
 
         TestShellManager testShellManager= new TestShellManager(mockSsdApplication, fileManager);
 

@@ -60,7 +60,6 @@ public class TestShellManager {
     }
 
     public void exit() {
-        // exit 실행
         System.exit(0);
     }
 

@@ -10,7 +10,6 @@ import com.samsung.testscript.command.TestScript3Command;
 import com.samsung.testshell.ShellCommandInvoker;
 import com.samsung.testshell.TestShellManager;
 import com.samsung.testshell.commands.*;
-import main.SsdApplication;
 
 import java.util.Scanner;
 
@@ -46,7 +45,7 @@ public class TestShellApplication {
     }
 
     private static void initShellCommand(ShellCommandInvoker shellCommandInvoker) {
-        TestShellManager testShellManager = new TestShellManager();
+        TestShellManager testShellManager = new TestShellManager(new SsdApplication(), new FileManager());
         shellCommandInvoker.register("write", new WriteCommand(testShellManager));
         shellCommandInvoker.register("read", new ReadCommand(testShellManager));
         shellCommandInvoker.register("exit", new ExitCommand(testShellManager));
