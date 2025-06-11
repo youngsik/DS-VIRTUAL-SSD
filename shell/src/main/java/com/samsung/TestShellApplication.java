@@ -1,6 +1,5 @@
 package com.samsung;
 
-import com.samsung.dto.InputDto;
 import com.samsung.file.FileManager;
 import com.samsung.file.JarExecutor;
 import com.samsung.testscript.ScriptCommandInvoker;
@@ -24,22 +23,33 @@ public class TestShellApplication {
         initShellCommand(shellCommandInvoker);
         initScriptCommand(scriptCommandInvoker);
 
-
         // 사용자 입력 받기
-        System.out.println("'testshell 명령어: write, read, exit, help, fullwrite, fullread");
+        System.out.println("testshell 명령어: write, read, exit, help, fullwrite, fullread");
         System.out.println("testscript 명령어: 1_FullWriteAndReadCompare, 2_PartialLBAWrite, 3_WriteReadAging");
 
         while (true) {
             try {
-                InputDto inputDto = parse(padToThree(split(getInput())));
+                String[] cmdArgs = split(getInput()); // 1~3개 args가 들어옴을 보장
 
-                if (inputDto.getCommandName().contains("_")) {
-                    scriptCommandInvoker.execute(inputDto.getCommandName());
+                // 명령어 파라미터 길이 필수 요건 체크
+                if (cmdArgs.length < 1 || cmdArgs.length > 4) {
+                    throw new RuntimeException("INVALID COMMAND");
+                }
+
+                String commandName = cmdArgs[0];
+
+                // 명령어 파라미터 null 체크
+                if (commandName == null) {
+                    throw new RuntimeException("INVALID COMMAND");
+                }
+
+                if (commandName.contains("_")) {
+                    scriptCommandInvoker.execute(cmdArgs);
                 } else {
-                    shellCommandInvoker.execute(inputDto.getCommandName(), inputDto.getIndex(), inputDto.getValue());
+                    shellCommandInvoker.execute(cmdArgs);
                 }
             } catch (Exception e) {
-                System.out.println("에러 발생: " + e.getMessage());
+                System.out.println(e.getMessage());
             }
         }
 
@@ -57,40 +67,17 @@ public class TestShellApplication {
 
     private static void initScriptCommand(ScriptCommandInvoker scriptCommandInvoker) {
         ScriptManager scriptManager = new ScriptManager(new FileManager(), new JarExecutor());
-        scriptCommandInvoker.register("1_fullwriteandreadcompare", new TestScript1Command(scriptManager));
-        scriptCommandInvoker.register("2_partiallbawrite", new TestScript2Command(scriptManager));
-        scriptCommandInvoker.register("3_writereadaging", new TestScript3Command(scriptManager));
-    }
-
-    private static InputDto parse(String[] inputs) {
-        String commandName = inputs[0];
-        Integer index = inputs[1] == null ? null : Integer.valueOf(inputs[1]);
-        String value = inputs[2];
-
-        if (commandName == null) {
-            throw new RuntimeException("명령어 입력은 필수입니다.");
-        }
-        return new InputDto(commandName, index, value);
+        scriptCommandInvoker.register("1_FullWriteAndReadCompare", new TestScript1Command(scriptManager));
+        scriptCommandInvoker.register("2_PartialLBAWrite", new TestScript2Command(scriptManager));
+        scriptCommandInvoker.register("3_WriteReadAging", new TestScript3Command(scriptManager));
     }
 
     private static String getInput() {
         Scanner scanner = new Scanner(System.in);
-        return scanner.nextLine().trim().toLowerCase();
+        return scanner.nextLine().trim();
     }
 
     private static String[] split(String input) {
         return input.split(" ");
-    }
-
-    private static String[] padToThree(String[] splitInput) {
-        String[] result = new String[3]; // 입력 최대 3개
-        for (int i = 0; i < 3; i++) {
-            if (i < splitInput.length) {
-                result[i] = splitInput[i];
-            } else {
-                result[i] = null;
-            }
-        }
-        return result;
     }
 }

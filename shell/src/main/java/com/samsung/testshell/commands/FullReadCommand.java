@@ -12,7 +12,12 @@ public class FullReadCommand implements ShellCommand {
     }
 
     @Override
-    public void execute(Integer index, String value) {
+    public void execute(String[] cmdArgs) {
+        // 명령어 길이 체크
+        if (cmdArgs.length != 1) {
+            throw new RuntimeException("INVALID COMMAND");
+        }
+
         testShellManager.fullread();
     }
 }
