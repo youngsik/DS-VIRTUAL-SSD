@@ -15,23 +15,24 @@ public class ScriptManager {
         this.ssdApplication = ssdApplication;
     }
 
-    public void testScript1(){
+    public boolean testScript1(){
         int indexHeader = 0;
+        boolean isSuccess = false;
         String verifyValue = "0xAAAABBBB";
         while (indexHeader <= SCRIPT1_LOOP - SCRIPT1_TERM) {
-            verifyEachFourTimes(indexHeader, verifyValue);
+            isSuccess = verifyEachFourTimes(indexHeader, verifyValue);
             indexHeader += SCRIPT1_TERM;
         }
+        return isSuccess;
     }
 
-    private void verifyEachFourTimes(int indexHeader, String verifyValue) {
+    private boolean verifyEachFourTimes(int indexHeader, String verifyValue) {
+        boolean isSuccess = false;
         for (int i = indexHeader; i < indexHeader + SCRIPT1_TERM; i++){
             write(i, verifyValue);
-            boolean compareResult = readAndCompare(i, verifyValue);
-            if(!compareResult){
-                System.out.println("불일치");
-            }
+            isSuccess = readAndCompare(i, verifyValue);
         }
+        return isSuccess;
     }
 
     private String read(Integer lba){
@@ -49,6 +50,4 @@ public class ScriptManager {
         return compareValue.equals(readValue);
     }
 
-    public void testScript2() {
-    }
 }

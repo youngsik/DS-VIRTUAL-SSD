@@ -27,7 +27,7 @@ public class ScriptManagerTest {
     }
 
     @Test
-    void testScript1_shouldWriteAndReadCorrectly() {
+    void testScript1() {
         for (int i = 0; i <= SCRIPT1_LOOP - SCRIPT1_TERM; i += SCRIPT1_TERM) {
             for (int j = i; j < i + SCRIPT1_TERM; j++) {
                 when(ssdApplication.execute(getReadCommand(j))).thenReturn(DUMMY_VALUE);
@@ -35,7 +35,7 @@ public class ScriptManagerTest {
             }
         }
 
-        scriptManager.testScript1();
+        boolean result = scriptManager.testScript1();
 
         for (int i = 0; i < SCRIPT1_LOOP; i++) {
             verify(ssdApplication).execute(getWriteCommand(i));
@@ -44,7 +44,21 @@ public class ScriptManagerTest {
             verify(ssdApplication).execute(getReadCommand(i));
         }
 
+        assertTrue(result);
         verify(ssdApplication, times(200)).execute(anyString());
+    }
+
+    @Test
+    void testScript2(){
+        for (int i = 0; i <= 4; i++){
+            when(ssdApplication.execute(getWriteCommand(i))).thenReturn("OK");
+        }
+
+        boolean result = scriptManager.testScript2();
+
+        for (int i = 0; i <= 4; i++){
+            when(ssdApplication.execute(getReadCommand(i))).thenReturn(DUMMY_VALUE);
+        }
     }
 
     private String getReadCommand(int j) {
