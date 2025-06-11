@@ -1,7 +1,6 @@
 package com.samsung;
 
 class Main {
-
     public static String command;
     public static int LBA;
     public static String value;
