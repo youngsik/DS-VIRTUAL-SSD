@@ -14,6 +14,10 @@ public class TestShellManager {
         // exit 실행
     }
 
+    public void help() {
+        // help 실행
+    }
+
     public void fullwrite() {
         // fullwrite 실행
     }
