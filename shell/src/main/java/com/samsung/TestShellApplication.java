@@ -1,6 +1,7 @@
 package com.samsung;
 
 import com.samsung.dto.InputDto;
+import com.samsung.file.FileManager;
 import com.samsung.testscript.ScriptCommandInvoker;
 import com.samsung.testscript.ScriptManager;
 import com.samsung.testscript.command.TestScript1Command;
@@ -55,7 +56,7 @@ public class TestShellApplication {
     }
 
     private static void initScriptCommand(ScriptCommandInvoker scriptCommandInvoker) {
-        ScriptManager scriptManager = new ScriptManager(new SsdApplication());
+        ScriptManager scriptManager = new ScriptManager(new SsdApplication(), new FileManager());
         scriptCommandInvoker.register("1_fullwriteandreadcompare", new TestScript1Command(scriptManager));
         scriptCommandInvoker.register("2_partiallbawrite", new TestScript2Command(scriptManager));
         scriptCommandInvoker.register("3_writereadaging", new TestScript3Command(scriptManager));
