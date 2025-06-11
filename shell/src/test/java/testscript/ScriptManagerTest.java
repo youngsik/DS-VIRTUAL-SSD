@@ -1,6 +1,6 @@
 package testscript;
 
-import com.samsung.FileManager;
+import com.samsung.file.FileManager;
 import com.samsung.testscript.ScriptManager;
 import main.SsdApplication;
 import org.junit.jupiter.api.DisplayName;

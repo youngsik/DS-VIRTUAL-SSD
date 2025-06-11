@@ -1,0 +1,81 @@
+package com.samsung.file;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class FileManager {
+    public static final String BLANK_DATA = "0x00000000";
+    public static final String SSD_NAND_FILE_NAME = "ssd_nand.txt";
+    public static final String SSD_OUTPUT_FILE_NAME = "ssd_output.txt";
+
+    private Map<Integer, String> hashmap = new HashMap<>();
+
+    public Map<Integer, String> getHashmap() {
+        return hashmap;
+    }
+
+    public void readFile(int index) {
+        settingHashMapFromNandFile();
+        String result = getValue(index);
+        File file = getOrCreateFile(SSD_OUTPUT_FILE_NAME);
+        writeOnOutputFile(file, result);
+    }
+
+
+    private void settingHashMapFromNandFile() {
+        File file = getOrCreateFile(SSD_NAND_FILE_NAME);
+        List<String> data = getDataFromNandFile(file);
+        updateHashMap(data);
+    }
+
+    private File getOrCreateFile(String fileName) {
+        File file = new File(fileName);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+
+            }
+        }
+        return file;
+    }
+
+    private List<String> getDataFromNandFile(File file) {
+        List<String> data = new ArrayList<>();
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                data.add(line);
+            }
+        } catch (IOException e) {
+
+        }
+        return data;
+    }
+
+    private String getValue(int index) {
+        return hashmap.getOrDefault(index, BLANK_DATA);
+    }
+
+    private void updateHashMap(List<String> data) {
+        for(String d : data){
+            String[] tmp = d.split(" ");
+            hashmap.put(Integer.parseInt(tmp[0]), tmp[1]);
+        }
+    }
+
+    private void writeOnOutputFile(File file, String result) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            writer.write(result);
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+
+        }
+    }
+}

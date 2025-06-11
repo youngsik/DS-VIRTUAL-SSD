@@ -1,6 +1,6 @@
 package com.samsung.testscript;
 
-import com.samsung.FileManager;
+import com.samsung.file.FileManager;
 import main.SsdApplication;
 
 import java.util.ArrayList;
