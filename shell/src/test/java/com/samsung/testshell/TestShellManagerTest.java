@@ -181,17 +181,19 @@ class TestShellManagerTest {
         String actualOutput = outContent.toString().trim();
 
         String expectedOutput = String.join("\n",
-                "DeviceSolution",
+                "제작자",
+                "팀명: DeviceSolution",
+                "팀원: 김영식, 박준경, 권희정, 권성민, 이상훈, 오시훈, 추준성",
                 "",
-                "명령어:",
-                "  write <index> <value>     지정된 index에 value를 기록합니다. 예: write 3 0xAAAABBBB",
-                "  read <index>              지정된 index의 값을 읽어옵니다. 예: read 3",
-                "  fullwrite <value>         전체 영역에 value를 기록합니다. 예: fullwrite 0xAAAABBBB",
+                "명령어",
+                "  write [LBA] [Value]     지정된 index에 value를 기록합니다. 예: write 3 0xAAAABBBB",
+                "  read [LBA]              지정된 index의 값을 읽어옵니다. 예: read 3",
+                "  fullwrite  [Value]         전체 영역에 value를 기록합니다. 예: fullwrite 0xAAAABBBB",
                 "  fullread                  전체 영역을 읽어옵니다.",
                 "  help                      사용 가능한 명령어를 출력합니다.",
                 "  exit                      프로그램을 종료합니다.",
-                "",
-                "개발자: 김영식, 박준경, 권희정, 권성민, 이상훈, 오시훈, 추준성"
+                "Copyright (c) 2025 DeviceSolution. All rights reserved.",
+                ""
         ).trim();
 
         // 공백문자/라인 간 공백 문제를 방지
