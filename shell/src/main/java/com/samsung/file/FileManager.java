@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 public class FileManager {
     public static final String BLANK_DATA = "0x00000000";
@@ -14,26 +13,22 @@ public class FileManager {
 
     private Map<Integer, String> hashmap = new HashMap<>();
 
+    public Map<Integer, String> getHashmap() {
+        return hashmap;
+    }
+
     public void readFile(int index) {
         settingHashMapFromNandFile();
         String result = getValue(index);
-        File file = getOrCreateFile(SSD_OUTPUT_FILE_NAME);
-        writeOnOutputFile(file, result);
-    }
-
-    public void writeFile(int index, String value) {
-        settingHashMapFromNandFile();
-        hashmap.put(index,value);
-        writeOnNandFile();
+        writeOnOutputFile(result);
     }
 
     private void settingHashMapFromNandFile() {
-        File file = getOrCreateFile(SSD_NAND_FILE_NAME);
-        List<String> data = getDataFromNandFile(file);
+        List<String> data = getDataFromNandFile();
         updateHashMap(data);
     }
 
-    public File getOrCreateFile(String fileName) {
+    private File getOrCreateFile(String fileName) {
         File file = new File(fileName);
         if (!file.exists()) {
             try {
@@ -45,7 +40,8 @@ public class FileManager {
         return file;
     }
 
-    public List<String> getDataFromNandFile(File file) {
+    private List<String> getDataFromNandFile() {
+        File file = getOrCreateFile(SSD_NAND_FILE_NAME);
         List<String> data = new ArrayList<>();
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
@@ -59,7 +55,7 @@ public class FileManager {
         return data;
     }
 
-    public String getValue(int index) {
+    private String getValue(int index) {
         return hashmap.getOrDefault(index, BLANK_DATA);
     }
 
@@ -70,22 +66,8 @@ public class FileManager {
         }
     }
 
-    private void writeOnNandFile() {
-        File file = getOrCreateFile(SSD_NAND_FILE_NAME);
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            for (Entry<Integer, String> entry : hashmap.entrySet()) {
-                writer.write(entry.getKey() + " " + entry.getValue());
-                writer.newLine();
-            }
-            writer.flush();
-            writer.close();
-        } catch (IOException e) {
-
-        }
-    }
-
-    private void writeOnOutputFile(File file, String result) {
+    public void writeOnOutputFile(String result) {
+        File file = getOrCreateFile(SSD_OUTPUT_FILE_NAME);
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
             writer.write(result);
@@ -95,9 +77,4 @@ public class FileManager {
 
         }
     }
-
-    public void throwExcpetion(String result) {
-
-    }
-
 }

@@ -1,5 +1,6 @@
 package testscript;
 
+import com.samsung.file.FileManager;
 import com.samsung.testscript.ScriptManager;
 import com.samsung.SsdApplication;
 import org.junit.jupiter.api.DisplayName;
@@ -25,6 +26,8 @@ public class ScriptManagerTest {
 
     @Mock
     SsdApplication ssdApplication;
+    @Mock
+    FileManager fileManager;
     @InjectMocks
     ScriptManager scriptManager;
 
@@ -36,12 +39,15 @@ public class ScriptManagerTest {
     @Test
     @DisplayName("TestScript1 구동 테스트")
     void testScript1() {
+        Map<Integer, String> hashMap = new HashMap<>();
         for (int i = 0; i <= SCRIPT1_LOOP - SCRIPT1_TERM; i += SCRIPT1_TERM) {
             for (int j = i; j < i + SCRIPT1_TERM; j++) {
-                when(ssdApplication.execute(getReadCommand(j))).thenReturn(DUMMY_VALUE);
+                doNothing().when(fileManager).readFile(j);
                 when(ssdApplication.execute(getWriteCommand(j, DUMMY_VALUE))).thenReturn("OK");
+                hashMap.put(j, DUMMY_VALUE);
             }
         }
+        when(fileManager.getHashmap()).thenReturn(hashMap);
 
         boolean result = scriptManager.testScript1();
 
@@ -49,11 +55,11 @@ public class ScriptManagerTest {
             verify(ssdApplication).execute(getWriteCommand(i, DUMMY_VALUE));
         }
         for (int i = 0; i < SCRIPT1_LOOP; i++) {
-            verify(ssdApplication).execute(getReadCommand(i));
+            verify(fileManager).readFile(i);
         }
 
         assertTrue(result);
-        verify(ssdApplication, times(200)).execute(anyString());
+        verify(ssdApplication, times(100)).execute(anyString());
     }
 
     @Test
@@ -62,9 +68,13 @@ public class ScriptManagerTest {
         for (int i = 0; i <= 4; i++){
             when(ssdApplication.execute(getWriteCommand(i, DUMMY_VALUE))).thenReturn("OK");
         }
+
+        Map<Integer, String> hashMap = new HashMap<>();
         for (int i = 0; i <= 4; i++){
-            when(ssdApplication.execute(getReadCommand(i))).thenReturn(DUMMY_VALUE);
+            doNothing().when(fileManager).readFile(i);
+            hashMap.put(i, DUMMY_VALUE);
         }
+        when(fileManager.getHashmap()).thenReturn(hashMap);
 
         boolean result = scriptManager.testScript2();
 
@@ -74,6 +84,7 @@ public class ScriptManagerTest {
     @Test
     @DisplayName("TestScript3 구동 테스트")
     void testScript3(){
+        when(fileManager.getHashmap()).thenReturn(lastWritten);
         doAnswer(invocation -> {
             String command = invocation.getArgument(0);
             if (command.startsWith("W ")) {
@@ -84,25 +95,16 @@ public class ScriptManagerTest {
             }
             return null;
         }).when(ssdApplication).execute(startsWith("W"));
-
-        when(ssdApplication.execute(startsWith("R"))).thenAnswer(invocation -> {
-            String command = invocation.getArgument(0);
-            int lba = Integer.parseInt(command.split(" ")[1]);
-            return lastWritten.getOrDefault(lba, "0x00000000");
-        });
+        doNothing().when(fileManager).readFile(anyInt());
 
         boolean result = scriptManager.testScript3();
 
         assertTrue(result);
         verify(ssdApplication, times(200)).execute(startsWith("W 0"));
         verify(ssdApplication, times(200)).execute(startsWith("W 99"));
-        verify(ssdApplication, times(200)).execute(startsWith("R 0"));
-        verify(ssdApplication, times(200)).execute(startsWith("R 99"));
-        verify(ssdApplication, times(800)).execute(anyString());
-    }
-
-    private String getReadCommand(int i) {
-        return "R " + i;
+        verify(fileManager, times(200)).readFile(0);
+        verify(fileManager, times(200)).readFile(99);
+        verify(fileManager, atLeast(400)).getHashmap();
     }
 
     private String getWriteCommand(int i, String value) {
