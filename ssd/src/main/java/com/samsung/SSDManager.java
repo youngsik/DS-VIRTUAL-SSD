@@ -1,3 +1,5 @@
+package com.samsung;
+
 class SSDManager {
     private String command = "";
     private int LBA = -1;
