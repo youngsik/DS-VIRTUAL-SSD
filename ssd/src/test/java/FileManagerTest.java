@@ -38,14 +38,14 @@ class FileManagerTest {
         fileManager.readFile(INDEX);
 
         try {
-            File file = new File("ssd_output.txt");
+            File file = new File(FileManager.SSD_OUTPUT_FILE_NAME);
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
             String ret = null;
             while ((ret = bufferedReader.readLine()) != null) {
                 assertThat(ret).isEqualTo(expect);
             }
         } catch (IOException e) {
-            System.out.println("파일 읽기 오류 발생");
+            System.out.println("테스트에서 ssd_output.txt 파일 읽기 오류 발생");
         }
     }
 }
