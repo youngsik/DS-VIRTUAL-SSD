@@ -28,8 +28,8 @@ class Main {
     }
 
     private static boolean parsePreCondCheck(String[] cmdParam) {
-        if (parseNumFail(cmdParam)) return true;
         if (parseParamCountCheckFail(cmdParam)) return true;
+        if (parseNumFail(cmdParam)) return true;
         if (checkValueFormatFail(cmdParam)) return true;
         if (checkCmdFail(cmdParam)) return true;
         return false;
@@ -42,34 +42,34 @@ class Main {
             setErrorCommand();
             return true;
         }
-        if (lba < 0 || lba > 99) {
+        if (checkLbaRangeFail()) {
             setErrorCommand();
             return true;
         }
         return false;
     }
 
-    private static void setErrorCommand() {
-        command = "ERROR";
-        value = "ERROR";
+    private static boolean parseParamCountCheckFail(String[] cmdParam) {
+        if (checkReadParamCountFail(cmdParam) || checkWriteParamCountFail(cmdParam)) {
+            setErrorCommand();
+            return true;
+        }
+        return false;
     }
 
-    private static boolean parseParamCountCheckFail(String[] cmdParam) {
-        if (cmdParam.length != 2 && cmdParam.length != 3) {
-            setErrorCommand();
-            return true;
-        }
-        if (cmdParam[0] == "W" && cmdParam.length != 3) {
-            setErrorCommand();
-            return true;
-        }
+    private static boolean checkWriteParamCountFail(String[] cmdParam) {
+        if (cmdParam[0].equals("W") && cmdParam.length != 3) return true;
+        return false;
+    }
+
+    private static boolean checkReadParamCountFail(String[] cmdParam) {
+        if (cmdParam[0].equals("R") && cmdParam.length != 2) return true;
         return false;
     }
 
     private static boolean checkCmdFail(String[] cmdParam) {
         if (commandList.contains(cmdParam[0])) return false;
-        command = "ERROR";
-        value = "ERROR";
+        setErrorCommand();
         return true;
     }
 
@@ -78,5 +78,14 @@ class Main {
         if (cmdParam.length == 2) return false;
         setErrorCommand();
         return true;
+    }
+
+    private static void setErrorCommand() {
+        command = "ERROR";
+        value = "ERROR";
+    }
+
+    private static boolean checkLbaRangeFail() {
+        return lba < 0 || lba > 99;
     }
 }

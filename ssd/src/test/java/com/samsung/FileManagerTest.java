@@ -18,13 +18,14 @@ class FileManagerTest {
     public static final String TEST_SSD_OUTPUT_TXT_FILE_NAME = "src/test/resources/test_ssd_output.txt";
     public static final String CORRECT_VALUE = "0x1298CDEF";
     public static final int INDEX = 1;
+    public static final String ERROR_MESSAGE = "ERROR";
 
     @InjectMocks
     private FileManager fileManager;
 
     @BeforeEach
     void setUp() {
-        resetTestOutputFile();
+        resetTestOutputFile(CORRECT_VALUE);
     }
 
     @DisplayName("특정 인덱스 위치의 파일 읽고, output 텍스트 파일에 결과 쓰기")
@@ -51,11 +52,21 @@ class FileManagerTest {
         assertByReadingSpecificIndexFile(INDEX+1, CORRECT_VALUE);
     }
 
-    private void resetTestOutputFile(){
+    @DisplayName("exception 발생 시 output 데이터 쓰기")
+    @Test
+    void error(){
+        resetTestOutputFile(ERROR_MESSAGE);
+
+        fileManager.writeOnOutputFile(ERROR_MESSAGE);
+
+        assertFromOutputFile(ERROR_MESSAGE);
+    }
+
+    private void resetTestOutputFile(String value){
         try {
             File file = new File(TEST_SSD_OUTPUT_TXT_FILE_NAME);
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            writer.write(CORRECT_VALUE);
+            writer.write(value);
             writer.flush();
             writer.close();
         } catch (IOException e) {
@@ -65,7 +76,10 @@ class FileManagerTest {
 
     private void assertByReadingSpecificIndexFile(int index, String expect) {
         fileManager.readFile(index);
+        assertFromOutputFile(expect);
+    }
 
+    private static void assertFromOutputFile(String expect) {
         try {
             File file = new File(TEST_SSD_OUTPUT_TXT_FILE_NAME);
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
