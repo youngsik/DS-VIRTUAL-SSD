@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,9 +14,12 @@ class ExitCommandTest {
     @Mock
     TestShellManager testShellManager;
 
+    @InjectMocks
+    ExitCommand exitCommand;
+
+    @DisplayName("execute 실행 테스트")
     @Test
-    void excute() {
-        ExitCommand exitCommand = new ExitCommand(testShellManager);
+    void executeTest() {
         exitCommand.excute();
         verify(testShellManager, times(1)).exit();
     }
