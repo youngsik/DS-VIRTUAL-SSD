@@ -1,8 +1,8 @@
 package com.samsung.testshell.commands;
 
-import com.samsung.Command;
+import com.samsung.testshell.ShellCommand;
 
-public class FullWriteCommand implements Command {
+public class FullWriteCommand implements ShellCommand {
 
     @Override
     public void excute() {
