@@ -23,8 +23,7 @@ class ExitCommandTest {
     @DisplayName("execute 실행 테스트")
     @Test
     void executeTest() {
-        String[] cmdArgs = new String[1];
-        exitCommand.execute(cmdArgs);
+        exitCommand.execute(new String[1]);
         verify(testShellManager, times(1)).exit();
     }
 }

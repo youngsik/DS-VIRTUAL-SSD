@@ -17,6 +17,7 @@ class WriteCommandTest {
 
     public static final String INDEX = "1";
     public static final String VALUE = "0xFFFFFFFF";
+    public static final String[] cmdArgs = new String[3];
 
     @Mock
     TestShellManager testShellManager;
@@ -27,7 +28,6 @@ class WriteCommandTest {
     @DisplayName("execute 실행 테스트")
     @Test
     void executeTest() {
-        String[] cmdArgs = new String[3];
         cmdArgs[1] = INDEX;
         cmdArgs[2] = VALUE;
         writeCommand.execute(cmdArgs);

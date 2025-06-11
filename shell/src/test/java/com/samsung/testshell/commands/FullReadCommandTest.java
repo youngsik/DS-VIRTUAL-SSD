@@ -23,8 +23,7 @@ class FullReadCommandTest {
     @DisplayName("execute 실행 테스트")
     @Test
     void executeTest() {
-        String[] cmdArgs = new String[1];
-        fullReadCommand.execute(cmdArgs);
+        fullReadCommand.execute(new String[1]);
         verify(testShellManager, times(1)).fullread();
     }
 }

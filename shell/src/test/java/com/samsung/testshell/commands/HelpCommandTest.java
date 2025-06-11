@@ -14,9 +14,6 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class HelpCommandTest {
 
-    public static final Integer INDEX = 1;
-    public static final String VALUE = "0XFFFFFF";
-
     @Mock
     TestShellManager testShellManager;
 
@@ -26,8 +23,7 @@ class HelpCommandTest {
     @DisplayName("execute 실행 테스트")
     @Test
     void executeTest() {
-        String[] cmdArgs = new String[1];
-        helpCommand.execute(cmdArgs);
+        helpCommand.execute(new String[1]);
         verify(testShellManager, times(1)).help();
     }
 }
