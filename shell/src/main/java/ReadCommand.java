@@ -1,5 +1,3 @@
-package commands;
-
 public class ReadCommand implements Command {
 
     @Override

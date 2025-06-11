@@ -1,5 +1,3 @@
-package commands;
-
 public class FullWriteCommand implements Command {
 
     @Override
