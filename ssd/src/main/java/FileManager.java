@@ -6,10 +6,25 @@ import java.util.Map.Entry;
 class FileManager {
     public static final String BLANK_DATA = "0x00000000";
     public static final String SSD_NAND_FILE_NAME = "ssd_nand.txt";
+    public static final String SSD_OUTPUT_FILE_NAME = "ssd_output_txt";
 
     private Map<Integer, String> hashmap = new HashMap<>();
 
     public void readFile(int index) {
+        String result = readNandFile(index);
+        File file = getOrCreateFile(SSD_OUTPUT_FILE_NAME);
+        writeOnOutputFile(file, result);
+    }
+
+    private void writeOnOutputFile(File file, String result) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            writer.write(result);
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void writeFile(int index, String value) {
