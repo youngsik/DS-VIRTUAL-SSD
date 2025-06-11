@@ -23,7 +23,7 @@ class ExitCommandTest {
     @DisplayName("execute 실행 테스트")
     @Test
     void executeTest() {
-        exitCommand.excute();
+        exitCommand.execute(1, "0XFFFFFF");
         verify(testShellManager, times(1)).exit();
     }
 }

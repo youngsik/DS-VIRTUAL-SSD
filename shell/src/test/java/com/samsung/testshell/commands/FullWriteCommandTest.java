@@ -8,7 +8,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -23,8 +22,8 @@ class FullWriteCommandTest {
 
     @DisplayName("execute 실행 테스트")
     @Test
-    void excuteTest() {
-        fullWriteCommand.excute();
-        verify(testShellManager, times(1)).fullwrite();
+    void executeTest() {
+        fullWriteCommand.execute(1, "0XFFFFFF");
+        verify(testShellManager, times(1)).fullwrite("0XFFFFFF");
     }
 }

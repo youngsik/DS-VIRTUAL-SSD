@@ -18,7 +18,7 @@ public class TestShellManager {
         // help 실행
     }
 
-    public void fullwrite() {
+    public void fullwrite(String value) {
         // fullwrite 실행
     }
 

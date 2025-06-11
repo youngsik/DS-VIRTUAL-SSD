@@ -23,7 +23,7 @@ class FullReadCommandTest {
     @DisplayName("execute 실행 테스트")
     @Test
     void executeTest() {
-        fullReadCommand.excute();
+        fullReadCommand.execute(1, "0XFFFFFF");
         verify(testShellManager, times(1)).fullread();
     }
 }

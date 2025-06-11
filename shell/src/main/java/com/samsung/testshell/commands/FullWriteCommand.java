@@ -12,7 +12,7 @@ public class FullWriteCommand implements ShellCommand {
     }
 
     @Override
-    public void excute() {
-        testShellManager.fullwrite();
+    public void execute(Integer index, String value) {
+        testShellManager.fullwrite(value);
     }
 }

@@ -23,7 +23,7 @@ class HelpCommandTest {
     @DisplayName("execute 실행 테스트")
     @Test
     void executeTest() {
-        helpCommand.excute();
+        helpCommand.execute(1, "0XFFFFFF");
         verify(testShellManager, times(1)).help();
     }
 }

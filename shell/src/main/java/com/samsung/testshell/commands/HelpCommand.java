@@ -12,7 +12,7 @@ public class HelpCommand implements ShellCommand {
     }
 
     @Override
-    public void excute() {
+    public void execute(Integer index, String value) {
         testShellManager.help();
     }
 }

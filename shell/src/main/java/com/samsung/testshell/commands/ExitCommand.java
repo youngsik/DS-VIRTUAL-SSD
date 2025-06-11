@@ -12,7 +12,7 @@ public class ExitCommand implements ShellCommand {
     }
 
     @Override
-    public void excute() {
+    public void execute(Integer index, String value) {
         testShellManager.exit();
     }
 }
