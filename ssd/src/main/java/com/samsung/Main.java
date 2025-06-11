@@ -1,7 +1,6 @@
 package com.samsung;
 
 class Main {
-
     public static String command;
     public static int LBA;
     public static String value;
@@ -27,8 +26,8 @@ class Main {
     }
 
     private static boolean parsePreCondCheck(String[] cmdParam) {
-        if (parseNumFail(cmdParam)) return true;
         if (parseParamCountCheckFail(cmdParam)) return true;
+        if (parseNumFail(cmdParam)) return true;
         if (checkValueFormatFail(cmdParam)) return true;
         return false;
     }
@@ -55,7 +54,7 @@ class Main {
         if (cmdParam.length != 2 && cmdParam.length != 3) {
             return setErrorCommand();
         }
-        if (cmdParam[0] == "W" && cmdParam.length != 3) {
+        if ("W".equals(cmdParam[0]) && cmdParam.length != 3) {
             return setErrorCommand();
         }
         return false;
