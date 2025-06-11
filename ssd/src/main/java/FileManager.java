@@ -37,7 +37,7 @@ class FileManager {
             try {
                 file.createNewFile();
             } catch (IOException e) {
-                System.out.println("파일 생성 오류 발생");
+
             }
         }
         return file;
@@ -52,7 +52,7 @@ class FileManager {
                 data.add(line);
             }
         } catch (IOException e) {
-            System.out.println("파일 읽기 오류 발생");
+
         }
         return data;
     }
@@ -79,7 +79,7 @@ class FileManager {
             writer.flush();
             writer.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+
         }
     }
 
@@ -90,7 +90,7 @@ class FileManager {
             writer.flush();
             writer.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+
         }
     }
 
