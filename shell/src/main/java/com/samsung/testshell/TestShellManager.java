@@ -59,7 +59,14 @@ public class TestShellManager {
     }
 
     public void fullread() {
+        String head = "[Full Read] LBA ";
 
+        File file = fileManager.getOrCreateFile(SSD_NAND_FILE_NAME);
+        List<String> listvalues = fileManager.getDataFromNandFile(file);
+
+        for (String value : listvalues) {
+            System.out.println(value);
+        }
 
     }
 }
