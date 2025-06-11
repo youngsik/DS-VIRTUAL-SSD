@@ -28,6 +28,7 @@ class Main {
         try {
             LBA = Integer.parseInt(cmdParam[1]);
         } catch (NumberFormatException e) {
+            command = "ERROR";
             value = "ERROR";
             return true;
         }
@@ -36,6 +37,7 @@ class Main {
 
     private static void parsePostCondCheck() {
         if (!"W".equals(command) && !"R".equals(command)) {
+            command = "ERROR";
             value = "ERROR";
         }
     }
