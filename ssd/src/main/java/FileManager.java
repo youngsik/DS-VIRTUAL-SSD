@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 class FileManager {
     public static final String BLANK_DATA = "0x00000000";
     public static final String SSD_NAND_FILE_NAME = "ssd_nand.txt";
-    public static final String SSD_OUTPUT_FILE_NAME = "ssd_output_txt";
+    public static final String SSD_OUTPUT_FILE_NAME = "ssd_output.txt";
 
     private Map<Integer, String> hashmap = new HashMap<>();
 
