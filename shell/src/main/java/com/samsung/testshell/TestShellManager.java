@@ -2,6 +2,7 @@ package com.samsung.testshell;
 
 import com.samsung.SsdApplication;
 import com.samsung.file.FileManager;
+import com.samsung.file.JarExecutor;
 
 import java.io.File;
 import java.util.Arrays;
@@ -12,14 +13,15 @@ public class TestShellManager {
 
     public static final String writeCmd = "W";
     public static final String ReadCmd = "R";
-    private final SsdApplication ssdApplicatioin;
+
+    private final JarExecutor jarExecutor;
     private final FileManager fileManager;
 
     public static final String BLANK_DATA = "0x00000000";
     public static final String SSD_NAND_FILE_NAME = "ssd_nand.txt";
 
-    public TestShellManager(SsdApplication ssdApplicatioin, FileManager fileManager) {
-        this.ssdApplicatioin = ssdApplicatioin;
+    public TestShellManager(JarExecutor jarExecutor, FileManager fileManager) {
+        this.jarExecutor = jarExecutor;
         this.fileManager =fileManager;
     }
 
@@ -27,14 +29,7 @@ public class TestShellManager {
         String head = "[Write]";
         String pass = "Done";
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(writeCmd)
-                .append(" ")
-                .append(index)
-                .append(" ")
-                .append(value);
-
-        ssdApplicatioin.execute(sb.toString() );
+        jarExecutor.executeWriteJar(index, value);
 
         String output = head + " " + pass;
         System.out.println(output);
@@ -44,13 +39,6 @@ public class TestShellManager {
         String head = "[Read] LBA";
         String location = String.format("%02d", index);
         String value;
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(ReadCmd)
-                .append(" ")
-                .append(index);
-
-        ssdApplicatioin.execute(sb.toString() );
 
         fileManager.readFile(index);
         value = fileManager.getHashmap().get(index);
@@ -86,7 +74,7 @@ public class TestShellManager {
         String pass = "Done";
 
         for(int i=0; i<100; i++) {
-            ssdApplicatioin.execute("W" + " " + i + " " + value);
+            jarExecutor.executeWriteJar(i, value);
         }
         System.out.println(head + " " + pass);
     }
