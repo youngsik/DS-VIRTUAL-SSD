@@ -12,8 +12,6 @@ import com.samsung.testshell.ShellCommandInvoker;
 import com.samsung.testshell.TestShellManager;
 import com.samsung.testshell.commands.*;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class TestShellApplication {
