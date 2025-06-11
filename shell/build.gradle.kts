@@ -3,7 +3,13 @@ plugins {
 }
 
 group = "org.example"
-version = "1.0-SNAPSHOT"
+
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "com.samsung.TestShellApplication" // ← 실제 main 클래스 FQCN
+    }
+}
+
 
 repositories {
     mavenCentral()
