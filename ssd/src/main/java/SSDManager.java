@@ -2,7 +2,7 @@ class SSDManager {
     private String action;
     private int LBA;
     private String value;
-    private FileManager fileManager;
+    private FileManager fileManager = new FileManager();
 
     public SSDManager(String action, int LBA, String value) {
         this.action = action;
