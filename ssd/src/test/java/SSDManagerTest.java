@@ -20,7 +20,7 @@ public class SSDManagerTest {
     @InjectMocks
     SSDManager readSsdManager = new SSDManager("R", LBA, WRITE_VALUE);
     @InjectMocks
-    SSDManager invalidValueSsdManager = new SSDManager(null, -1, ERROR_VALUE);
+    SSDManager invalidValueSsdManager = new SSDManager(ERROR_VALUE, -1, ERROR_VALUE);
 
     @Test
     @DisplayName("읽기 테스트")

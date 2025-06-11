@@ -1,26 +1,26 @@
 class SSDManager {
-    private String action = "";
+    private String command = "";
     private int LBA = -1;
     private String value = "";
     private FileManager fileManager;
 
-    public SSDManager(String action, int LBA, String value) {
-        this.action = action;
+    public SSDManager(String command, int LBA, String value) {
+        this.command = command;
         this.LBA = LBA;
         this.value = value;
         this.fileManager = new FileManager();
     }
 
     public void cmdExecute() {
-        if ("ERROR".equals(value)) {
+        if (command.equals("ERROR")) {
             fileManager.errorResult(value);
             return;
         }
-        if ("R".equals(action)) {
+        if (command.equals("R")) {
             fileRead(LBA);
             return;
         }
-        if ("W".equals(action)) {
+        if (command.equals("W")) {
             fileWrite(LBA, value);
         }
     }
