@@ -11,5 +11,9 @@ class Main {
         command = args[0];
         lbaLocation = Integer.parseInt(args[1]);
         value = args[2];
+
+        if (!"W".equals(command) && !"R".equals(command)) {
+            value = "ERROR";
+        }
     }
 }
