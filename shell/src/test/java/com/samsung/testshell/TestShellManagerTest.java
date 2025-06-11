@@ -147,4 +147,31 @@ class TestShellManagerTest {
         assertThat(normalizedActual).isEqualTo(normalizedExpected);
     }
 
+    @Test
+    @DisplayName("testSheel help")
+    void testShellFullHelp() {
+
+        List<String> listvalues = Arrays.asList("DeviceSolution", "김영식, 박준경, 권희정, 권성민, 이상훈, 오시훈, 추준성","사용법","write 3 0xAAAABBBB" );
+
+        TestShellManager testShellManager= new TestShellManager(mockSsdApplication, fileManager);
+
+        testShellManager.help();
+
+        String actualOutput = outContent.toString().trim();
+
+        String expectedOutput = String.join("\n", listvalues).trim();
+        String normalizedExpected = Arrays.stream(expectedOutput.split("\n"))
+                .map(String::trim)
+                .collect(Collectors.joining("\n"));
+
+        String normalizedActual = Arrays.stream(actualOutput.split("\n"))
+                .map(String::trim)
+                .collect(Collectors.joining("\n"));
+
+        assertThat(normalizedActual).isEqualTo(normalizedExpected);
+
+    }
+
+
+
 }
