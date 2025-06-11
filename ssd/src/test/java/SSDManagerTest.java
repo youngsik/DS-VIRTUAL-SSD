@@ -11,7 +11,6 @@ public class SSDManagerTest {
     public static final int LBA = 0;
     public static final String WRITE_VALUE = "0x00000000";
     public static final String ERROR_VALUE = "ERROR";
-    public static final String INVALID_COMMAND = "INVALID COMMAND";
 
     @Mock
     FileManager fileManager;
@@ -22,10 +21,6 @@ public class SSDManagerTest {
     SSDManager readSsdManager = new SSDManager("R", LBA, WRITE_VALUE);
     @InjectMocks
     SSDManager invalidValueSsdManager = new SSDManager(null, -1, ERROR_VALUE);
-    @InjectMocks
-    SSDManager invalidCmdSsdManager = new SSDManager("w", LBA, WRITE_VALUE);
-    @InjectMocks
-    SSDManager invalidLBASsdManager = new SSDManager("W", -1, WRITE_VALUE);
 
     @Test
     @DisplayName("읽기 테스트")
@@ -64,7 +59,7 @@ public class SSDManagerTest {
     }
 
     @Test
-    @DisplayName("ERROR 값 테스트")
+    @DisplayName("ERROR 처리 테스트")
     void valueErrorTest() {
         invalidValueSsdManager.cmdExecute();
         verify(fileManager, times(1)).errorResult(ERROR_VALUE);
