@@ -16,7 +16,7 @@ class FileManager {
             try {
                 file.createNewFile();
             } catch (IOException e) {
-                System.out.println("파일 생성 오료");
+                System.out.println("파일 생성 오류 발생");
             }
         }
         return file;
