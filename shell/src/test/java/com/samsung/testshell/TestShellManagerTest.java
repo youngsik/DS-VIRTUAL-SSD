@@ -1,0 +1,96 @@
+package com.samsung.testshell;
+
+import com.samsung.FileManager;
+import com.samsung.SsdApplication;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+class TestShellManagerTest {
+
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private final PrintStream originalOut = System.out;
+
+    @Mock
+    SsdApplication mockSsdApplication;
+
+    @Mock
+    FileManager fileManager;
+
+    @BeforeEach
+    void setUp() {
+        System.setOut(new PrintStream(outContent));
+    }
+
+    @Test
+    @DisplayName("testSheel 읽기 실행")
+    void testShellReadExecute() {
+
+        int index = 3;
+        String inputCommand ="R " + index;
+
+        TestShellManager testShellManager= new TestShellManager(mockSsdApplication, fileManager);
+        testShellManager.read(index);
+
+        verify(mockSsdApplication, times(1)).execute(inputCommand);
+        verify(fileManager, times(1)).getValue(index);
+    }
+
+    @Test
+    @DisplayName("testSheel 읽기 출력")
+    void testShellReadValue() {
+
+        int index = 3;
+        String inputCommand ="R " + index;
+        String expected = "[Read] LBA 03 0xFFFFFFFF";
+
+        TestShellManager testShellManager= new TestShellManager(mockSsdApplication, fileManager);
+        when(fileManager.getValue(index)).thenReturn("0xFFFFFFFF");
+        testShellManager.read(index);
+
+        assertThat(outContent.toString().trim())
+                .isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("testSheel 쓰기 실행")
+    void testShellWriteExecute() {
+
+        int index = 3;
+        String value = "0xFFFFFFFF";
+
+        String inputCommand ="W" + " " + index + " " + value;
+
+        TestShellManager testShellManager= new TestShellManager(mockSsdApplication, fileManager);testShellManager.write(index,value);
+
+        verify(mockSsdApplication, times(1)).execute(inputCommand);
+    }
+
+    @Test
+    @DisplayName("testSheel 쓰기 출력")
+    void testShellWriteValue() {
+
+        int index = 3;
+        String value = "0xFFFFFFFF";
+        String expected = "[Write] Done";
+
+        String inputCommand ="W" + " " + index + " " + value;
+
+        TestShellManager testShellManager= new TestShellManager(mockSsdApplication, fileManager);
+        testShellManager.write(index,value);
+
+        assertThat(outContent.toString().trim())
+                .isEqualTo(expected);
+
+    }
+}
