@@ -20,11 +20,8 @@ class MainTest {
         main.parsing(args);
 
         assertEquals("W", main.command);
-<<<<<<< HEAD
         assertEquals(3, main.lba);
-=======
         assertEquals(3, main.LBA);
->>>>>>> refs/remotes/origin/feature/23_ssdMain
         assertEquals("0x12345678", main.value);
     }
 
@@ -36,11 +33,8 @@ class MainTest {
         main.parsing(args);
 
         assertEquals("R", main.command);
-<<<<<<< HEAD
         assertEquals(3, main.lba);
-=======
         assertEquals(3, main.LBA);
->>>>>>> refs/remotes/origin/feature/23_ssdMain
         assertEquals(null, main.value);
     }
 
@@ -51,12 +45,9 @@ class MainTest {
         String[] args = {"X", "5", "0x99999999"};
         main.parsing(args);
 
-<<<<<<< HEAD
         assertEquals("X", main.command);
         assertEquals(5, main.lba);
-=======
         assertEquals("ERROR", main.command);
->>>>>>> refs/remotes/origin/feature/23_ssdMain
         assertEquals("ERROR", main.value);
     }
 
