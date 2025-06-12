@@ -24,6 +24,7 @@ repositories {
 
 dependencies {
     implementation(project(":ssd"))
+    implementation(project(":common"))
     testImplementation("com.github.stefanbirkner:system-lambda:1.2.1")
 }
 

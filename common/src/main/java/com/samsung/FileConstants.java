@@ -1,7 +1,7 @@
 package com.samsung;
 
-public final class Constants {
-    private Constants() {}
+public final class FileConstants {
+    private FileConstants() {}
 
     public static final String BLANK_DATA = "0x00000000";
     public static final String SSD_NAND_FILE_NAME = "ssd_nand.txt";

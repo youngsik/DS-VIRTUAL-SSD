@@ -3,7 +3,6 @@ package com.samsung;
 import com.samsung.command.CommandInvoker;
 import com.samsung.command.testscript.*;
 import com.samsung.command.testshell.*;
-import com.samsung.file.FileManager;
 import com.samsung.file.JarExecutor;
 import com.samsung.validator.ArgumentsValidator;
 import com.samsung.validator.CommandValidator;
