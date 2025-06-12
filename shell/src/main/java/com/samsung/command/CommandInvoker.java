@@ -1,8 +1,8 @@
 package com.samsung.command;
 
+import com.samsung.FileManager;
 import com.samsung.command.testscript.*;
 import com.samsung.command.testshell.*;
-import com.samsung.file.FileManager;
 import com.samsung.file.JarExecutor;
 
 import java.util.Map;
@@ -40,6 +40,8 @@ public class CommandInvoker {
         TestShellManager testShellManager = new TestShellManager(new JarExecutor(), new FileManager());
         register("write", new WriteCommand(testShellManager));
         register("read", new ReadCommand(testShellManager));
+        register("erase", new EraseCommand(testShellManager));
+        register("erase_range", new EraseRangeCommand(testShellManager));
         register("exit", new ExitCommand(testShellManager));
         register("help", new HelpCommand(testShellManager));
         register("fullwrite", new FullWriteCommand(testShellManager));
@@ -51,7 +53,7 @@ public class CommandInvoker {
     }
 
     private void initScriptCommand() {
-        ScriptManager scriptManager = new ScriptManager(new FileManager(), new JarExecutor());
+        ScriptManager scriptManager = new ScriptManager(new FileManager(), new JarExecutor(), RandomHex.getInstance());
 
         String[] script1CommandNames = {"1_FullWriteAndReadCompare", "1_"};
         String[] script2CommandNames = {"2_PartialLBAWrite", "2_"};

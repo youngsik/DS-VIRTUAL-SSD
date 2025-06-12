@@ -1,7 +1,9 @@
 package com.samsung.command.testshell;
 
-import com.samsung.file.FileManager;
+import com.samsung.FileManager;
 import com.samsung.file.JarExecutor;
+
+import java.util.List;
 
 public class TestShellManager {
 
@@ -16,7 +18,7 @@ public class TestShellManager {
 
     public TestShellManager(JarExecutor jarExecutor, FileManager fileManager) {
         this.jarExecutor = jarExecutor;
-        this.fileManager =fileManager;
+        this.fileManager = fileManager;
     }
 
     public void write(int index, String value) {
@@ -32,13 +34,9 @@ public class TestShellManager {
     public void read(int index) {
         String head = "[Read] LBA";
         String location = String.format("%02d", index);
-        String value;
+        String value = fileManager.getValueFromFile(index);
 
-        fileManager.readFile(index);
-        value = fileManager.getHashmap().getOrDefault(index, BLANK_DATA);
-
-        String output = head + " " + location + " " + value;
-        System.out.println(output);
+        System.out.println(head + " " + location + " " + value);
     }
 
     public void exit() {
@@ -53,6 +51,8 @@ public class TestShellManager {
         System.out.println("명령어");
         System.out.println("  write [LBA] [Value]     지정된 index에 value를 기록합니다. 예: write 3 0xAAAABBBB");
         System.out.println("  read [LBA]              지정된 index의 값을 읽어옵니다. 예: read 3");
+        System.out.println("  erase [LBA] [Length]    지정된 LBA 부터 Length 길이만큼을 SSD에서 삭제합니다. 예 : erase 0 10");
+        System.out.println("  erase_range [LBA1] [LBA2]    지정된 범위의 데이터를 SSD에서 삭제합니다. 예 : erase_range 10 20");
         System.out.println("  fullwrite  [Value]         전체 영역에 value를 기록합니다. 예: fullwrite 0xAAAABBBB");
         System.out.println("  fullread                  전체 영역을 읽어옵니다.");
         System.out.println("  help                      사용 가능한 명령어를 출력합니다.");
@@ -67,7 +67,7 @@ public class TestShellManager {
         String head = "[Full Write]";
         String pass = "Done";
 
-        for(int i=0; i<100; i++) {
+        for (int i = 0; i < 100; i++) {
             jarExecutor.executeWrite(i, value);
         }
         System.out.println(head + " " + pass);
@@ -75,15 +75,65 @@ public class TestShellManager {
 
     public void fullread() {
         String head = "[Full Read] LBA";
+        List<String> values = fileManager.getAllValuesFromFile();
+        int index = 0;
+        for(String value : values){
+            if(index == 100) break;
+            String location = String.format("%02d", index++);
+            System.out.println(head + " " + location + " " + value);
+        }
+    }
 
-        for (int index = 0; index < 100; index++) {
-            fileManager.readFile(index);
-            String value = fileManager.getHashmap().getOrDefault(index, BLANK_DATA);
+    public void erase(int eraseLBA, int eraseSize) {
+        if(eraseSize == 0) {
+            return;
+        }
 
-            String location = String.format("%02d", index);
-            String output = head + " " + location + " " + value;
+        LBARange range = new LBARange(eraseLBA, getFinishLBA(eraseLBA, eraseSize));
 
-            System.out.println(output);
+        for(int i = range.start; i <= range.end; i += 10) {
+            jarExecutor.executeErase(i, getEraseSize(i, range.end));
+            // System.out.println("SSD : [ERASE] " + i + " " + getEraseSize(i, range.end));
+        }
+
+        System.out.println("[ERASE] " + eraseLBA + " " + eraseSize + " [DONE]");
+    }
+
+    public void eraseRange(int startLBA, int finishLBA) {
+        LBARange range = new LBARange(startLBA, finishLBA);
+
+        for(int i = range.start; i <= range.end; i += 10) {
+            jarExecutor.executeErase(i, getEraseSize(i, range.end));
+            // System.out.println("SSD : [ERASE] " + i + " " + getEraseSize(i, range.end));
+        }
+
+        System.out.println("[ERASE] " + startLBA + " " + finishLBA + " [DONE]");
+    }
+
+    private int getFinishLBA(int startLBA, int eraseSize) {
+        int res = startLBA + eraseSize;
+        res += (eraseSize < 0 ? 1 : -1);
+
+        return Math.min(99, Math.max(0, res));
+    }
+
+    private int getEraseSize(int currentLBA, int endLBA) {
+        return Math.min(10, endLBA - currentLBA + 1);
+    }
+
+    private static class LBARange {
+        public int start;
+        public int end;
+
+        public LBARange(int start, int end) {
+            if(start > end) {
+                this.start = end;
+                this.end = start;
+            }
+            else{
+                this.start = start;
+                this.end = end;
+            }
         }
     }
 }

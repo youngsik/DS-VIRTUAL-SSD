@@ -1,20 +1,18 @@
 package com.samsung.command.testshell;
 
-import com.samsung.command.testshell.TestShellManager;
-import com.samsung.file.FileManager;
+import com.samsung.FileManager;
 import com.samsung.file.JarExecutor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.HashMap;
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,6 +22,7 @@ import static com.github.stefanbirkner.systemlambda.SystemLambda.catchSystemExit
 @ExtendWith(MockitoExtension.class)
 class TestShellManagerTest {
 
+    public static final int INDEX = 3;
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
 
@@ -36,40 +35,29 @@ class TestShellManagerTest {
     @Mock
     FileManager fileManager;
 
-
     @BeforeEach
     void setUp() {
         System.setOut(new PrintStream(outContent));
-        testShellManager = new TestShellManager(jarExecutor, fileManager);;
+        testShellManager = new TestShellManager(jarExecutor, fileManager);
     }
 
     @Test
     @DisplayName("testShell 읽기 실행")
     void testShellReadExecute() {
+        doReturn("0xFFFFFFFE").when(fileManager).getValueFromFile(anyInt());
 
-        int index = 3;
-        String inputCommand ="R " + index;
+        testShellManager.read(INDEX);
 
-        testShellManager.read(index);
-
-        verify(fileManager, times(1)).readFile(index);
-
+        verify(fileManager, times(1)).getValueFromFile(INDEX);
     }
 
     @Test
     @DisplayName("testShell 읽기 출력")
     void testShellReadValue() {
-
-        int index = 3;
-        String inputCommand ="R " + index;
-        String expected = "[Read] LBA 03 0xFFFFFFFF";
-
-
-        Map<Integer, String> hashMap = new HashMap<>();
-        doNothing().when(fileManager).readFile(index);
-        hashMap.put(index, DUMMY_VALUE);
-
-        when(fileManager.getHashmap()).thenReturn(hashMap);
+        int index = INDEX;
+        String value = "0xFFFFFFFF";
+        String expected = "[Read] LBA 03 "+ value;
+        when(fileManager.getValueFromFile(index)).thenReturn(value);
 
         testShellManager.read(index);
 
@@ -80,13 +68,10 @@ class TestShellManagerTest {
     @Test
     @DisplayName("testShell 쓰기 실행")
     void testShellWriteExecute() {
-
-        int index = 3;
+        int index = INDEX;
         String value = "0xFFFFFFFF";
 
-        String inputCommand ="W" + " " + index + " " + value;
-
-        testShellManager.write(index,value);
+        testShellManager.write(index, value);
 
         verify(jarExecutor, times(1)).executeWrite(index, value);
     }
@@ -94,23 +79,24 @@ class TestShellManagerTest {
     @Test
     @DisplayName("testShell 쓰기 출력")
     void testShellWriteValue() {
-
-        int index = 3;
+        int index = INDEX;
         String value = "0xFFFFFFFF";
         String expected = "[Write] Done";
 
-        testShellManager.write(index,value);
+        testShellManager.write(index, value);
 
         assertThat(outContent.toString().trim())
                 .isEqualTo(expected);
-
     }
+
     @Test
     @DisplayName("testShell 전체쓰기 실행")
     void testShellFullWriteExecute() {
         String value = "0xFFFFFFFF";
+
         testShellManager.fullwrite(value);
-        verify(jarExecutor, times(100)).executeWrite(anyInt(),anyString());
+
+        verify(jarExecutor, times(100)).executeWrite(anyInt(), anyString());
     }
 
     @Test
@@ -120,6 +106,7 @@ class TestShellManagerTest {
         String value = "0xFFFFFFFF";
 
         testShellManager.fullwrite(value);
+
         assertThat(outContent.toString().trim())
                 .isEqualTo(expected);
     }
@@ -127,46 +114,36 @@ class TestShellManagerTest {
     @Test
     @DisplayName("testShell fullread")
     void testFullreadOutput() {
-
-        Map<Integer, String> fakeData = new HashMap<>();
-        fakeData.put(0, "0xFFFFFFFF");
-        fakeData.put(1, "0xFFFFFFFE");
-        fakeData.put(99, "0x12345678");
-
-        when(fileManager.getHashmap()).thenReturn(fakeData);
+        List<String> fakeData = new ArrayList<>();
+        fakeData.add("0xFFFFFFFF");
+        fakeData.add("0x12345678");
+        for (int i = 0; i < 100; i++) {;
+            fakeData.add("0x00000000");
+        }
+        doReturn(fakeData).when(fileManager).getAllValuesFromFile();
 
         testShellManager.fullread();
 
+        verify(fileManager).getAllValuesFromFile();
         String[] outputLines = outContent.toString().trim().split("\n");
-
         assertThat(outputLines).hasSize(100);
-
         assertThat(outputLines[0].replace("\n", "").replace("\r", "").trim())
                 .isEqualTo("[Full Read] LBA 00 0xFFFFFFFF");
-
-
-        for (int i = 2; i < 99; i++) {
+        assertThat(outputLines[1].replace("\n", "").replace("\r", "").trim())
+                .isEqualTo("[Full Read] LBA 01 0x12345678");
+        for (int i = 2; i < 100; i++) {
             String expected = String.format("[Full Read] LBA %02d 0x00000000", i);
             assertThat(outputLines[i].replace("\n", "").replace("\r", "").trim())
                     .isEqualTo(expected);
-        }
-
-        assertThat(outputLines[99].replace("\n", "").replace("\r", "").trim())
-                .isEqualTo("[Full Read] LBA 99 0x12345678");
-
-        for (int i = 0; i < 100; i++) {
-            verify(fileManager).readFile(i);
         }
     }
 
     @Test
     @DisplayName("testShell help")
     void testShellFullHelp() {
-
         testShellManager.help();
 
         String actualOutput = outContent.toString().trim();
-
         String expectedOutput = String.join("\n",
                 "제작자",
                 "팀명: DeviceSolution",
@@ -175,6 +152,8 @@ class TestShellManagerTest {
                 "명령어",
                 "  write [LBA] [Value]     지정된 index에 value를 기록합니다. 예: write 3 0xAAAABBBB",
                 "  read [LBA]              지정된 index의 값을 읽어옵니다. 예: read 3",
+                "  erase [LBA] [Length]    지정된 LBA 부터 Length 길이만큼을 SSD에서 삭제합니다. 예 : erase 0 10",
+                "  erase_range [LBA1] [LBA2]    지정된 범위의 데이터를 SSD에서 삭제합니다. 예 : erase_range 10 20",
                 "  fullwrite  [Value]         전체 영역에 value를 기록합니다. 예: fullwrite 0xAAAABBBB",
                 "  fullread                  전체 영역을 읽어옵니다.",
                 "  help                      사용 가능한 명령어를 출력합니다.",
@@ -197,12 +176,134 @@ class TestShellManagerTest {
 
     @Test
     @DisplayName("testShell EXIT")
-    void testShellFullEXIT() throws Exception {
-
-        int statusCode = catchSystemExit(() -> {
-            testShellManager.exit(); // exit() 호출
-        });
-
+    void testShellFullEXIT() {
+        int statusCode=-1;
+        try {
+            statusCode = catchSystemExit(() -> {
+                testShellManager.exit(); // exit() 호출
+            });
+        } catch (Exception e) {
+        }
         assertThat(statusCode).isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("testShell Erase SSD 실행 size 미변동 case")
+    void testShellEraseSSDExecuteNoChangeSize() {
+
+        int index = 1;
+        int size = 5;
+
+        testShellManager.erase(index,size);
+
+        verify(jarExecutor, times(1)).executeErase(index, size);
+    }
+
+    @Test
+    @DisplayName("testShell Erase SSD 실행 size 변동 case")
+    void testShellEraseSSDExecuteChangeSize() {
+
+        int index = 0;
+        int size = 15;
+        int expaectedIndex = 0;
+        int expaectedSize = 10;
+
+        testShellManager.erase(index,size);
+
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+    }
+
+
+    @Test
+    @DisplayName("testShell Erase SSD 실행 Multi수행 case")
+    void testShellEraseSSDExecuteMulti() {
+
+        int index = 2;
+        int size = 12;
+        int expaectedIndex;
+        int expaectedSize;
+
+        testShellManager.erase(index,size);
+
+        verify(jarExecutor, times(2)).executeErase(anyInt(), anyInt());
+
+        expaectedIndex=2;
+        expaectedSize=10;
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+
+        expaectedIndex=12;
+        expaectedSize=2;
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+    }
+
+    @Test
+    @DisplayName("testShell Erase SSD 실행 -Size case")
+    void testShellEraseSSDExecuteMinusSize() {
+
+        int index = 99;
+        int size = -30;
+        int expaectedIndex ;
+        int expaectedSize;
+
+        testShellManager.erase(index,size);
+
+        verify(jarExecutor, times(3)).executeErase(anyInt(), anyInt());
+
+        expaectedIndex=70;
+        expaectedSize=10;
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+
+        expaectedIndex=80;
+        expaectedSize=10;
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+
+        expaectedIndex=90;
+        expaectedSize=10;
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+    }
+
+    @Test
+    @DisplayName("testShell EraseRange SSD 실행")
+    void testShellEraseSSDExecuteRange() {
+
+        int first = 0;
+        int end = 9;
+        int expaectedIndex ;
+        int expaectedSize;
+
+        testShellManager.eraseRange(first,end);
+
+        verify(jarExecutor, times(1)).executeErase(anyInt(), anyInt());
+
+        expaectedIndex=0;
+        expaectedSize=10;
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+    }
+
+    @Test
+    @DisplayName("testShell EraseRange Multi SSD 실행")
+    void testShellEraseSSDExecuteRangeMulti() {
+
+        int first = 0;
+        int end = 20;
+        int expaectedIndex ;
+        int expaectedSize;
+
+        testShellManager.eraseRange(first,end);
+
+        verify(jarExecutor, times(3)).executeErase(anyInt(), anyInt());
+
+        expaectedIndex=0;
+        expaectedSize=10;
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+
+        expaectedIndex=10;
+        expaectedSize=10;
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+
+        expaectedIndex=20;
+        expaectedSize=1;
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+
     }
 }
