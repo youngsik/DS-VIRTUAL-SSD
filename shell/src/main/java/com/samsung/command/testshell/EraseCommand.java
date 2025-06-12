@@ -16,11 +16,11 @@ public class EraseCommand implements Command {
         }
 
         int eraseLBA;
-        int eraseLength;
+        int eraseSize;
 
         try{
             eraseLBA = Integer.parseInt(cmdArgs[1]);
-            eraseLength = Integer.parseInt(cmdArgs[2]);
+            eraseSize = Integer.parseInt(cmdArgs[2]);
         }catch(NumberFormatException e) {
             throw new RuntimeException("INVALID ERASE START LOCATION");
         }
@@ -29,6 +29,6 @@ public class EraseCommand implements Command {
             throw new RuntimeException("INVALID ERASE START LOCATION");
         }
 
-        testShellManager.erase(eraseLBA, eraseLength);
+        testShellManager.erase(eraseLBA, eraseSize);
     }
 }

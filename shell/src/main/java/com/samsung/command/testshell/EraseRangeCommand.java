@@ -2,6 +2,8 @@ package com.samsung.command.testshell;
 
 import com.samsung.command.Command;
 
+import java.util.Collections;
+
 public class EraseRangeCommand implements Command {
     private final TestShellManager testShellManager;
 
@@ -29,12 +31,6 @@ public class EraseRangeCommand implements Command {
         // LBA 범위 확인
         if(!isLBAValid(beginLBA) || !isLBAValid(endLBA)) {
             throw new RuntimeException("INVALID COMMAND PARMETER");
-        }
-
-        if(beginLBA > endLBA) {
-            int tempLBA = beginLBA;
-            beginLBA = endLBA;
-            endLBA = tempLBA;
         }
 
         testShellManager.eraseRange(beginLBA, endLBA);

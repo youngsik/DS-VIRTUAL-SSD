@@ -26,9 +26,9 @@ class EraseCommandTest {
         Random random = new Random();
 
         int startLBA = random.nextInt(0, 100);
-        int length = random.nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
+        int size = random.nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
 
-        String[] cmdArgs = new String[]{"erase", String.valueOf(startLBA), String.valueOf(length)};
+        String[] cmdArgs = new String[]{"erase", String.valueOf(startLBA), String.valueOf(size)};
         eraseCommand.execute(cmdArgs);
 
         Mockito.verify(testShellManager, Mockito.times(1)).erase(Mockito.anyInt(), Mockito.anyInt());
@@ -40,7 +40,7 @@ class EraseCommandTest {
         Random random = new Random();
 
         int startLBA;
-        int length = random.nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
+        int size = random.nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
 
         if(random.nextBoolean()) {
             startLBA = random.nextInt(Integer.MIN_VALUE, 0);
@@ -49,7 +49,7 @@ class EraseCommandTest {
             startLBA = random.nextInt(100, Integer.MAX_VALUE);
         }
 
-        String[] cmdArgs = new String[] {"erase", String.valueOf(startLBA), String.valueOf(length)};
+        String[] cmdArgs = new String[] {"erase", String.valueOf(startLBA), String.valueOf(size)};
         assertThrows(RuntimeException.class, () -> eraseCommand.execute(cmdArgs));
     }
 

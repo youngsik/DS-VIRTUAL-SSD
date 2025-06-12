@@ -20,7 +20,7 @@ public class TestShellApplication {
         initScriptCommand(commandInvoker);
 
         // 사용자 입력 받기
-        System.out.println("testshell 명령어: write, read, exit, help, fullwrite, fullread");
+        System.out.println("testshell 명령어: write, read, erase, erase_range, exit, help, fullwrite, fullread");
         System.out.println("testscript 명령어: 1_FullWriteAndReadCompare, 2_PartialLBAWrite, 3_WriteReadAging");
 
         while (true) {
