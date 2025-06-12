@@ -18,7 +18,8 @@ public class ScriptManager {
     }
 
     public boolean testScript1() {
-        for (int index = LBA_FIRST; index <= LOOP_100 - VERIFY_TERM; index += VERIFY_TERM) {
+        int lastVerifyBlock = LOOP_100 - VERIFY_TERM;
+        for (int index = LBA_FIRST; index <= lastVerifyBlock; index += VERIFY_TERM) {
             if(!isVerifyBlock(index, TEST_VALUE)) return false;
         }
         return true;
