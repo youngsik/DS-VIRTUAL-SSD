@@ -1,5 +1,0 @@
-[25.06.12 17:29:23] INFO  c.s.command.testscript.ScriptManager - test script1 테스트
-[25.06.12 17:29:23] INFO  c.s.command.testscript.ScriptManager - test script2 테스트
-[25.06.12 17:29:23] INFO  c.s.command.testscript.ScriptManager - test script3 테스트
-[25.06.12 17:29:23] INFO  c.s.command.testscript.ScriptManager - test script4 테스트
-[25.06.12 17:29:24] INFO  com.samsung.log.LogCompressor - Compressed until_1.log → until_1.zip
