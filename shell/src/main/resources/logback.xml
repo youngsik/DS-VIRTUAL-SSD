@@ -1,8 +1,8 @@
 <configuration>
-    <property name="LOG_DIR" value="logs"/>
+    <property name="LOG_DIR" value="${user.dir}/logs"/>
 
     <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_DIR}/latest.log</file>
+        <file>./${LOG_DIR}/latest.log</file>
 
         <!-- 10KB 초과시 날짜 기반으로 파일명 변경 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -17,15 +17,13 @@
         </rollingPolicy>
 
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>[%d{yy.MM.dd HH:mm}] %class{1}.%method - %msg%n</pattern>
         </encoder>
     </appender>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>
-                [%d{yy.MM.dd HH:mm}] %C{1}.%M( ) : %msg%n
-            </pattern>
+            <pattern>[%d{yy.MM.dd HH:mm}] %class{1}.%method - %msg%n</pattern>
         </encoder>
     </appender>
 
