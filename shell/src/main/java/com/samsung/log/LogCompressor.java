@@ -10,9 +10,14 @@ import java.util.Comparator;
 public class LogCompressor {
     private static final String LOG_DIR = "logs";
 
-    public void compressIfNeeded() {
-        File[] logFiles = new File(LOG_DIR).listFiles((dir, name) ->
+    // 이 메서드를 테스트에서 override할 수 있도록 변경
+    protected File[] listLogFiles() {
+        return new File(LOG_DIR).listFiles((dir, name) ->
                 name.startsWith("until_") && name.endsWith(".log"));
+    }
+
+    public void compressIfNeeded() {
+        File[] logFiles = listLogFiles();
 
         if (logFiles == null || logFiles.length < 2) return;
 
