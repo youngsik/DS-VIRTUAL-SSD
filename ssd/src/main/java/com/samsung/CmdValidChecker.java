@@ -2,7 +2,6 @@ package com.samsung;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import static com.samsung.SSDConstant.*;
 
 public class CmdValidChecker {
@@ -13,7 +12,10 @@ public class CmdValidChecker {
             = new ArrayList<>(Arrays.asList(COMMAND_READ, COMMAND_WRITE, COMMAND_ERASE));
 
     public CmdData cmdValidCheckAndParsing(String[] cmdParam) {
-        if (parsePreCondCheck(cmdParam)) return new CmdData("ERROR",-1,"ERROR");
+        if (!isCmdValid(cmdParam)) {
+            setErrorCommand();
+            return new CmdData(command, lba, value);
+        }
 
         command = cmdParam[0];
         lba = Integer.parseInt(cmdParam[1]);
@@ -21,42 +23,41 @@ public class CmdValidChecker {
         return new CmdData(command, lba, value);
     }
 
-    private boolean parsePreCondCheck(String[] cmdParam) {
-        if (checkInputNull(cmdParam)) return true;
-        if (parseParamCountCheckFail(cmdParam)) return true;
-        if (parseNumFail(cmdParam)) return true;
-        if (checkValueFormatFail(cmdParam)) return true;
-        if (checkCmdFail(cmdParam)) return true;
+    private boolean isCmdValid(String[] cmdParam) {
+        if (!isInputNotNull(cmdParam)) return false;
+        if (!isParamCountCorrect(cmdParam)) return false;
+        if (!isLbaNumber(cmdParam)) return false;
+        if (!isValueFormatCorrect(cmdParam)) return false;
+        if (!isCorrectCommand(cmdParam)) return false;
+        return true;
+    }
+
+    private boolean isInputNotNull(String[] cmdParam) {
+        if (cmdParam.length != 0) return true;
         return false;
     }
 
-    private boolean checkInputNull(String[] cmdParam) {
-        if (cmdParam.length != 0) return false;
-        setErrorCommand();
-        return true;
-
+    private boolean isParamCountCorrect(String[] cmdParam) {
+        if (checkReadParamCount(cmdParam)) return true;
+        if (checkWriteParamCount(cmdParam)) return true;
+        if (checkEraseParamCount(cmdParam)) return true;
+        return false;
     }
 
-    private boolean parseNumFail(String[] cmdParam) {
+    private boolean isLbaNumber(String[] cmdParam) {
         try {
             lba = Integer.parseInt(cmdParam[1]);
         } catch (NumberFormatException e) {
-            setErrorCommand();
-            return true;
+            return false;
         }
         if (checkLbaRangeFail()) {
-            setErrorCommand();
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
-    private boolean parseParamCountCheckFail(String[] cmdParam) {
-        if (checkReadParamCount(cmdParam)) return false;
-        if(checkWriteParamCount(cmdParam)) return false;
-        if(checkEraseParamCount(cmdParam)) return false;
-        setErrorCommand();
-        return true;
+    private boolean checkLbaRangeFail() {
+        return lba < 0 || lba > 99;
     }
 
     private boolean checkWriteParamCount(String[] cmdParam) {
@@ -86,18 +87,11 @@ public class CmdValidChecker {
         return cmdParam[0].equals(COMMAND_ERASE);
     }
 
-    private boolean checkCmdFail(String[] cmdParam) {
-        if (commandList.contains(cmdParam[0])) return false;
-        setErrorCommand();
-        return true;
-    }
-
-    private boolean checkValueFormatFail(String[] cmdParam) {
-        if (checkWriteValue(cmdParam)) return false;
-        if (checkEraseValue(cmdParam)) return false;
-        if (cmdParam.length == 2) return false;
-        setErrorCommand();
-        return true;
+    private boolean isValueFormatCorrect(String[] cmdParam) {
+        if (checkWriteValue(cmdParam)) return true;
+        if (checkEraseValue(cmdParam)) return true;
+        if (cmdParam.length == 2) return true;
+        return false;
     }
 
     private boolean checkWriteValue(String[] cmdParam) {
@@ -121,12 +115,14 @@ public class CmdValidChecker {
         return true;
     }
 
-    private void setErrorCommand() {
-        command = "ERROR";
-        value = "ERROR";
+    private boolean isCorrectCommand(String[] cmdParam) {
+        if (commandList.contains(cmdParam[0])) return true;
+        return false;
     }
 
-    private boolean checkLbaRangeFail() {
-        return lba < 0 || lba > 99;
+    private void setErrorCommand() {
+        command = COMMAND_ERROR;
+        lba = -1;
+        value = COMMAND_ERROR;
     }
 }
