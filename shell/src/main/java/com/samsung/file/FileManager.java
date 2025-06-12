@@ -60,9 +60,8 @@ public class FileManager {
     }
 
     private void updateHashMap(List<String> data) {
-        for(String d : data){
-            String[] tmp = d.split(" ");
-            hashmap.put(Integer.parseInt(tmp[0]), tmp[1]);
+        for(int i = 0; i < 100; i++) {
+            hashmap.put(i, data.get(i));
         }
     }
 
