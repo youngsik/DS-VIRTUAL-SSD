@@ -20,6 +20,14 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class FileCommandHandlerTest {
 
+    public static final String VALID_FILE_NAME = "valid.txt";
+    public static final String INVALID_FILE_NAME = "QWERTYsdfDsFGHZXCSsdfN.txt";
+
+    public static final String TEST_SCRIPT1_COMMAND = "1_FullWriteAndReadCompare";
+    public static final String TEST_SCRIPT2_COMMAND = "2_PartialLBAWrite";
+    public static final String TEST_SCRIPT3_COMMAND = "3_WriteReadAging";
+    public static final String TEST_SCRIPT4_COMMAND = "4_EraseAndWriteAging";
+
     @Mock
     private CommandInvoker mockInvoker;
 
@@ -28,17 +36,10 @@ class FileCommandHandlerTest {
 
     @DisplayName("handle() 메서드 실행 테스트 - 유효한 txt 파일")
     @Test
-    void handleExecutionTest(@TempDir Path tempDir) throws FileNotFoundException {
-        Path txtFile = tempDir.resolve("valid.txt");
-        try (PrintWriter writer = new PrintWriter(txtFile.toFile())) {
-            writer.println("1_FullWriteAndReadCompare");
-            writer.println("2_PartialLBAWrite");
-            writer.println("3_WriteReadAging");
-            writer.println("4_EraseAndWriteAging");
-        }
-        String validFileName = txtFile.toString();
+    void handleExecutionTest(@TempDir Path tempDir) {
+        writeTempFile(tempDir);
 
-        handler.handle(validFileName);
+        handler.handle(VALID_FILE_NAME);
 
         verify(mockInvoker, times(4)).execute(any());
     }
@@ -46,31 +47,35 @@ class FileCommandHandlerTest {
     @DisplayName("handle() 메서드 예외 테스트 - 유효하지 않은 txt 파일")
     @Test
     void handleIOExceptionTest() {
-        String invalidFileName = "QWERTYsdfDsFGHZXCSsdfN.txt";
-        assertThrows(RuntimeException.class, () -> handler.handle(invalidFileName));
+        assertThrows(RuntimeException.class, () -> handler.handle(INVALID_FILE_NAME));
     }
 
     @DisplayName("handle() 메서드 예외 테스트 - 세 번째 실행 스크립트에서 예외 발생")
     @Test
-    void handleIOExceptionTest2(@TempDir Path tempDir) throws FileNotFoundException {
-        Path txtFile = tempDir.resolve("valid.txt");
-        try (PrintWriter writer = new PrintWriter(txtFile.toFile())) {
-            writer.println("1_FullWriteAndReadCompare");
-            writer.println("2_PartialLBAWrite");
-            writer.println("3_WriteReadAging");
-            writer.println("4_EraseAndWriteAging");
-        }
-        String validFileName = txtFile.toString();
+    void handleIOExceptionTest2(@TempDir Path tempDir) {
+        writeTempFile(tempDir);
 
-        doNothing().when(mockInvoker).execute(eq(new String[] { "1_FullWriteAndReadCompare" }));
-        doNothing().when(mockInvoker).execute(eq(new String[] { "2_PartialLBAWrite" }));
-        doThrow(new RuntimeException()).when(mockInvoker).execute(eq(new String[]{ "3_WriteReadAging" }));
+        doNothing().when(mockInvoker).execute(eq(new String[] {TEST_SCRIPT1_COMMAND}));
+        doNothing().when(mockInvoker).execute(eq(new String[] {TEST_SCRIPT2_COMMAND}));
+        doThrow(new RuntimeException()).when(mockInvoker).execute(eq(new String[]{TEST_SCRIPT3_COMMAND}));
 
         try {
-            handler.handle(validFileName);
+            handler.handle(VALID_FILE_NAME);
         } catch (RuntimeException e) {
             verify(mockInvoker, times(3)).execute(any());
             assertThat(e.getMessage()).isEqualTo("FileCommandHandler Fail 발생");
+        }
+    }
+
+    private void writeTempFile(Path tempDir) {
+        Path txtFile = tempDir.resolve(VALID_FILE_NAME);
+        try (PrintWriter writer = new PrintWriter(txtFile.toFile())) {
+            writer.println(TEST_SCRIPT1_COMMAND);
+            writer.println(TEST_SCRIPT2_COMMAND);
+            writer.println(TEST_SCRIPT3_COMMAND);
+            writer.println(TEST_SCRIPT4_COMMAND);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 }
