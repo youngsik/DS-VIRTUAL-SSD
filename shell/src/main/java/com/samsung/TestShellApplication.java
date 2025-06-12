@@ -6,7 +6,6 @@ import com.samsung.command.testscript.TestScript1Command;
 import com.samsung.command.testscript.TestScript2Command;
 import com.samsung.command.testscript.TestScript3Command;
 import com.samsung.command.testshell.*;
-import com.samsung.file.FileManager;
 import com.samsung.file.JarExecutor;
 
 import java.util.HashMap;
