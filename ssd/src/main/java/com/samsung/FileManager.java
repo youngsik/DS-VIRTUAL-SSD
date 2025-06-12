@@ -18,11 +18,6 @@ public class FileManager {
         resetNandFile();
     }
 
-    /// ssd_nand.txt 예시
-    /// 0x12345678
-    /// 0xABCDEFGH
-    /// 0x1298CDEF
-    /// 0xABCDEFGH
     public void readFile(int index) {
         try {
             RandomAccessFile file = new RandomAccessFile(SSD_NAND_FILE_NAME, "r");
