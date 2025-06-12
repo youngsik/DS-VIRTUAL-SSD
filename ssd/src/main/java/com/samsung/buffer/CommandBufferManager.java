@@ -178,15 +178,6 @@ public class CommandBufferManager {
     }
 
     // Buffer의 내용을 비우는 함수
-    public void deleteAndInitBuffer(File[] files) {
-        if (files != null) {
-            for (File file : files) {
-                file.delete();
-            }
-        }
-        createEmptyFiles();  // 빈 파일 다시 생성
-    }
-
     private void flushToFile(){
         File bufferDir = new File(BUFFER_DIR);
         File[] files = bufferDir.listFiles((dir, name) -> name.matches("\\d+_.+\\.txt"));
@@ -201,6 +192,15 @@ public class CommandBufferManager {
             ssdManager.cmdExecute();
         }
         deleteAndInitBuffer(files);
+    }
+
+    public void deleteAndInitBuffer(File[] files) {
+        if (files != null) {
+            for (File file : files) {
+                file.delete();
+            }
+        }
+        createEmptyFiles();  // 빈 파일 다시 생성
     }
 }
 
