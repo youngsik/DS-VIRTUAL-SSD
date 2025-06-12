@@ -2,10 +2,10 @@ package com.samsung.command.testscript;
 
 import com.samsung.command.Command;
 
-public class TestScript3Command implements Command {
+public class TestScript4Command implements Command {
     private final ScriptManager scriptManager;
 
-    public TestScript3Command(ScriptManager scriptManager) {
+    public TestScript4Command(ScriptManager scriptManager) {
         this.scriptManager = scriptManager;
     }
 
@@ -15,6 +15,6 @@ public class TestScript3Command implements Command {
             throw new RuntimeException("INVALID COMMAND");
         }
 
-        scriptManager.testScript3();
+        scriptManager.testScript4();
     }
 }

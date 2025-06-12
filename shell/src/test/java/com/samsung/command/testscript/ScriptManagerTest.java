@@ -19,6 +19,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ScriptManagerTest {
+    private static final String EMPTY_VALUE = "0x00000000";
 
     @Mock
     private FileManager fileManager;
@@ -35,17 +36,10 @@ public class ScriptManagerTest {
     void setUp() {
         lastWritten = new HashMap<>();
 
-        // fileManager 설정
         when(fileManager.getHashmap()).thenReturn(lastWritten);
         doNothing().when(fileManager).readFile(anyInt());
 
-        // jarExecutor 동작 mocking
-        doAnswer(invocation -> {
-            int lba = invocation.getArgument(0);
-            String value = invocation.getArgument(1);
-            lastWritten.put(lba, value);
-            return null;
-        }).when(jarExecutor).executeWrite(anyInt(), anyString());
+        stubWrite();
     }
 
     @Test
@@ -84,4 +78,41 @@ public class ScriptManagerTest {
         verify(fileManager, times(200)).readFile(99);
         verify(fileManager, atLeast(400)).getHashmap();
     }
+
+
+    @Test
+    @DisplayName("testScript4 - write, overwrite 후 erase → EMPTY_VALUE 검증")
+    void testScript4() {
+        stubErase();
+
+        boolean result = scriptManager.testScript4();
+
+        assertTrue(result);
+        verify(jarExecutor, times(1)).executeErase(eq(0), eq(3));
+        verify(jarExecutor, times(31)).executeErase(anyInt(), eq(3));
+        verify(jarExecutor, times(30 * 2)).executeWrite(anyInt(), anyString());
+        verify(fileManager, times(30 * 3)).readFile(anyInt());
+        verify(fileManager, atLeast(1)).getHashmap();
+    }
+
+    private void stubErase() {
+        doAnswer(invocation -> {
+            int startLba = invocation.getArgument(0);
+            int length = invocation.getArgument(1);
+            for (int i = startLba; i < startLba + length; i++) {
+                lastWritten.put(i, EMPTY_VALUE);
+            }
+            return null;
+        }).when(jarExecutor).executeErase(anyInt(), anyInt());
+    }
+
+    private void stubWrite() {
+        doAnswer(invocation -> {
+            int lba = invocation.getArgument(0);
+            String value = invocation.getArgument(1);
+            lastWritten.put(lba, value);
+            return null;
+        }).when(jarExecutor).executeWrite(anyInt(), anyString());
+    }
+
 }
