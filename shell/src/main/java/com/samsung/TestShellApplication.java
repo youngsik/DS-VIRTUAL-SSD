@@ -5,7 +5,6 @@ import com.samsung.command.testscript.*;
 import com.samsung.command.testshell.*;
 import com.samsung.file.FileManager;
 import com.samsung.file.JarExecutor;
-import com.samsung.validator.ArgumentsValidator;
 
 import java.util.Scanner;
 
@@ -24,8 +23,6 @@ public class TestShellApplication {
         while (true) {
             try {
                 String[] cmdArgs = split(getInput());
-                ArgumentsValidator.validateArgsRequirements(cmdArgs);
-
                 commandInvoker.execute(cmdArgs);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
