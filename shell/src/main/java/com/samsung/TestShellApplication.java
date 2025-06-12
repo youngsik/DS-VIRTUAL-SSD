@@ -56,17 +56,21 @@ public class TestShellApplication {
 
     private static void initScriptCommand(CommandInvoker commandInvoker) {
         ScriptManager scriptManager = new ScriptManager(new FileManager(), new JarExecutor());
+
         TestScript1Command testScript1Command = new TestScript1Command(scriptManager);
         TestScript2Command testScript2Command = new TestScript2Command(scriptManager);
         TestScript3Command testScript3Command = new TestScript3Command(scriptManager);
+        TestScript4Command testScript4Command = new TestScript4Command(scriptManager);
 
         commandInvoker.register("1_FullWriteAndReadCompare", testScript1Command);
         commandInvoker.register("2_PartialLBAWrite", testScript2Command);
         commandInvoker.register("3_WriteReadAging", testScript3Command);
+        commandInvoker.register("4_EraseAndWriteAging", testScript4Command);
 
         commandInvoker.register("1_", testScript1Command);
         commandInvoker.register("2_", testScript2Command);
         commandInvoker.register("3_", testScript3Command);
+        commandInvoker.register("4_", testScript4Command);
     }
 
     private static String getInput() {
