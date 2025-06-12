@@ -23,41 +23,29 @@ public class SSDManagerTest {
     SSDManager readSsdManager = new SSDManager("R", LBA, WRITE_VALUE);
     @InjectMocks
     SSDManager invalidValueSsdManager = new SSDManager(ERROR_VALUE, -1, ERROR_VALUE);
+    @InjectMocks
+    SSDManager eraseSsdManager = new SSDManager("E", 0, "9");
 
     @Test
     @DisplayName("읽기 테스트")
     public void readTest() {
-        readSsdManager.fileRead(LBA);
+        readSsdManager.cmdExecute();
         verify(fileManager, times(1)).readFile(LBA);
     }
 
     @Test
     @DisplayName("쓰기 테스트")
     public void writeTest() {
-        writeSsdManager.fileWrite(LBA, WRITE_VALUE);
+        writeSsdManager.cmdExecute();
         verify(fileManager, times(1)).writeFile(LBA, WRITE_VALUE);
     }
 
     @Test
     @DisplayName("읽기 2번 테스트")
     public void readTwiceTest() {
-        readSsdManager.fileRead(LBA);
-        readSsdManager.fileRead(LBA);
-        verify(fileManager, times(2)).readFile(LBA);
-    }
-
-    @Test
-    @DisplayName("읽기 명령어 테스트(성공)")
-    void cmdExecuteReadPass() {
         readSsdManager.cmdExecute();
-        verify(fileManager, times(1)).readFile(LBA);
-    }
-
-    @Test
-    @DisplayName("쓰기 명령어 테스트(성공)")
-    void cmdExecuteWritePass() {
-        writeSsdManager.cmdExecute();
-        verify(fileManager, times(1)).writeFile(LBA, WRITE_VALUE);
+        readSsdManager.cmdExecute();
+        verify(fileManager, times(2)).readFile(LBA);
     }
 
     @Test
@@ -65,5 +53,14 @@ public class SSDManagerTest {
     void valueErrorTest() {
         invalidValueSsdManager.cmdExecute();
         verify(fileManager, times(1)).writeOnOutputFile(ERROR_VALUE);
+    }
+
+    @Test
+    @DisplayName("지우기 명령어 테스트(성공)")
+    void cmdExecuteErasePass() {
+        eraseSsdManager.cmdExecute();
+        for(int i=0; i<9; i++) {
+            verify(fileManager, times(1)).writeFile(i, WRITE_VALUE);
+        }
     }
 }
