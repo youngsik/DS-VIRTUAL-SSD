@@ -66,6 +66,7 @@ class EraseRangeCommandTest {
     }
 
     @Test
+    @DisplayName("인자 개수가 많음")
     public void invalidManyParameter() {
         String[] cmdArgs = new String[] {"erase_range", "0", "10", "hello"};
         assertThrows(RuntimeException.class, () -> eraseRangeCommand.execute(cmdArgs));

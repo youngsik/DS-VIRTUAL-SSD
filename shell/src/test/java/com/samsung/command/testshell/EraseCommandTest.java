@@ -68,12 +68,14 @@ class EraseCommandTest {
     }
 
     @Test
+    @DisplayName("1번째 파라미터가 정수가 아님")
     public void invalidParameterNotInteger() {
         String[] cmdArgs = new String[]{"erase", "A", "10"};
         assertThrows(RuntimeException.class, () -> eraseCommand.execute(cmdArgs));
     }
 
     @Test
+    @DisplayName("2번째 파라미터가 정수가 아님")
     public void invalidParameterNotIntegerLength() {
         String[] cmdArgs = new String[] {"erase", "0", "F"};
         assertThrows(RuntimeException.class, () -> eraseCommand.execute(cmdArgs));
