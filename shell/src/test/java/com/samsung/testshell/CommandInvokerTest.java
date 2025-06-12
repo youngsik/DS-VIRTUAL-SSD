@@ -28,7 +28,7 @@ class CommandInvokerTest {
     private Command mockCommand;
 
     @InjectMocks
-    private ShellCommandInvoker invoker;
+    private CommandInvoker invoker;
 
     @DisplayName("ShellCommand 객체 등록 실행 테스트")
     @Test

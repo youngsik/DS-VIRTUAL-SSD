@@ -1,6 +1,7 @@
 package com.samsung.testscript;
 
 import com.samsung.Command;
+import com.samsung.testshell.CommandInvoker;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +29,7 @@ class ScriptCommandInvokerTest {
     private Command mockScriptCommand;
 
     @InjectMocks
-    private ScriptCommandInvoker invoker;
+    private CommandInvoker invoker;
 
     @DisplayName("ScriptCommand 객체 등록 실행 테스트")
     @Test
