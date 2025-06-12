@@ -94,33 +94,22 @@ public class TestShellManager {
             return;
         }
 
-        int startLBA = eraseLBA;
-        int finishLBA = getFinishLBA(startLBA, eraseSize);
+        LBARange range = new LBARange(eraseLBA, getFinishLBA(eraseLBA, eraseSize));
 
-        if(startLBA > finishLBA) {
-            int tempLBA = startLBA;
-            startLBA = finishLBA;
-            finishLBA = tempLBA;
-        }
-
-        for(int i = startLBA; i <= finishLBA; i += 10) {
-            // jarExecutor.executeErase(i, getEraseLength(i, finishLBA));
-            System.out.println("SSD : [ERASE] " + i + " " + getEraseSize(i, finishLBA));
+        for(int i = range.start; i <= range.end; i += 10) {
+            // jarExecutor.executeErase(i, getEraseLength(i, range.end));
+            System.out.println("SSD : [ERASE] " + i + " " + getEraseSize(i, range.end));
         }
 
         System.out.println("[ERASE] " + eraseLBA + " " + eraseSize + " [DONE]");
     }
 
     public void eraseRange(int startLBA, int finishLBA) {
-        if(startLBA > finishLBA) {
-            int t = startLBA;
-            startLBA = finishLBA;
-            finishLBA = t;
-        }
+        LBARange range = new LBARange(startLBA, finishLBA);
 
-        for(int i = startLBA; i <= finishLBA; i += 10) {
-            // jarExecutor.executeErase(i, getEraseLength(i, finishLBA));
-            System.out.println("SSD : [ERASE] " + i + " " + getEraseSize(i, finishLBA));
+        for(int i = range.start; i <= range.end; i += 10) {
+            // jarExecutor.executeErase(i, getEraseLength(i, range.end));
+            System.out.println("SSD : [ERASE] " + i + " " + getEraseSize(i, range.end));
         }
 
         System.out.println("[ERASE] " + startLBA + " " + finishLBA + " [DONE]");
@@ -128,7 +117,6 @@ public class TestShellManager {
 
     private int getFinishLBA(int startLBA, int eraseSize) {
         int res = startLBA + eraseSize;
-
         res += (eraseSize < 0 ? 1 : -1);
 
         return Math.min(99, Math.max(0, res));
@@ -136,5 +124,21 @@ public class TestShellManager {
 
     private int getEraseSize(int currentLBA, int endLBA) {
         return Math.min(10, endLBA - currentLBA + 1);
+    }
+
+    private static class LBARange {
+        public int start;
+        public int end;
+
+        public LBARange(int start, int end) {
+            if(start > end) {
+                this.start = end;
+                this.end = start;
+            }
+            else{
+                this.start = start;
+                this.end = end;
+            }
+        }
     }
 }
