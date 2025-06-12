@@ -23,7 +23,7 @@ public class TestShellManager {
         String head = "[Write]";
         String pass = "Done";
 
-        jarExecutor.executeWriteJar(index, value);
+        jarExecutor.executeWrite(index, value);
 
         String output = head + " " + pass;
         System.out.println(output);
@@ -70,7 +70,7 @@ public class TestShellManager {
         String pass = "Done";
 
         for(int i=0; i<100; i++) {
-            jarExecutor.executeWriteJar(i, value);
+            jarExecutor.executeWrite(i, value);
         }
         System.out.println(head + " " + pass);
     }

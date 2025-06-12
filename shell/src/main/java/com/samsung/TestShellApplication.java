@@ -9,11 +9,13 @@ import com.samsung.command.testshell.*;
 import com.samsung.file.FileManager;
 import com.samsung.file.JarExecutor;
 
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class TestShellApplication {
     public static void main(String[] args) {
-        CommandInvoker commandInvoker = new CommandInvoker();
+        CommandInvoker commandInvoker = new CommandInvoker(new HashMap<>());
+        commandInvoker.initAllCommands();
 
         // 명령어 등록
         initShellCommand(commandInvoker);
@@ -25,25 +27,8 @@ public class TestShellApplication {
 
         while (true) {
             try {
-                String[] cmdArgs = split(getInput()); // 1~3개 args가 들어옴을 보장
-
-                // 명령어 파라미터 길이 필수 요건 체크
-                if (cmdArgs.length < 1 || cmdArgs.length > 4) {
-                    throw new RuntimeException("INVALID COMMAND");
-                }
-
-                String commandName = cmdArgs[0];
-
-                // 명령어 파라미터 null 체크
-                if (commandName == null) {
-                    throw new RuntimeException("INVALID COMMAND");
-                }
-
-                if (commandName.contains("_")) {
-                    commandInvoker.execute(cmdArgs);
-                } else {
-                    commandInvoker.execute(cmdArgs);
-                }
+                String[] cmdArgs = split(getInput());
+                commandInvoker.execute(cmdArgs);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }

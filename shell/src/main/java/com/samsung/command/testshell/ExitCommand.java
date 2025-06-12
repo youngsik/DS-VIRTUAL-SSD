@@ -1,6 +1,7 @@
 package com.samsung.command.testshell;
 
 import com.samsung.command.Command;
+import com.samsung.validator.ArgumentsValidator;
 
 public class ExitCommand implements Command {
 
@@ -12,11 +13,7 @@ public class ExitCommand implements Command {
 
     @Override
     public void execute(String[] cmdArgs) {
-        // 명령어 길이 체크
-        if (cmdArgs.length != 1) {
-            throw new RuntimeException("INVALID COMMAND");
-        }
-
+        ArgumentsValidator.validateOneArgs(cmdArgs);
         testShellManager.exit();
     }
 }
