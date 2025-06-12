@@ -54,7 +54,7 @@ public class TestShellApplication {
     }
 
     private static void initScriptCommand(CommandInvoker commandInvoker) {
-        ScriptManager scriptManager = new ScriptManager(new FileManager(), new JarExecutor());
+        ScriptManager scriptManager = new ScriptManager(new FileManager(), new JarExecutor(), RandomHex.getInstance());
 
         TestScript1Command testScript1Command = new TestScript1Command(scriptManager);
         TestScript2Command testScript2Command = new TestScript2Command(scriptManager);
