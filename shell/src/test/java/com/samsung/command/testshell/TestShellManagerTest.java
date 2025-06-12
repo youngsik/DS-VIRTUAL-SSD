@@ -1,13 +1,12 @@
 package com.samsung.command.testshell;
 
-import com.samsung.FileManager;
+import com.samsung.file.FileManager;
 import com.samsung.file.JarExecutor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.ByteArrayOutputStream;
