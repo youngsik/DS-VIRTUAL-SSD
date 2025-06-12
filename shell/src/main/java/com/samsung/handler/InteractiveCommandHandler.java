@@ -15,7 +15,7 @@ public class InteractiveCommandHandler {
     public void handle() {
         while (true) {
             try {
-                String[] cmdArgs = split(getInput());
+                String[] cmdArgs = getInput().split(" ");
                 commandInvoker.execute(cmdArgs);
             } catch (Exception e) {
                 System.err.println(e.getMessage());
@@ -26,9 +26,5 @@ public class InteractiveCommandHandler {
     private String getInput() {
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine().trim();
-    }
-
-    private String[] split(String input) {
-        return input.split(" ");
     }
 }
