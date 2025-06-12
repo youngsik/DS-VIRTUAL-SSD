@@ -8,6 +8,8 @@ import com.samsung.command.testscript.TestScript3Command;
 import com.samsung.command.testshell.*;
 import com.samsung.file.FileManager;
 import com.samsung.file.JarExecutor;
+import com.samsung.validator.ArgumentsValidator;
+import com.samsung.validator.CommandValidator;
 
 import java.util.Scanner;
 
@@ -25,19 +27,13 @@ public class TestShellApplication {
 
         while (true) {
             try {
-                String[] cmdArgs = split(getInput()); // 1~3개 args가 들어옴을 보장
+                String[] cmdArgs = split(getInput());
 
                 // 명령어 파라미터 길이 필수 요건 체크
-                if (cmdArgs.length < 1 || cmdArgs.length > 4) {
-                    throw new RuntimeException("INVALID COMMAND");
-                }
+                ArgumentsValidator.validateArgsRequirements(cmdArgs);
 
                 String commandName = cmdArgs[0];
-
-                // 명령어 파라미터 null 체크
-                if (commandName == null) {
-                    throw new RuntimeException("INVALID COMMAND");
-                }
+                CommandValidator.validateNull(commandName);
 
                 if (commandName.contains("_")) {
                     commandInvoker.execute(cmdArgs);
