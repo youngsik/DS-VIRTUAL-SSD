@@ -23,7 +23,7 @@ public class FileCommandHandler {
         }
     }
 
-    private static void validatePrecondition(String fileName) {
+    private void validatePrecondition(String fileName) {
         if (!fileName.endsWith(".txt")) {
             throw new RuntimeException("유효하지 않은 파일 타입입니다.");
         }
