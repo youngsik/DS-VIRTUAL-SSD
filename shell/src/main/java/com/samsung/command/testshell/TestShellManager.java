@@ -97,8 +97,8 @@ public class TestShellManager {
         LBARange range = new LBARange(eraseLBA, getFinishLBA(eraseLBA, eraseSize));
 
         for(int i = range.start; i <= range.end; i += 10) {
-            // jarExecutor.executeErase(i, getEraseLength(i, range.end));
-            System.out.println("SSD : [ERASE] " + i + " " + getEraseSize(i, range.end));
+            jarExecutor.executeErase(i, getEraseSize(i, range.end));
+            // System.out.println("SSD : [ERASE] " + i + " " + getEraseSize(i, range.end));
         }
 
         System.out.println("[ERASE] " + eraseLBA + " " + eraseSize + " [DONE]");
@@ -108,8 +108,8 @@ public class TestShellManager {
         LBARange range = new LBARange(startLBA, finishLBA);
 
         for(int i = range.start; i <= range.end; i += 10) {
-            // jarExecutor.executeErase(i, getEraseLength(i, range.end));
-            System.out.println("SSD : [ERASE] " + i + " " + getEraseSize(i, range.end));
+            jarExecutor.executeErase(i, getEraseSize(i, range.end));
+            // System.out.println("SSD : [ERASE] " + i + " " + getEraseSize(i, range.end));
         }
 
         System.out.println("[ERASE] " + startLBA + " " + finishLBA + " [DONE]");
