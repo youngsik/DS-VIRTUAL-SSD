@@ -7,9 +7,11 @@ import com.samsung.file.FileManager;
 import com.samsung.file.JarExecutor;
 import com.samsung.validator.ArgumentsValidator;
 import com.samsung.validator.CommandValidator;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Scanner;
 
+@Slf4j
 public class TestShellApplication {
     public static void main(String[] args) {
         CommandInvoker commandInvoker = new CommandInvoker();
@@ -38,7 +40,7 @@ public class TestShellApplication {
                     commandInvoker.execute(cmdArgs);
                 }
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                log.info(e.getMessage());
             }
         }
 

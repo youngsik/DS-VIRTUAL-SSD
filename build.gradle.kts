@@ -13,6 +13,7 @@ subprojects {
             "testCompileOnly"("org.projectlombok:lombok:1.18.32")
             "testAnnotationProcessor"("org.projectlombok:lombok:1.18.32")
 
+            "implementation"("ch.qos.logback:logback-core:1.4.14")
             "implementation"("org.slf4j:slf4j-api:2.0.13")
             "implementation"("ch.qos.logback:logback-classic:1.4.14")
         }
