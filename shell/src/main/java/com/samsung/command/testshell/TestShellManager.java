@@ -3,6 +3,8 @@ package com.samsung.command.testshell;
 import com.samsung.FileManager;
 import com.samsung.file.JarExecutor;
 
+import java.util.List;
+
 public class TestShellManager {
 
     public static final String writeCmd = "W";
@@ -71,11 +73,11 @@ public class TestShellManager {
 
     public void fullread() {
         String head = "[Full Read] LBA";
-
-        for (int index = 0; index < 100; index++) {
-            String value = fileManager.getValueFromFile(index);
-            String location = String.format("%02d", index);
-
+        List<String> values = fileManager.getAllValuesFromFile();
+        int index = 0;
+        for(String value : values){
+            if(index == 100) break;
+            String location = String.format("%02d", index++);
             System.out.println(head + " " + location + " " + value);
         }
     }

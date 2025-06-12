@@ -1,20 +1,18 @@
 package com.samsung.command.testshell;
 
-import com.samsung.command.testshell.TestShellManager;
-import com.samsung.file.FileManager;
+import com.samsung.FileManager;
 import com.samsung.file.JarExecutor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.HashMap;
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,6 +22,7 @@ import static com.github.stefanbirkner.systemlambda.SystemLambda.catchSystemExit
 @ExtendWith(MockitoExtension.class)
 class TestShellManagerTest {
 
+    public static final int INDEX = 3;
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
 
@@ -36,40 +35,36 @@ class TestShellManagerTest {
     @Mock
     FileManager fileManager;
 
-
     @BeforeEach
     void setUp() {
         System.setOut(new PrintStream(outContent));
-        testShellManager = new TestShellManager(jarExecutor, fileManager);;
+        testShellManager = new TestShellManager(jarExecutor, fileManager);
     }
 
     @Test
     @DisplayName("testShell 읽기 실행")
     void testShellReadExecute() {
+        doReturn("0xFFFFFFFE").when(fileManager).getValueFromFile(anyInt());
 
-        int index = 3;
-        String inputCommand ="R " + index;
+        testShellManager.read(INDEX);
 
-        testShellManager.read(index);
-
-        verify(fileManager, times(1)).readFile(index);
-
+        verify(fileManager, times(1)).getValueFromFile(INDEX);
     }
 
     @Test
     @DisplayName("testShell 읽기 출력")
     void testShellReadValue() {
+        int index = INDEX;
+        String inputCommand = "R " + index;
+        String value = "0xFFFFFFFF";
+        String expected = "[Read] LBA 03 "+ value;
 
-        int index = 3;
-        String inputCommand ="R " + index;
-        String expected = "[Read] LBA 03 0xFFFFFFFF";
 
+//        Map<Integer, String> hashMap = new HashMap<>();
+//        doNothing().when(fileManager).readFile(index);
+//        hashMap.put(index, DUMMY_VALUE);
 
-        Map<Integer, String> hashMap = new HashMap<>();
-        doNothing().when(fileManager).readFile(index);
-        hashMap.put(index, DUMMY_VALUE);
-
-        when(fileManager.getHashmap()).thenReturn(hashMap);
+        when(fileManager.getValueFromFile(index)).thenReturn(value);
 
         testShellManager.read(index);
 
@@ -81,12 +76,12 @@ class TestShellManagerTest {
     @DisplayName("testShell 쓰기 실행")
     void testShellWriteExecute() {
 
-        int index = 3;
+        int index = INDEX;
         String value = "0xFFFFFFFF";
 
-        String inputCommand ="W" + " " + index + " " + value;
+        String inputCommand = "W" + " " + index + " " + value;
 
-        testShellManager.write(index,value);
+        testShellManager.write(index, value);
 
         verify(jarExecutor, times(1)).executeWrite(index, value);
     }
@@ -95,22 +90,23 @@ class TestShellManagerTest {
     @DisplayName("testShell 쓰기 출력")
     void testShellWriteValue() {
 
-        int index = 3;
+        int index = INDEX;
         String value = "0xFFFFFFFF";
         String expected = "[Write] Done";
 
-        testShellManager.write(index,value);
+        testShellManager.write(index, value);
 
         assertThat(outContent.toString().trim())
                 .isEqualTo(expected);
 
     }
+
     @Test
     @DisplayName("testShell 전체쓰기 실행")
     void testShellFullWriteExecute() {
         String value = "0xFFFFFFFF";
         testShellManager.fullwrite(value);
-        verify(jarExecutor, times(100)).executeWrite(anyInt(),anyString());
+        verify(jarExecutor, times(100)).executeWrite(anyInt(), anyString());
     }
 
     @Test
@@ -128,34 +124,28 @@ class TestShellManagerTest {
     @DisplayName("testShell fullread")
     void testFullreadOutput() {
 
-        Map<Integer, String> fakeData = new HashMap<>();
-        fakeData.put(0, "0xFFFFFFFF");
-        fakeData.put(1, "0xFFFFFFFE");
-        fakeData.put(99, "0x12345678");
+        List<String> fakeData = new ArrayList<>();
+        fakeData.add("0xFFFFFFFF");
+        fakeData.add("0x12345678");
+        for (int i = 0; i < 100; i++) {;
+            fakeData.add("0x00000000");
+        }
 
-        when(fileManager.getHashmap()).thenReturn(fakeData);
+        doReturn(fakeData).when(fileManager).getAllValuesFromFile();
 
         testShellManager.fullread();
 
+        verify(fileManager).getAllValuesFromFile();
         String[] outputLines = outContent.toString().trim().split("\n");
-
         assertThat(outputLines).hasSize(100);
-
         assertThat(outputLines[0].replace("\n", "").replace("\r", "").trim())
                 .isEqualTo("[Full Read] LBA 00 0xFFFFFFFF");
-
-
-        for (int i = 2; i < 99; i++) {
+        assertThat(outputLines[1].replace("\n", "").replace("\r", "").trim())
+                .isEqualTo("[Full Read] LBA 01 0x12345678");
+        for (int i = 2; i < 100; i++) {
             String expected = String.format("[Full Read] LBA %02d 0x00000000", i);
             assertThat(outputLines[i].replace("\n", "").replace("\r", "").trim())
                     .isEqualTo(expected);
-        }
-
-        assertThat(outputLines[99].replace("\n", "").replace("\r", "").trim())
-                .isEqualTo("[Full Read] LBA 99 0x12345678");
-
-        for (int i = 0; i < 100; i++) {
-            verify(fileManager).readFile(i);
         }
     }
 
