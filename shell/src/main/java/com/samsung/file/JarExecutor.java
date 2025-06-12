@@ -1,40 +1,40 @@
 package com.samsung.file;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JarExecutor {
-    public void executeWrite(Integer lba, String value){
-        try {
-            ProcessBuilder pb = new ProcessBuilder(
-                    "java", "-jar",
-                    getSsdJarPath(),
-                    "W", lba.toString(), value);
 
-            System.out.println(pb.command());
+    private static final int DEFAULT_WAIT_MILLIS = 1000;
+
+    public void executeWrite(Integer lba, String value) {
+        executeCommand("W", lba.toString(), value);
+    }
+
+    public void executeErase(Integer startLba, Integer length) {
+        executeCommand("E", startLba.toString(), length.toString());
+    }
+
+    private void executeCommand(String... args) {
+        try {
+            List<String> command = new ArrayList<>();
+            command.add("java");
+            command.add("-jar");
+            command.add(getSsdJarPath());
+            command.addAll(List.of(args));
+
+            ProcessBuilder pb = new ProcessBuilder(command);
+            System.out.println("Executing command: " + String.join(" ", command));
+
             pb.inheritIO();
             pb.start();
-            Thread.sleep(1000);
+
+            Thread.sleep(DEFAULT_WAIT_MILLIS);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
-
-    public void executeErase(Integer startLba, Integer length){
-        try {
-            ProcessBuilder pb = new ProcessBuilder(
-                    "java", "-jar",
-                    getSsdJarPath(),
-                    "E", startLba.toString(), length.toString());
-
-            System.out.println(pb.command());
-            pb.inheritIO();
-            pb.start();
-            Thread.sleep(1000);
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     private String getSsdJarPath() {
         String projectRoot = System.getProperty("user.dir");
