@@ -46,7 +46,7 @@ public class CommandInvoker {
         register("fullread", new FullReadCommand(testShellManager));
     }
 
-    public void register(String commandName, Command command) {
+    private void register(String commandName, Command command) {
         commandMap.put(commandName, command);
     }
 

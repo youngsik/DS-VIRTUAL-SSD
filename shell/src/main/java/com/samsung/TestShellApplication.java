@@ -17,10 +17,6 @@ public class TestShellApplication {
         CommandInvoker commandInvoker = new CommandInvoker(new HashMap<>());
         commandInvoker.initAllCommands();
 
-        // 명령어 등록
-        initShellCommand(commandInvoker);
-        initScriptCommand(commandInvoker);
-
         // 사용자 입력 받기
         System.out.println("testshell 명령어: write, read, erase, erase_range, exit, help, fullwrite, fullread");
         System.out.println("testscript 명령어: 1_FullWriteAndReadCompare, 2_PartialLBAWrite, 3_WriteReadAging");
@@ -34,25 +30,6 @@ public class TestShellApplication {
             }
         }
 
-    }
-
-    private static void initShellCommand(CommandInvoker commandInvoker) {
-        TestShellManager testShellManager = new TestShellManager(new JarExecutor(), new FileManager());
-        commandInvoker.register("write", new WriteCommand(testShellManager));
-        commandInvoker.register("read", new ReadCommand(testShellManager));
-        commandInvoker.register("exit", new ExitCommand(testShellManager));
-        commandInvoker.register("help", new HelpCommand(testShellManager));
-        commandInvoker.register("fullwrite", new FullWriteCommand(testShellManager));
-        commandInvoker.register("fullread", new FullReadCommand(testShellManager));
-        commandInvoker.register("erase", new EraseCommand(testShellManager));
-        commandInvoker.register("erase_range", new EraseRangeCommand(testShellManager));
-    }
-
-    private static void initScriptCommand(CommandInvoker commandInvoker) {
-        ScriptManager scriptManager = new ScriptManager(new FileManager(), new JarExecutor());
-        commandInvoker.register("1_FullWriteAndReadCompare", new TestScript1Command(scriptManager));
-        commandInvoker.register("2_PartialLBAWrite", new TestScript2Command(scriptManager));
-        commandInvoker.register("3_WriteReadAging", new TestScript3Command(scriptManager));
     }
 
     private static String getInput() {
