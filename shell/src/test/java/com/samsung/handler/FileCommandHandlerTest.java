@@ -37,9 +37,9 @@ class FileCommandHandlerTest {
     @DisplayName("handle() 메서드 실행 테스트 - 유효한 txt 파일")
     @Test
     void handleExecutionTest(@TempDir Path tempDir) {
-        writeTempFile(tempDir);
+        Path txtFile = writeTempFile(tempDir);
 
-        handler.handle(VALID_FILE_NAME);
+        handler.handle(txtFile.toString());
 
         verify(mockInvoker, times(4)).execute(any());
     }
@@ -53,21 +53,21 @@ class FileCommandHandlerTest {
     @DisplayName("handle() 메서드 예외 테스트 - 세 번째 실행 스크립트에서 예외 발생")
     @Test
     void handleIOExceptionTest2(@TempDir Path tempDir) {
-        writeTempFile(tempDir);
+        Path txtFile = writeTempFile(tempDir);
 
         doNothing().when(mockInvoker).execute(eq(new String[] {TEST_SCRIPT1_COMMAND}));
         doNothing().when(mockInvoker).execute(eq(new String[] {TEST_SCRIPT2_COMMAND}));
-        doThrow(new RuntimeException()).when(mockInvoker).execute(eq(new String[]{TEST_SCRIPT3_COMMAND}));
+        doThrow(new RuntimeException()).when(mockInvoker).execute(eq(new String[] {TEST_SCRIPT3_COMMAND}));
 
         try {
-            handler.handle(VALID_FILE_NAME);
+            handler.handle(txtFile.toString());
         } catch (RuntimeException e) {
             verify(mockInvoker, times(3)).execute(any());
             assertThat(e.getMessage()).isEqualTo("FileCommandHandler Fail 발생");
         }
     }
 
-    private void writeTempFile(Path tempDir) {
+    private Path writeTempFile(Path tempDir) {
         Path txtFile = tempDir.resolve(VALID_FILE_NAME);
         try (PrintWriter writer = new PrintWriter(txtFile.toFile())) {
             writer.println(TEST_SCRIPT1_COMMAND);
@@ -77,5 +77,6 @@ class FileCommandHandlerTest {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+        return txtFile;
     }
 }
