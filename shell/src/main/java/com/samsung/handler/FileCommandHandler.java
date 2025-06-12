@@ -15,10 +15,17 @@ public class FileCommandHandler {
     }
 
     public void handle(String fileName) {
+        validatePrecondition(fileName);
         try {
             executeAllCommands(Files.readAllLines(Paths.get(fileName)));
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    private static void validatePrecondition(String fileName) {
+        if (!fileName.endsWith(".txt")) {
+            throw new RuntimeException("유효하지 않은 파일 타입입니다.");
         }
     }
 
