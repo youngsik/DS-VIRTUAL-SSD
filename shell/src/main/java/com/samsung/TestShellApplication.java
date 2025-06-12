@@ -1,14 +1,13 @@
 package com.samsung;
 
+import com.samsung.command.CommandInvoker;
+import com.samsung.command.testscript.ScriptManager;
+import com.samsung.command.testscript.TestScript1Command;
+import com.samsung.command.testscript.TestScript2Command;
+import com.samsung.command.testscript.TestScript3Command;
+import com.samsung.command.testshell.*;
 import com.samsung.file.FileManager;
 import com.samsung.file.JarExecutor;
-import com.samsung.testscript.ScriptManager;
-import com.samsung.testscript.command.TestScript1Command;
-import com.samsung.testscript.command.TestScript2Command;
-import com.samsung.testscript.command.TestScript3Command;
-import com.samsung.testshell.CommandInvoker;
-import com.samsung.testshell.TestShellManager;
-import com.samsung.testshell.commands.*;
 
 import java.util.Scanner;
 
