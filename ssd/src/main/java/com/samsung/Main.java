@@ -1,5 +1,7 @@
 package com.samsung;
 
+import com.samsung.validator.CmdValidChecker;
+
 class Main {
     public static void main(String[] args) {
         CmdData cmdData = cmdValidCheck(args);

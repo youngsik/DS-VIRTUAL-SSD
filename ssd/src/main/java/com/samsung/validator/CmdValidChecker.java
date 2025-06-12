@@ -1,4 +1,7 @@
-package com.samsung;
+package com.samsung.validator;
+
+import com.samsung.CmdData;
+import com.samsung.SSDConstant;
 
 import static com.samsung.SSDConstant.*;
 
