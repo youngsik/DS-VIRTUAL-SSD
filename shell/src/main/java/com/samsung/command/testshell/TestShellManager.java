@@ -58,6 +58,8 @@ public class TestShellManager {
         System.out.println("명령어");
         System.out.println("  write [LBA] [Value]     지정된 index에 value를 기록합니다. 예: write 3 0xAAAABBBB");
         System.out.println("  read [LBA]              지정된 index의 값을 읽어옵니다. 예: read 3");
+        System.out.println("  erase [LBA] [Length]    지정된 LBA 부터 Length 길이만큼을 SSD에서 삭제합니다. 예 : erase 0 10");
+        System.out.println("  erase_range [LBA1] [LBA2]    지정된 범위의 데이터를 SSD에서 삭제합니다. 예 : erase_range 10 20");
         System.out.println("  fullwrite  [Value]         전체 영역에 value를 기록합니다. 예: fullwrite 0xAAAABBBB");
         System.out.println("  fullread                  전체 영역을 읽어옵니다.");
         System.out.println("  help                      사용 가능한 명령어를 출력합니다.");
@@ -111,7 +113,7 @@ public class TestShellManager {
             System.out.println("SSD : [ERASE] " + i + " " + getEraseLength(i, finishLBA));
         }
 
-        System.out.println("[ERASE] " + eraseLBA + " " + eraseLength);
+        System.out.println("[ERASE] " + eraseLBA + " " + eraseLength + " [DONE]");
     }
 
     public void eraseRange(int startLBA, int finishLBA) {
@@ -120,7 +122,7 @@ public class TestShellManager {
             System.out.println("SSD : [ERASE] " + i + " " + getEraseLength(i, finishLBA));
         }
 
-        System.out.println("[ERASE] " + startLBA + " " + finishLBA);
+        System.out.println("[ERASE] " + startLBA + " " + finishLBA + " [DONE]");
     }
 
     private int getFinishLBA(int startLBA, int eraseLength) {
