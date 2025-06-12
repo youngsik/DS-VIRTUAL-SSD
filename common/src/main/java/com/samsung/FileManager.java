@@ -3,12 +3,9 @@ package com.samsung;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.stream.Stream;
+import java.util.List;
 
-import static com.samsung.Constants.*;
+import static com.samsung.FileConstants.*;
 
 public class FileManager {
 
@@ -29,6 +26,16 @@ public class FileManager {
             byte[] buf = new byte[10];
             file.read(buf);
             result = new String(buf);
+        } catch (IOException e) {
+
+        }
+        return result;
+    }
+
+    public List<String> getAllValuesFromFile(){
+        List<String> result = null;
+        try {
+            result = Files.readAllLines(Path.of(SSD_NAND_FILE_NAME));
         } catch (IOException e) {
 
         }

@@ -1,17 +1,17 @@
 package com.samsung;
 
 import com.samsung.command.CommandInvoker;
-import com.samsung.command.testscript.ScriptManager;
-import com.samsung.command.testscript.TestScript1Command;
-import com.samsung.command.testscript.TestScript2Command;
-import com.samsung.command.testscript.TestScript3Command;
+import com.samsung.command.testscript.*;
 import com.samsung.command.testshell.*;
-import com.samsung.file.FileManager;
 import com.samsung.file.JarExecutor;
+import com.samsung.validator.ArgumentsValidator;
+import com.samsung.validator.CommandValidator;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Scanner;
 
+@Slf4j
 public class TestShellApplication {
     public static void main(String[] args) {
         CommandInvoker commandInvoker = new CommandInvoker(new HashMap<>());

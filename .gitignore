@@ -1,5 +1,6 @@
-*.txt
-*.jar
+**/*.log
+**/*.jar
+**/*.txt
 .idea/
 .gradle
 build/
