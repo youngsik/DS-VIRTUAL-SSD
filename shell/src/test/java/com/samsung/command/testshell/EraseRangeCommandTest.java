@@ -1,5 +1,6 @@
 package com.samsung.command.testshell;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,6 +21,7 @@ class EraseRangeCommandTest {
     EraseRangeCommand eraseRangeCommand;
 
     @Test
+    @DisplayName("LBA 구간이 정상적으로 들어오는 경우")
     public void validLBA() {
         Random random = new Random();
 
@@ -33,11 +35,16 @@ class EraseRangeCommandTest {
     }
 
     @Test
+    @DisplayName("LBA 구간이 비정상적으로 들어오는 경우 0에서 99사이 아님")
     public void invalidLBA() {
         Random random = new Random();
 
         int begin = random.nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
         int end = random.nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
+
+        while(begin >= 0 && begin < 100 && end >= 0 && end < 100) {
+            begin = random.nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
+        }
 
         String[] cmdArgs = new String[]{"erase_range", String.valueOf(begin), String.valueOf(end)};
 

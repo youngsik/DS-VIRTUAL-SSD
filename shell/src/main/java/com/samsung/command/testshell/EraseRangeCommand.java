@@ -1,8 +1,5 @@
 package com.samsung.command.testshell;
-
 import com.samsung.command.Command;
-
-import java.util.Collections;
 
 public class EraseRangeCommand implements Command {
     private final TestShellManager testShellManager;

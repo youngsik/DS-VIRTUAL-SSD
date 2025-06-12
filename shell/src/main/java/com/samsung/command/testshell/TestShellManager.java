@@ -16,7 +16,7 @@ public class TestShellManager {
 
     public TestShellManager(JarExecutor jarExecutor, FileManager fileManager) {
         this.jarExecutor = jarExecutor;
-        this.fileManager =fileManager;
+        this.fileManager = fileManager;
     }
 
     public void write(int index, String value) {
@@ -128,17 +128,10 @@ public class TestShellManager {
 
     private int getFinishLBA(int startLBA, int eraseSize) {
         int res = startLBA + eraseSize;
-        res = res + (eraseSize < 0 ? 1 : -1);
 
-        if(res < 0) {
-            return 0;
-        }
-        else if(res >= 100) {
-            return 99;
-        }
-        else{
-            return res;
-        }
+        res += (eraseSize < 0 ? 1 : -1);
+
+        return Math.min(99, Math.max(0, res));
     }
 
     private int getEraseSize(int currentLBA, int endLBA) {
