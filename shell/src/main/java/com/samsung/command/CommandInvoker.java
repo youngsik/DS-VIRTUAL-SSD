@@ -40,6 +40,8 @@ public class CommandInvoker {
         TestShellManager testShellManager = new TestShellManager(new JarExecutor(), new FileManager());
         register("write", new WriteCommand(testShellManager));
         register("read", new ReadCommand(testShellManager));
+        register("erase", new EraseCommand(testShellManager));
+        register("erase_range", new EraseRangeCommand(testShellManager));
         register("exit", new ExitCommand(testShellManager));
         register("help", new HelpCommand(testShellManager));
         register("fullwrite", new FullWriteCommand(testShellManager));
