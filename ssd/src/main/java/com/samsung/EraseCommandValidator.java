@@ -6,7 +6,6 @@ public class EraseCommandValidator implements CommandValidator {
     @Override
     public CmdData validate(String[] cmdParam) {
         if (cmdParam.length != 3) return error();
-        if (!cmdParam[0].equals(COMMAND_ERASE)) return error();
         int lba, size;
         try {
             lba = Integer.parseInt(cmdParam[1]);
@@ -14,8 +13,8 @@ public class EraseCommandValidator implements CommandValidator {
         } catch (NumberFormatException e) {
             return error();
         }
-        if (lba < 0 || lba > 99) return error();
-        if (size < 0 || size > 10) return error();
+        if (lba < 0 || lba > MAX_LBA) return error();
+        if (size < 0 || size > MAX_ERASE_SIZE) return error();
         if (lba + size > 100) return error();
         return new CmdData(COMMAND_ERASE, lba, cmdParam[2]);
     }

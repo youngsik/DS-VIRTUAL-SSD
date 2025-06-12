@@ -8,14 +8,13 @@ public class ReadCommandValidator implements CommandValidator {
     @Override
     public CmdData validate(String[] cmdParam) {
         if (cmdParam.length != 2) return error();
-        if (!cmdParam[0].equals(COMMAND_READ)) return error();
         int lba;
         try {
             lba = Integer.parseInt(cmdParam[1]);
         } catch (NumberFormatException e) {
             return error();
         }
-        if (lba < 0 || lba > 99) return error();
+        if (lba < 0 || lba > MAX_LBA) return error();
         return new CmdData(COMMAND_READ, lba, null);
     }
 
