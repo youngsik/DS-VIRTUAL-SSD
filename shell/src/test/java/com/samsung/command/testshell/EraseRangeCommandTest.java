@@ -50,4 +50,24 @@ class EraseRangeCommandTest {
 
         assertThrows(RuntimeException.class, () -> eraseRangeCommand.execute(cmdArgs));
     }
+
+    @Test
+    @DisplayName("인자로 문자열 전달")
+    public void invalidStringParameter() {
+        String[] cmdArgs = new String[] {"erase_range", "0x", "11"};
+        assertThrows(RuntimeException.class, () -> eraseRangeCommand.execute(cmdArgs));
+    }
+
+    @Test
+    @DisplayName("인자 개수 문제")
+    public void invalidLessParameter() {
+        String[] cmdArgs = new String[] {"erase_range"};
+        assertThrows(RuntimeException.class, () -> eraseRangeCommand.execute(cmdArgs));
+    }
+
+    @Test
+    public void invalidManyParameter() {
+        String[] cmdArgs = new String[] {"erase_range", "0", "10", "hello"};
+        assertThrows(RuntimeException.class, () -> eraseRangeCommand.execute(cmdArgs));
+    }
 }
