@@ -172,4 +172,41 @@ class MainTest {
         Main.parsing(new String[]{});
         assertEquals("ERROR", Main.command);
     }
+
+    @Test
+    void testEraseInput() {
+        Main.parsing(new String[]{"E", "5", "9"});
+        assertEquals("E", Main.command);
+    }
+
+    @Test
+    void testEraseInput_fail_value1() {
+        Main.parsing(new String[]{"E", "5", "11"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test
+    void testEraseInput_fail_value2() {
+        Main.parsing(new String[]{"E", "5", "-1"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test
+    void testEraseInput_fail_value3() {
+        Main.parsing(new String[]{"E", "5", "aa"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test
+    void testEraseInput_fail_lba3() {
+        Main.parsing(new String[]{"E", "100", "aa"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test
+    void testEraseInput_fail_paramQty() {
+        Main.parsing(new String[]{"E"});
+        assertEquals("ERROR", Main.command);
+    }
 }
+

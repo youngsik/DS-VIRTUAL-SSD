@@ -8,7 +8,7 @@ class Main {
     public static String command;
     public static int lba;
     public static String value;
-    private static final ArrayList<String> commandList = new ArrayList<>(Arrays.asList("R", "W"));
+    private static final ArrayList<String> commandList = new ArrayList<>(Arrays.asList("R", "W", "E"));
 
     public static void main(String[] args) {
         parsing(args);
@@ -58,7 +58,9 @@ class Main {
     }
 
     private static boolean parseParamCountCheckFail(String[] cmdParam) {
-        if (checkReadParamCount(cmdParam) || checkWriteParamCount(cmdParam)) return false;
+        if (checkReadParamCount(cmdParam)) return false;
+        if(checkWriteParamCount(cmdParam)) return false;
+        if(checkEraseParamCount(cmdParam)) return false;
         setErrorCommand();
         return true;
     }
@@ -73,6 +75,11 @@ class Main {
         return false;
     }
 
+    private static boolean checkEraseParamCount(String[] cmdParam) {
+        if (cmdParam[0].equals("E") && cmdParam.length == 3) return true;
+        return false;
+    }
+
     private static boolean checkCmdFail(String[] cmdParam) {
         if (commandList.contains(cmdParam[0])) return false;
         setErrorCommand();
@@ -80,9 +87,29 @@ class Main {
     }
 
     private static boolean checkValueFormatFail(String[] cmdParam) {
-        if (cmdParam.length > 2 && cmdParam[2].matches("^0x[0-9A-F]{8}$")) return false;
+        if (checkWriteValue(cmdParam)) return false;
+        if (checkEraseValue(cmdParam)) return false;
         if (cmdParam.length == 2) return false;
         setErrorCommand();
+        return true;
+    }
+
+    private static boolean checkWriteValue(String[] cmdParam) {
+        if (!cmdParam[0].equals("W")) return false;
+        return cmdParam[2].matches("^0x[0-9A-F]{8}$");
+    }
+
+    private static boolean checkEraseValue(String[] cmdParam) {
+        if (!cmdParam[0].equals("E")) return false;
+        int eRange = 0;
+        try {
+            eRange = Integer.parseInt(cmdParam[2]);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        if (eRange < 0 || eRange > 10) {
+            return false;
+        }
         return true;
     }
 
