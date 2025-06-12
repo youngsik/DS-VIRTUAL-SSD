@@ -24,7 +24,7 @@ public class FileManager {
             file.read(buf);
             writeOnOutputFile(new String(buf));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+
         }
     }
 
@@ -34,7 +34,7 @@ public class FileManager {
             file.seek(index * OFFSET);
             file.writeBytes(value);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+
         }
     }
 
