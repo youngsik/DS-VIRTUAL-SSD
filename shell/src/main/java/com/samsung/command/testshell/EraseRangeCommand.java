@@ -17,7 +17,6 @@ public class EraseRangeCommand implements Command {
         int beginLBA;
         int endLBA;
 
-        // LBA 숫자 여부 확인
         try{
             beginLBA = Integer.parseInt(cmdArgs[1]);
             endLBA = Integer.parseInt(cmdArgs[2]);
@@ -25,7 +24,6 @@ public class EraseRangeCommand implements Command {
             throw new RuntimeException("INVALID COMMAND PARAMETER");
         }
 
-        // LBA 범위 확인
         if(!isLBAValid(beginLBA) || !isLBAValid(endLBA)) {
             throw new RuntimeException("INVALID COMMAND PARMETER");
         }

@@ -8,14 +8,8 @@ import java.util.List;
 @Slf4j
 public class TestShellManager {
 
-    public static final String writeCmd = "W";
-    public static final String ReadCmd = "R";
-
     private final JarExecutor jarExecutor;
     private final FileManager fileManager;
-
-    public static final String BLANK_DATA = "0x00000000";
-    public static final String SSD_NAND_FILE_NAME = "ssd_nand.txt";
 
     public TestShellManager(JarExecutor jarExecutor, FileManager fileManager) {
         this.jarExecutor = jarExecutor;
@@ -60,8 +54,6 @@ public class TestShellManager {
         System.out.println("  exit                      프로그램을 종료합니다.");
         System.out.println("Copyright (c) 2025 DeviceSolution. All rights reserved.");
         System.out.println();
-
-
     }
 
     public void fullwrite(String value) {
@@ -94,7 +86,6 @@ public class TestShellManager {
 
         for(int i = range.start; i <= range.end; i += 10) {
             jarExecutor.executeErase(i, getEraseSize(i, range.end));
-            // System.out.println("SSD : [ERASE] " + i + " " + getEraseSize(i, range.end));
         }
 
         System.out.println("[ERASE] " + eraseLBA + " " + eraseSize + " [DONE]");
@@ -105,7 +96,6 @@ public class TestShellManager {
 
         for(int i = range.start; i <= range.end; i += 10) {
             jarExecutor.executeErase(i, getEraseSize(i, range.end));
-            // System.out.println("SSD : [ERASE] " + i + " " + getEraseSize(i, range.end));
         }
 
         System.out.println("[ERASE] " + startLBA + " " + finishLBA + " [DONE]");
