@@ -3,12 +3,15 @@ package com.samsung;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static com.samsung.SSDConstant.*;
+
 class Main {
 
     public static String command;
     public static int lba;
     public static String value;
-    private static final ArrayList<String> commandList = new ArrayList<>(Arrays.asList("R", "W"));
+    private static final ArrayList<String> commandList
+            = new ArrayList<>(Arrays.asList(COMMAND_READ, COMMAND_WRITE, COMMAND_ERASE));
 
     public static void main(String[] args) {
         parsing(args);
@@ -58,19 +61,38 @@ class Main {
     }
 
     private static boolean parseParamCountCheckFail(String[] cmdParam) {
-        if (checkReadParamCount(cmdParam) || checkWriteParamCount(cmdParam)) return false;
+        if (checkReadParamCount(cmdParam)) return false;
+        if(checkWriteParamCount(cmdParam)) return false;
+        if(checkEraseParamCount(cmdParam)) return false;
         setErrorCommand();
         return true;
     }
 
     private static boolean checkWriteParamCount(String[] cmdParam) {
-        if (cmdParam[0].equals("W") && cmdParam.length == 3) return true;
+        if (isWriteCommand(cmdParam) && cmdParam.length == 3) return true;
         return false;
     }
 
     private static boolean checkReadParamCount(String[] cmdParam) {
-        if (cmdParam[0].equals("R") && cmdParam.length == 2) return true;
+        if (isReadCommand(cmdParam) && cmdParam.length == 2) return true;
         return false;
+    }
+
+    private static boolean checkEraseParamCount(String[] cmdParam) {
+        if (isEraseCommand(cmdParam) && cmdParam.length == 3) return true;
+        return false;
+    }
+
+    private static boolean isWriteCommand(String[] cmdParam) {
+        return cmdParam[0].equals(COMMAND_WRITE);
+    }
+
+    private static boolean isReadCommand(String[] cmdParam) {
+        return cmdParam[0].equals(COMMAND_READ);
+    }
+
+    private static boolean isEraseCommand(String[] cmdParam) {
+        return cmdParam[0].equals(COMMAND_ERASE);
     }
 
     private static boolean checkCmdFail(String[] cmdParam) {
@@ -80,9 +102,31 @@ class Main {
     }
 
     private static boolean checkValueFormatFail(String[] cmdParam) {
-        if (cmdParam.length > 2 && cmdParam[2].matches("^0x[0-9A-F]{8}$")) return false;
+        if (checkWriteValue(cmdParam)) return false;
+        if (checkEraseValue(cmdParam)) return false;
         if (cmdParam.length == 2) return false;
         setErrorCommand();
+        return true;
+    }
+
+    private static boolean checkWriteValue(String[] cmdParam) {
+        if (!isWriteCommand(cmdParam)) return false;
+        return cmdParam[2].matches("^0x[0-9A-F]{8}$");
+    }
+
+    private static boolean checkEraseValue(String[] cmdParam) {
+        if (!isEraseCommand(cmdParam)) return false;
+        int lba = 0;
+        int eRange = 0;
+        try {
+            lba = Integer.parseInt(cmdParam[1]);
+            eRange = Integer.parseInt(cmdParam[2]);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        if (eRange < 0 || eRange > 10 || lba + eRange > 100) {
+            return false;
+        }
         return true;
     }
 
