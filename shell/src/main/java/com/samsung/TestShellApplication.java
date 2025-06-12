@@ -1,26 +1,25 @@
 package com.samsung;
 
+import com.samsung.command.CommandInvoker;
+import com.samsung.command.testscript.ScriptManager;
+import com.samsung.command.testscript.TestScript1Command;
+import com.samsung.command.testscript.TestScript2Command;
+import com.samsung.command.testscript.TestScript3Command;
+import com.samsung.command.testshell.*;
 import com.samsung.file.FileManager;
 import com.samsung.file.JarExecutor;
-import com.samsung.testscript.ScriptCommandInvoker;
-import com.samsung.testscript.ScriptManager;
-import com.samsung.testscript.command.TestScript1Command;
-import com.samsung.testscript.command.TestScript2Command;
-import com.samsung.testscript.command.TestScript3Command;
-import com.samsung.testshell.ShellCommandInvoker;
-import com.samsung.testshell.TestShellManager;
-import com.samsung.testshell.commands.*;
+import com.samsung.validator.ArgumentsValidator;
+import com.samsung.validator.CommandValidator;
 
 import java.util.Scanner;
 
 public class TestShellApplication {
     public static void main(String[] args) {
-        ShellCommandInvoker shellCommandInvoker = new ShellCommandInvoker();
-        ScriptCommandInvoker scriptCommandInvoker = new ScriptCommandInvoker();
+        CommandInvoker commandInvoker = new CommandInvoker();
 
         // 명령어 등록
-        initShellCommand(shellCommandInvoker);
-        initScriptCommand(scriptCommandInvoker);
+        initShellCommand(commandInvoker);
+        initScriptCommand(commandInvoker);
 
         // 사용자 입력 받기
         System.out.println("testshell 명령어: write, read, exit, help, fullwrite, fullread");
@@ -28,24 +27,18 @@ public class TestShellApplication {
 
         while (true) {
             try {
-                String[] cmdArgs = split(getInput()); // 1~3개 args가 들어옴을 보장
+                String[] cmdArgs = split(getInput());
 
                 // 명령어 파라미터 길이 필수 요건 체크
-                if (cmdArgs.length < 1 || cmdArgs.length > 4) {
-                    throw new RuntimeException("INVALID COMMAND");
-                }
+                ArgumentsValidator.validateArgsRequirements(cmdArgs);
 
                 String commandName = cmdArgs[0];
-
-                // 명령어 파라미터 null 체크
-                if (commandName == null) {
-                    throw new RuntimeException("INVALID COMMAND");
-                }
+                CommandValidator.validateNull(commandName);
 
                 if (commandName.contains("_")) {
-                    scriptCommandInvoker.execute(cmdArgs);
+                    commandInvoker.execute(cmdArgs);
                 } else {
-                    shellCommandInvoker.execute(cmdArgs);
+                    commandInvoker.execute(cmdArgs);
                 }
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -54,21 +47,21 @@ public class TestShellApplication {
 
     }
 
-    private static void initShellCommand(ShellCommandInvoker shellCommandInvoker) {
+    private static void initShellCommand(CommandInvoker commandInvoker) {
         TestShellManager testShellManager = new TestShellManager(new JarExecutor(), new FileManager());
-        shellCommandInvoker.register("write", new WriteCommand(testShellManager));
-        shellCommandInvoker.register("read", new ReadCommand(testShellManager));
-        shellCommandInvoker.register("exit", new ExitCommand(testShellManager));
-        shellCommandInvoker.register("help", new HelpCommand(testShellManager));
-        shellCommandInvoker.register("fullwrite", new FullWriteCommand(testShellManager));
-        shellCommandInvoker.register("fullread", new FullReadCommand(testShellManager));
+        commandInvoker.register("write", new WriteCommand(testShellManager));
+        commandInvoker.register("read", new ReadCommand(testShellManager));
+        commandInvoker.register("exit", new ExitCommand(testShellManager));
+        commandInvoker.register("help", new HelpCommand(testShellManager));
+        commandInvoker.register("fullwrite", new FullWriteCommand(testShellManager));
+        commandInvoker.register("fullread", new FullReadCommand(testShellManager));
     }
 
-    private static void initScriptCommand(ScriptCommandInvoker scriptCommandInvoker) {
+    private static void initScriptCommand(CommandInvoker commandInvoker) {
         ScriptManager scriptManager = new ScriptManager(new FileManager(), new JarExecutor());
-        scriptCommandInvoker.register("1_FullWriteAndReadCompare", new TestScript1Command(scriptManager));
-        scriptCommandInvoker.register("2_PartialLBAWrite", new TestScript2Command(scriptManager));
-        scriptCommandInvoker.register("3_WriteReadAging", new TestScript3Command(scriptManager));
+        commandInvoker.register("1_FullWriteAndReadCompare", new TestScript1Command(scriptManager));
+        commandInvoker.register("2_PartialLBAWrite", new TestScript2Command(scriptManager));
+        commandInvoker.register("3_WriteReadAging", new TestScript3Command(scriptManager));
     }
 
     private static String getInput() {
