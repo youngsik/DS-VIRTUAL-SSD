@@ -1,6 +1,8 @@
 package com.samsung.command.testshell;
 
 import com.samsung.command.Command;
+import com.samsung.validator.ArgumentsValidator;
+import com.samsung.validator.CommandValidator;
 
 public class ReadCommand implements Command {
 
@@ -12,19 +14,14 @@ public class ReadCommand implements Command {
 
     @Override
     public void execute(String[] cmdArgs) {
-        if (cmdArgs.length != 2) {
-            throw new RuntimeException("INVALID COMMAND");
-        }
-
+        ArgumentsValidator.validateTwoArgs(cmdArgs);
         try {
             Integer index = Integer.parseInt(cmdArgs[1]);
-            if (index < 0 || index > 99) {
-                throw new RuntimeException("INVALID COMMAND");
-            }
-
+            CommandValidator.validateLbaRange(index);
             testShellManager.read(index);
         } catch (NumberFormatException e) {
             throw new RuntimeException("INVALID COMMAND"); // 숫자 아니면 Exception
         }
     }
+
 }

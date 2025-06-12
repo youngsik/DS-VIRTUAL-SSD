@@ -1,6 +1,7 @@
 package com.samsung.command.testshell;
 
 import com.samsung.command.Command;
+import com.samsung.validator.ArgumentsValidator;
 
 public class HelpCommand implements Command {
 
@@ -12,10 +13,8 @@ public class HelpCommand implements Command {
 
     @Override
     public void execute(String[] cmdArgs) {
-        if (cmdArgs.length != 1) {
-            throw new RuntimeException("INVALID COMMAND");
-        }
-
+        ArgumentsValidator.validateOneArgs(cmdArgs);
         testShellManager.help();
     }
+
 }

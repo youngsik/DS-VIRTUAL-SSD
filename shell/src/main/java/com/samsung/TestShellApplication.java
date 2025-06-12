@@ -1,13 +1,12 @@
 package com.samsung;
 
 import com.samsung.command.CommandInvoker;
-import com.samsung.command.testscript.ScriptManager;
-import com.samsung.command.testscript.TestScript1Command;
-import com.samsung.command.testscript.TestScript2Command;
-import com.samsung.command.testscript.TestScript3Command;
+import com.samsung.command.testscript.*;
 import com.samsung.command.testshell.*;
 import com.samsung.file.FileManager;
 import com.samsung.file.JarExecutor;
+import com.samsung.validator.ArgumentsValidator;
+import com.samsung.validator.CommandValidator;
 
 import java.util.Scanner;
 
@@ -25,19 +24,13 @@ public class TestShellApplication {
 
         while (true) {
             try {
-                String[] cmdArgs = split(getInput()); // 1~3개 args가 들어옴을 보장
+                String[] cmdArgs = split(getInput());
 
                 // 명령어 파라미터 길이 필수 요건 체크
-                if (cmdArgs.length < 1 || cmdArgs.length > 4) {
-                    throw new RuntimeException("INVALID COMMAND");
-                }
+                ArgumentsValidator.validateArgsRequirements(cmdArgs);
 
                 String commandName = cmdArgs[0];
-
-                // 명령어 파라미터 null 체크
-                if (commandName == null) {
-                    throw new RuntimeException("INVALID COMMAND");
-                }
+                CommandValidator.validateNull(commandName);
 
                 if (commandName.contains("_")) {
                     commandInvoker.execute(cmdArgs);
@@ -63,9 +56,21 @@ public class TestShellApplication {
 
     private static void initScriptCommand(CommandInvoker commandInvoker) {
         ScriptManager scriptManager = new ScriptManager(new FileManager(), new JarExecutor());
-        commandInvoker.register("1_FullWriteAndReadCompare", new TestScript1Command(scriptManager));
-        commandInvoker.register("2_PartialLBAWrite", new TestScript2Command(scriptManager));
-        commandInvoker.register("3_WriteReadAging", new TestScript3Command(scriptManager));
+
+        TestScript1Command testScript1Command = new TestScript1Command(scriptManager);
+        TestScript2Command testScript2Command = new TestScript2Command(scriptManager);
+        TestScript3Command testScript3Command = new TestScript3Command(scriptManager);
+        TestScript4Command testScript4Command = new TestScript4Command(scriptManager);
+
+        commandInvoker.register("1_FullWriteAndReadCompare", testScript1Command);
+        commandInvoker.register("2_PartialLBAWrite", testScript2Command);
+        commandInvoker.register("3_WriteReadAging", testScript3Command);
+        commandInvoker.register("4_EraseAndWriteAging", testScript4Command);
+
+        commandInvoker.register("1_", testScript1Command);
+        commandInvoker.register("2_", testScript2Command);
+        commandInvoker.register("3_", testScript3Command);
+        commandInvoker.register("4_", testScript4Command);
     }
 
     private static String getInput() {

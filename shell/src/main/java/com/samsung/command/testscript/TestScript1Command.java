@@ -1,6 +1,7 @@
 package com.samsung.command.testscript;
 
 import com.samsung.command.Command;
+import com.samsung.validator.ArgumentsValidator;
 
 public class TestScript1Command implements Command {
     private final ScriptManager scriptManager;
@@ -11,10 +12,8 @@ public class TestScript1Command implements Command {
 
     @Override
     public void execute(String[] cmdArgs) {
-        if (cmdArgs.length != 1) {
-            throw new RuntimeException("INVALID COMMAND");
-        }
-
+        ArgumentsValidator.validateOneArgs(cmdArgs);
         scriptManager.testScript1();
     }
+
 }
