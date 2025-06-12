@@ -1,22 +1,24 @@
 package com.samsung.testshell;
 
+import com.samsung.Command;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class ShellCommandInvoker {
-    private Map<String, ShellCommand> commandMap = new HashMap<>();
+    private Map<String, Command> commandMap = new HashMap<>();
 
-    public void register(String commandName, ShellCommand command) {
+    public void register(String commandName, Command command) {
         commandMap.put(commandName, command);
     }
 
     public void execute(String[] cmdArgs) {
-        ShellCommand command = getCommand(cmdArgs[0]);
+        Command command = getCommand(cmdArgs[0]);
         command.execute(cmdArgs);
     }
 
-    private ShellCommand getCommand(String commandName) {
-        ShellCommand command = commandMap.get(commandName);
+    private Command getCommand(String commandName) {
+        Command command = commandMap.get(commandName);
 
         // 명령어 존재 여부 체크
         if (command == null) {

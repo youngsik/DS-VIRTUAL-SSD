@@ -1,9 +1,9 @@
 package com.samsung.testshell.commands;
 
-import com.samsung.testshell.ShellCommand;
+import com.samsung.Command;
 import com.samsung.testshell.TestShellManager;
 
-public class HelpCommand implements ShellCommand {
+public class HelpCommand implements Command {
 
     private final TestShellManager testShellManager;
 
