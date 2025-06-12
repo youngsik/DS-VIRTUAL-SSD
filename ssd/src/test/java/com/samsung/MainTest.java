@@ -168,12 +168,6 @@ class MainTest {
     }
 
     @Test
-    void testEmptyInput() {
-        Main.parsing(new String[]{});
-        assertEquals("ERROR", Main.command);
-    }
-
-    @Test
     @DisplayName("Erase 성공")
     void testEraseInput() {
         Main.parsing(new String[]{"E", "5", "9"});
@@ -213,5 +207,272 @@ class MainTest {
         Main.parsing(new String[]{"E"});
         assertEquals("ERROR", Main.command);
     }
+
+    @Test
+    @DisplayName("E 명령 - 최소값(0 위치부터 1칸 지우기)")
+    void testEraseMinValue() {
+        Main.parsing(new String[]{"E", "0", "1"});
+        assertEquals("E", Main.command);
+        assertEquals(0, Main.lba);
+        assertEquals("1", Main.value);
+    }
+
+    @Test
+    @DisplayName("E 명령 - 50 위치부터 5칸 지우기")
+    void testEraseMiddleValue() {
+        Main.parsing(new String[]{"E", "50", "5"});
+        assertEquals("E", Main.command);
+        assertEquals(50, Main.lba);
+        assertEquals("5", Main.value);
+    }
+
+    @Test
+    @DisplayName("E 명령 - 최대 lba(99 위치부터 1칸 지우기)")
+    void testEraseMaxLba() {
+        Main.parsing(new String[]{"E", "99", "1"});
+        assertEquals("E", Main.command);
+        assertEquals(99, Main.lba);
+        assertEquals("1", Main.value);
+    }
+
+    @Test
+    @DisplayName("E 명령 - 10 위치부터 0칸 지우기(오류 아님)")
+    void testEraseZeroCount() {
+        Main.parsing(new String[]{"E", "10", "0"});
+        assertEquals("E", Main.command);
+        assertEquals(10, Main.lba);
+        assertEquals("0", Main.value);
+    }
+
+    @Test
+    @DisplayName("E 명령 - 0 위치부터 10칸 지우기(최대 size)")
+    void testEraseMaxCount() {
+        Main.parsing(new String[]{"E", "0", "10"});
+        assertEquals("E", Main.command);
+        assertEquals(0, Main.lba);
+        assertEquals("10", Main.value);
+    }
+
+    @Test
+    @DisplayName("E 명령 - 90 위치부터 9칸 지우기")
+    void testEraseNearEnd() {
+        Main.parsing(new String[]{"E", "90", "9"});
+        assertEquals("E", Main.command);
+        assertEquals(90, Main.lba);
+        assertEquals("9", Main.value);
+    }
+
+    @Test
+    @DisplayName("E 명령 - 음수 LBA 입력 오류")
+    void testEraseNegativeLba() {
+        Main.parsing(new String[]{"E", "-1", "5"});
+        assertEquals("ERROR", Main.command);
+        assertEquals("ERROR", Main.value);
+    }
+
+    @Test
+    @DisplayName("E 명령 - LBA 99 초과 입력 오류")
+    void testEraseLbaOver99() {
+        Main.parsing(new String[]{"E", "100", "1"});
+        assertEquals("ERROR", Main.command);
+        assertEquals("ERROR", Main.value);
+    }
+
+    @Test
+    @DisplayName("E 명령 - LBA 소수점 입력 오류")
+    void testEraseLbaWithDecimal() {
+        Main.parsing(new String[]{"E", "10.5", "2"});
+        assertEquals("ERROR", Main.command);
+        assertEquals("ERROR", Main.value);
+    }
+
+    @Test
+    @DisplayName("E 명령 - LBA 문자 입력 오류")
+    void testEraseLbaWithAlphabet() {
+        Main.parsing(new String[]{"E", "abc", "2"});
+        assertEquals("ERROR", Main.command);
+        assertEquals("ERROR", Main.value);
+    }
+
+    @Test
+    @DisplayName("E 명령 - LBA 특수문자 입력 오류")
+    void testEraseLbaWithSpecialChar() {
+        Main.parsing(new String[]{"E", "1-2", "2"});
+        assertEquals("ERROR", Main.command);
+        assertEquals("ERROR", Main.value);
+    }
+
+    @Test
+    @DisplayName("E 명령 - value 음수 입력 오류")
+    void testEraseNegativeValue() {
+        Main.parsing(new String[]{"E", "1", "-1"});
+        assertEquals("ERROR", Main.command);
+        assertEquals("ERROR", Main.value);
+    }
+
+    @Test
+    @DisplayName("E 명령 - value 10 초과 입력 오류")
+    void testEraseValueOver10() {
+        Main.parsing(new String[]{"E", "1", "11"});
+        assertEquals("ERROR", Main.command);
+        assertEquals("ERROR", Main.value);
+    }
+
+    @Test
+    @DisplayName("E 명령 - value 소수점 입력 오류")
+    void testEraseValueWithDecimal() {
+        Main.parsing(new String[]{"E", "1", "1.5"});
+        assertEquals("ERROR", Main.command);
+        assertEquals("ERROR", Main.value);
+    }
+
+    @Test
+    @DisplayName("E 명령 - value 문자 입력 오류")
+    void testEraseValueWithAlphabet() {
+        Main.parsing(new String[]{"E", "1", "abc"});
+        assertEquals("ERROR", Main.command);
+        assertEquals("ERROR", Main.value);
+    }
+
+    @Test @DisplayName("E110 - 공백 없음")
+    void testNoSpace() {
+        Main.parsing(new String[]{"E110"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test @DisplayName("E 1   10 - 공백이 두 칸 이상")
+    void testMultipleSpaces() {
+        Main.parsing(new String[]{"E", "1", "10"});
+        assertEquals("E", Main.command);
+        assertEquals(1, Main.lba);
+        assertEquals("10", Main.value);
+    }
+
+    @Test @DisplayName("E 1 - 값 부족")
+    void testMissingValue() {
+        Main.parsing(new String[]{"E", "1"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test @DisplayName("E 1 10 5 - 너무 많은 값")
+    void testTooManyValues() {
+        Main.parsing(new String[]{"E", "1", "10", "5"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test @DisplayName("E 95 5 - lba+size=100 오류")
+    void testLbaPlusSizeEquals100() {
+        Main.parsing(new String[]{"E", "95", "5"});
+        assertEquals("E", Main.command);
+    }
+
+    @Test @DisplayName("E 99 2 - lba+size=101 오류")
+    void testLbaPlusSizeOver99() {
+        Main.parsing(new String[]{"E", "99", "2"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test @DisplayName("E @ 1 - lba에 특수문자 포함")
+    void testLbaWithSpecialChar() {
+        Main.parsing(new String[]{"E", "@", "1"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test @DisplayName("E 5 # - size에 특수문자 포함")
+    void testSizeWithSpecialChar() {
+        Main.parsing(new String[]{"E", "5", "#"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test @DisplayName("E $ % - lba, size 모두 특수문자 포함")
+    void testLbaAndSizeWithSpecialChar() {
+        Main.parsing(new String[]{"E", "$", "%"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test @DisplayName("E ! 10 - lba에 느낌표 포함")
+    void testLbaWithExclamation() {
+        Main.parsing(new String[]{"E", "!", "10"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test @DisplayName("E 3 & - size에 앰퍼샌드 포함")
+    void testSizeWithAmpersand() {
+        Main.parsing(new String[]{"E", "3", "&"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test @DisplayName("E * 1 - lba에 별표 포함")
+    void testLbaWithAsterisk() {
+        Main.parsing(new String[]{"E", "*", "1"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test @DisplayName("E 1 10# - size 끝에 특수문자 포함")
+    void testSizeEndsWithSpecialChar() {
+        Main.parsing(new String[]{"E", "1", "10#"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test @DisplayName("E 1@ 10 - lba 숫자와 특수문자 붙음")
+    void testLbaNumberWithSpecialChar() {
+        Main.parsing(new String[]{"E", "1@", "10"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test @DisplayName("E 1 1\\n - size 뒤에 개행문자 포함")
+    void testSizeWithNewline() {
+        Main.parsing(new String[]{"E", "1", "1\n"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test @DisplayName("E - command만 있고 lba, size 없음")
+    void testOnlyCommand() {
+        Main.parsing(new String[]{"E"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test @DisplayName("E 1 - command, lba만 있고 size 없음")
+    void testCommandAndLbaOnly() {
+        Main.parsing(new String[]{"E", "1"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test @DisplayName("E 1 2 3 - 파라미터 4개")
+    void testFourParameters() {
+        Main.parsing(new String[]{"E", "1", "2", "3"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test @DisplayName("빈 문자열 - 아무 입력도 없는 경우")
+    void testEmptyInput() {
+        Main.parsing(new String[]{});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test @DisplayName("E 1 2 3 4 - 파라미터 5개 이상")
+    void testFiveParameters() {
+        Main.parsing(new String[]{"E", "1", "2", "3", "4"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test @DisplayName(" E 1 2 - 앞에 공백 포함")
+    void testLeadingSpace() {
+        Main.parsing(new String[]{" E", "1", "2"});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test @DisplayName("E 1 2 - 끝에 공백 포함")
+    void testTrailingSpace() {
+        Main.parsing(new String[]{"E", "1", "2 "});
+        assertEquals("ERROR", Main.command);
+    }
+
+    @Test @DisplayName("     E 1 2 - 앞에 여러 공백 포함")
+    void testMultipleLeadingSpaces() {
+        Main.parsing(new String[]{"     E", "1", "2"});
+        assertEquals("ERROR", Main.command);
+    }
+
 }
 
