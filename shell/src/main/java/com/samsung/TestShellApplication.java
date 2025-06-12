@@ -59,6 +59,8 @@ public class TestShellApplication {
         commandInvoker.register("help", new HelpCommand(testShellManager));
         commandInvoker.register("fullwrite", new FullWriteCommand(testShellManager));
         commandInvoker.register("fullread", new FullReadCommand(testShellManager));
+        commandInvoker.register("erase", new EraseCommand(testShellManager));
+        commandInvoker.register("erase_range", new EraseRangeCommand(testShellManager));
     }
 
     private static void initScriptCommand(CommandInvoker commandInvoker) {

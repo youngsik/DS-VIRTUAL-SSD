@@ -91,4 +91,59 @@ public class TestShellManager {
             System.out.println(output);
         }
     }
+
+    public void erase(int eraseLBA, int eraseLength) {
+        if(eraseLength == 0) {
+            return;
+        }
+
+        int startLBA = eraseLBA;
+        int finishLBA = getFinishLBA(startLBA, eraseLength);
+
+        if(startLBA > finishLBA) {
+            int tempLBA = startLBA;
+            startLBA = finishLBA;
+            finishLBA = tempLBA;
+        }
+
+        for(int i = startLBA; i <= finishLBA; i += 10) {
+            // jarExecutor.executeErase(i, getEraseLength(i, finishLBA));
+            System.out.println("[ERASE] " + i + " " + getEraseLength(i, finishLBA));
+        }
+
+        System.out.println("[ERASE] " + eraseLBA + " " + eraseLength);
+    }
+
+    public void eraseRange(int startLBA, int finishLBA) {
+        for(int i = startLBA; i <= finishLBA; i += 10) {
+            // jarExecutor.executeErase(i, getEraseLength(i, finishLBA));
+            System.out.println("[ERASE] " + i + " " + getEraseLength(i, finishLBA));
+        }
+
+        System.out.println("[ERASE] " + startLBA + " " + finishLBA);
+    }
+
+    private int getFinishLBA(int startLBA, int eraseLength) {
+        int res = startLBA + eraseLength;
+        res = res + (eraseLength < 0 ? 1 : -1);
+
+        if(res < 0) {
+            return 0;
+        }
+        else if(res >= 100) {
+            return 99;
+        }
+        else{
+            return res;
+        }
+    }
+
+    private int getEraseLength(int currentLBA, int endLBA) {
+        if(currentLBA + 10 > endLBA) {
+            return endLBA - currentLBA + 1;
+        }
+        else{
+            return 10;
+        }
+    }
 }
