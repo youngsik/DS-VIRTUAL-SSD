@@ -6,7 +6,6 @@ import com.samsung.command.testshell.*;
 import com.samsung.file.FileManager;
 import com.samsung.file.JarExecutor;
 import com.samsung.validator.ArgumentsValidator;
-import com.samsung.validator.CommandValidator;
 
 import java.util.Scanner;
 
@@ -25,18 +24,9 @@ public class TestShellApplication {
         while (true) {
             try {
                 String[] cmdArgs = split(getInput());
-
-                // 명령어 파라미터 길이 필수 요건 체크
                 ArgumentsValidator.validateArgsRequirements(cmdArgs);
 
-                String commandName = cmdArgs[0];
-                CommandValidator.validateNull(commandName);
-
-                if (commandName.contains("_")) {
-                    commandInvoker.execute(cmdArgs);
-                } else {
-                    commandInvoker.execute(cmdArgs);
-                }
+                commandInvoker.execute(cmdArgs);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
