@@ -3,119 +3,99 @@ package com.samsung.command.testscript;
 import com.samsung.file.FileManager;
 import com.samsung.file.JarExecutor;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
+import static com.samsung.command.testscript.TestScriptConstant.*;
+
 public class ScriptManager {
-    private static final String TEST_VALUE = "0xAAAABBBB";
-    private static final String TEST_VALUE_OVER_WRITE = "0xAAAAAAAA";
-    private static final String EMPTY_VALUE = "0x00000000";
-
-    private static final int TEST_LOOP_30 = 30;
-    private static final int TEST_LOOP_100 = 100;
-    private static final int VERIFY_TERM = 4;
-
-    private static final int MAX_RAND_BOUND = 1000;
-    private static final int LBA_FIRST = 0;
-    private static final int LBA_LAST = 99;
-
-    private final List<Integer> script2LbaOrder = new ArrayList<>(List.of(4, 0, 3, 1, 2));
-
     private final FileManager fileManager;
     private final JarExecutor jarExecutor;
+    private final Random random = new Random();
 
     public ScriptManager(FileManager fileManager, JarExecutor jarExecutor) {
         this.fileManager = fileManager;
         this.jarExecutor = jarExecutor;
     }
-    public Random random = new Random();
 
-    public boolean testScript1(){
-        int indexHeader = LBA_FIRST;
-        boolean isSuccess = false;
-        while (indexHeader <= TEST_LOOP_100 - VERIFY_TERM) {
-            isSuccess = verifyEachFourTimes(indexHeader, TEST_VALUE);
-            indexHeader += VERIFY_TERM;
+    public boolean testScript1() {
+        boolean result = false;
+        for (int index = LBA_FIRST; index <= LOOP_100 - VERIFY_TERM; index += VERIFY_TERM) {
+            result = verifyBlock(index, TEST_VALUE);
         }
-        return isSuccess;
-    }
-
-    private boolean verifyEachFourTimes(int indexHeader, String verifyValue) {
-        boolean isSuccess = false;
-        for (int i = indexHeader; i < indexHeader + VERIFY_TERM; i++){
-            write(i, verifyValue);
-            isSuccess = readAndCompare(i, verifyValue);
-        }
-        return isSuccess;
+        return result;
     }
 
     public boolean testScript2() {
-        boolean isSuccess = false;
-        for (int i = 0; i < TEST_LOOP_30; i++) {
-            for (Integer lba : script2LbaOrder) {
-                write(lba, TEST_VALUE);
-            }
-
+        boolean result = false;
+        for (int i = 0; i < LOOP_30; i++) {
+            script2LbaOrder.forEach(lba -> write(lba, TEST_VALUE));
             for (int j = 0; j <= VERIFY_TERM; j++) {
-                isSuccess = readAndCompare(j, TEST_VALUE);
+                result = verifyValue(j, TEST_VALUE);
             }
         }
-
-        return isSuccess;
+        return result;
     }
 
-    public boolean testScript3(){
-        boolean isSuccess = false;
-        for (int i = 0; i < TEST_LOOP_100 * 2; i++){
-            String randHexForFirst = getRandomHex();
-            String randHexForLast = getRandomHex();
-
-            boolean isSuccessLbaFirst = writeAndVerify(LBA_FIRST, randHexForFirst);
-            boolean isSuccessLbaLast = writeAndVerify(LBA_LAST, randHexForLast);
-
-            isSuccess = isSuccessLbaFirst && isSuccessLbaLast;
+    public boolean testScript3() {
+        boolean result = false;
+        for (int i = 0; i < LOOP_100 * 2; i++) {
+            String hex1 = getRandomHex();
+            String hex2 = getRandomHex();
+            boolean firstOk = writeAndVerify(LBA_FIRST, hex1);
+            boolean lastOk = writeAndVerify(LBA_LAST, hex2);
+            result = firstOk && lastOk;
         }
-        return isSuccess;
+        return result;
     }
 
-    public boolean testScript4(){
-        boolean isSuccess = false;
-        jarExecutor.executeErase(0, 3);
-        Integer index = 2;
-        for (int i = 0; i < 30; i++){
-            jarExecutor.executeWrite(index, TEST_VALUE);
-            jarExecutor.executeWrite(index, TEST_VALUE_OVER_WRITE);
+    public boolean testScript4() {
+        boolean result = false;
+        jarExecutor.executeErase(0, ERASE_BLOCK_LENGTH);
 
-            jarExecutor.executeErase(index, 3);
-            for(int j = 0; j < 3; j++) {
-                isSuccess = readAndCompare(index++, EMPTY_VALUE);
+        int currentLba = 2;
+        for (int i = 0; i < LOOP_30; i++) {
+            testScript4Logic(currentLba);
+
+            for (int offset = 0; offset < ERASE_BLOCK_LENGTH; offset++) {
+                result = verifyValue(currentLba++, EMPTY_VALUE);
             }
         }
-        return isSuccess;
+        return result;
     }
 
-    private boolean writeAndVerify(Integer lba, String randHex) {
-        write(lba, randHex);
-        return readAndCompare(lba, randHex);
+    private void testScript4Logic(int currentLba) {
+        jarExecutor.executeWrite(currentLba, TEST_VALUE);
+        jarExecutor.executeWrite(currentLba, TEST_VALUE_OVERWRITE);
+        jarExecutor.executeErase(currentLba, ERASE_BLOCK_LENGTH);
     }
 
-    private String getRandomHex() {
-        int randInt = random.nextInt(MAX_RAND_BOUND);
-        return String.format("0x%08X", randInt);
+    private boolean verifyBlock(int startLba, String value) {
+        boolean success = false;
+        for (int i = 0; i < VERIFY_TERM; i++) {
+            int lba = startLba + i;
+            write(lba, value);
+            success = verifyValue(lba, value);
+        }
+        return success;
     }
 
-    private String read(Integer lba){
+    private boolean writeAndVerify(int lba, String value) {
+        write(lba, value);
+        return verifyValue(lba, value);
+    }
+
+    private boolean verifyValue(int lba, String expected) {
         fileManager.readFile(lba);
-        return fileManager.getHashmap().get(lba);
+        String actual = fileManager.getHashmap().get(lba);
+        return expected.equals(actual);
     }
 
-    private void write(Integer lba, String value){
+    private void write(int lba, String value) {
         jarExecutor.executeWrite(lba, value);
     }
 
-    private boolean readAndCompare(Integer lba, String compareValue){
-        String readValue = read(lba);
-        return compareValue.equals(readValue);
+    private String getRandomHex() {
+        int randomInt = random.nextInt(MAX_RAND_BOUND);
+        return String.format("0x%08X", randomInt);
     }
 }

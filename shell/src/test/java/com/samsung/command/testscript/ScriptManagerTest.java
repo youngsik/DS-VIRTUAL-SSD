@@ -39,7 +39,7 @@ public class ScriptManagerTest {
         when(fileManager.getHashmap()).thenReturn(lastWritten);
         doNothing().when(fileManager).readFile(anyInt());
 
-        stubWrite();
+        stubWriteJar();
     }
 
     @Test
@@ -83,7 +83,7 @@ public class ScriptManagerTest {
     @Test
     @DisplayName("testScript4 - write, overwrite 후 erase → EMPTY_VALUE 검증")
     void testScript4() {
-        stubErase();
+        stubEraseJar();
 
         boolean result = scriptManager.testScript4();
 
@@ -95,7 +95,7 @@ public class ScriptManagerTest {
         verify(fileManager, atLeast(1)).getHashmap();
     }
 
-    private void stubErase() {
+    private void stubEraseJar() {
         doAnswer(invocation -> {
             int startLba = invocation.getArgument(0);
             int length = invocation.getArgument(1);
@@ -106,7 +106,7 @@ public class ScriptManagerTest {
         }).when(jarExecutor).executeErase(anyInt(), anyInt());
     }
 
-    private void stubWrite() {
+    private void stubWriteJar() {
         doAnswer(invocation -> {
             int lba = invocation.getArgument(0);
             String value = invocation.getArgument(1);
@@ -114,5 +114,4 @@ public class ScriptManagerTest {
             return null;
         }).when(jarExecutor).executeWrite(anyInt(), anyString());
     }
-
 }
