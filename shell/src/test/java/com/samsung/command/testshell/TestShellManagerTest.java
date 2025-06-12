@@ -175,6 +175,8 @@ class TestShellManagerTest {
                 "명령어",
                 "  write [LBA] [Value]     지정된 index에 value를 기록합니다. 예: write 3 0xAAAABBBB",
                 "  read [LBA]              지정된 index의 값을 읽어옵니다. 예: read 3",
+                "  erase [LBA] [Length]    지정된 LBA 부터 Length 길이만큼을 SSD에서 삭제합니다. 예 : erase 0 10",
+                "  erase_range [LBA1] [LBA2]    지정된 범위의 데이터를 SSD에서 삭제합니다. 예 : erase_range 10 20",
                 "  fullwrite  [Value]         전체 영역에 value를 기록합니다. 예: fullwrite 0xAAAABBBB",
                 "  fullread                  전체 영역을 읽어옵니다.",
                 "  help                      사용 가능한 명령어를 출력합니다.",
@@ -197,12 +199,134 @@ class TestShellManagerTest {
 
     @Test
     @DisplayName("testShell EXIT")
-    void testShellFullEXIT() throws Exception {
-
-        int statusCode = catchSystemExit(() -> {
-            testShellManager.exit(); // exit() 호출
-        });
-
+    void testShellFullEXIT() {
+        int statusCode=-1;
+        try {
+            statusCode = catchSystemExit(() -> {
+                testShellManager.exit(); // exit() 호출
+            });
+        } catch (Exception e) {
+        }
         assertThat(statusCode).isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("testShell Erase SSD 실행 size 미변동 case")
+    void testShellEraseSSDExecuteNoChangeSize() {
+
+        int index = 1;
+        int size = 5;
+
+        testShellManager.erase(index,size);
+
+        verify(jarExecutor, times(1)).executeErase(index, size);
+    }
+
+    @Test
+    @DisplayName("testShell Erase SSD 실행 size 변동 case")
+    void testShellEraseSSDExecuteChangeSize() {
+
+        int index = 0;
+        int size = 15;
+        int expaectedIndex = 0;
+        int expaectedSize = 10;
+
+        testShellManager.erase(index,size);
+
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+    }
+
+
+    @Test
+    @DisplayName("testShell Erase SSD 실행 Multi수행 case")
+    void testShellEraseSSDExecuteMulti() {
+
+        int index = 2;
+        int size = 12;
+        int expaectedIndex;
+        int expaectedSize;
+
+        testShellManager.erase(index,size);
+
+        verify(jarExecutor, times(2)).executeErase(anyInt(), anyInt());
+
+        expaectedIndex=2;
+        expaectedSize=10;
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+
+        expaectedIndex=12;
+        expaectedSize=2;
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+    }
+
+    @Test
+    @DisplayName("testShell Erase SSD 실행 -Size case")
+    void testShellEraseSSDExecuteMinusSize() {
+
+        int index = 99;
+        int size = -30;
+        int expaectedIndex ;
+        int expaectedSize;
+
+        testShellManager.erase(index,size);
+
+        verify(jarExecutor, times(3)).executeErase(anyInt(), anyInt());
+
+        expaectedIndex=70;
+        expaectedSize=10;
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+
+        expaectedIndex=80;
+        expaectedSize=10;
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+
+        expaectedIndex=90;
+        expaectedSize=10;
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+    }
+
+    @Test
+    @DisplayName("testShell EraseRange SSD 실행")
+    void testShellEraseSSDExecuteRange() {
+
+        int first = 0;
+        int end = 9;
+        int expaectedIndex ;
+        int expaectedSize;
+
+        testShellManager.eraseRange(first,end);
+
+        verify(jarExecutor, times(1)).executeErase(anyInt(), anyInt());
+
+        expaectedIndex=0;
+        expaectedSize=10;
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+    }
+
+    @Test
+    @DisplayName("testShell EraseRange Multi SSD 실행")
+    void testShellEraseSSDExecuteRangeMulti() {
+
+        int first = 0;
+        int end = 20;
+        int expaectedIndex ;
+        int expaectedSize;
+
+        testShellManager.eraseRange(first,end);
+
+        verify(jarExecutor, times(3)).executeErase(anyInt(), anyInt());
+
+        expaectedIndex=0;
+        expaectedSize=10;
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+
+        expaectedIndex=10;
+        expaectedSize=10;
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+
+        expaectedIndex=20;
+        expaectedSize=1;
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+
     }
 }

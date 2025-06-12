@@ -9,4 +9,5 @@ public class SSDConstant {
     public static final String COMMAND_ERASE = "E";
     public static final String ERASE_VALUE = "0x00000000";
     public static final int MAX_LBA = 99;
+    public static final int MAX_ERASE_SIZE = 10;
 }
