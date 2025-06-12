@@ -151,7 +151,6 @@ public class CommandBufferManager {
                 return i;  // "empty.txt" 파일 인덱스 반환
             }
         }
-
         // 빈 파일이 없다면 버퍼가 꽉 찼다고 판단
         return -1;
     }
@@ -168,7 +167,7 @@ public class CommandBufferManager {
 
         // 3) 정리된 명령어를 새로 저장한다.
         // flush()로 buffer를 비운 후, 정리된 명령어들을 processCommand로 다시 저장
-        flush();
+        flushToFile();
 
         // 정리된 명령어 배열에서 다시 저장
         for (CmdData cmd : commandBuffer) {
@@ -179,17 +178,12 @@ public class CommandBufferManager {
     }
 
     // Buffer의 내용을 비우는 함수
-    public void flush() {
-        // 모든 명령어 파일을 지우고 _empty.txt 파일을 다시 생성
-        File bufferDir = new File(BUFFER_DIR);
-        File[] files = bufferDir.listFiles((dir, name) -> name.matches("\\d+_.+\\.txt"));
-
+    public void deleteAndInitBuffer(File[] files) {
         if (files != null) {
             for (File file : files) {
                 file.delete();
             }
         }
-
         createEmptyFiles();  // 빈 파일 다시 생성
     }
 
@@ -206,6 +200,7 @@ public class CommandBufferManager {
             ssdManager = new SSDManager(command, lba, value);
             ssdManager.cmdExecute();
         }
+        deleteAndInitBuffer(files);
     }
 }
 
