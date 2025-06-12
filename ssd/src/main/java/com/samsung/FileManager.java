@@ -46,39 +46,19 @@ public class FileManager {
     }
 
     public void writeOnOutputFile(String result) {
-        File file = getOrCreateFile(SSD_OUTPUT_FILE_NAME);
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            writer.write(result);
-            writer.flush();
-            writer.close();
+        try(RandomAccessFile file = new RandomAccessFile(SSD_OUTPUT_FILE_NAME, "rw");) {
+            file.writeBytes(result);
         } catch (IOException e) {
 
         }
     }
 
-    private File getOrCreateFile(String fileName) {
-        File file = new File(fileName);
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-
-            }
-        }
-        return file;
-    }
-
     private void resetNandFile() {
-        File file = getOrCreateFile(SSD_NAND_FILE_NAME);
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+        try(RandomAccessFile file = new RandomAccessFile(SSD_NAND_FILE_NAME, "rw");) {
             for (int i = 0; i < 98; i++) {
-                writer.write(BLANK_DATA + "\n");
+                file.writeBytes(BLANK_DATA + "\n");
             }
-            writer.write(BLANK_DATA);
-            writer.flush();
-            writer.close();
+            file.writeBytes(BLANK_DATA);
         } catch (IOException e) {
 
         }
