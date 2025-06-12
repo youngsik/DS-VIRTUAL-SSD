@@ -1,9 +1,12 @@
 package com.samsung.log;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.Comparator;
 
+@Slf4j
 public class LogCompressor {
     private static final String LOG_DIR = "logs";
 
@@ -18,7 +21,7 @@ public class LogCompressor {
         File zipped = new File(oldest.getAbsolutePath().replace(".log", ".zip"));
 
         if (oldest.renameTo(zipped)) {
-            System.out.println("Compressed " + oldest.getName() + " → " + zipped.getName());
+            log.info("Compressed {} → {}", oldest.getName(), zipped.getName());
         }
     }
 }
