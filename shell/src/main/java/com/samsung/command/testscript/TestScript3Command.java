@@ -13,7 +13,14 @@ public class TestScript3Command implements Command {
     @Override
     public void execute(String[] cmdArgs) {
         ArgumentsValidator.validateOneArgs(cmdArgs);
-        scriptManager.testScript3();
+        boolean isTestPassed = scriptManager.testScript3();
+        validatePostcondition(isTestPassed);
+    }
+
+    private void validatePostcondition(boolean isTestPassed) {
+        if (!isTestPassed) {
+            throw new RuntimeException("TestScript3 is Failed!");
+        }
     }
 
 }
