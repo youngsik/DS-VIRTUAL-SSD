@@ -20,11 +20,4 @@ public class ArgumentsValidator {
         }
     }
 
-    public static void validateArgsRequirements(String[] cmdArgs) {
-        if (cmdArgs.length < 1 || cmdArgs.length > 4) {
-            throw new RuntimeException("INVALID COMMAND");
-        }
-    }
-
-
 }
