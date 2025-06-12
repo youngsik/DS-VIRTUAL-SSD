@@ -1,0 +1,39 @@
+<configuration>
+    <property name="LOG_DIR" value="logs"/>
+
+    <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/latest.log</file>
+
+        <!-- 10KB 초과시 날짜 기반으로 파일명 변경 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/until_%d{yyyyMMdd_HHmmss}.log</fileNamePattern>
+            <maxHistory>100</maxHistory>
+
+            <!-- 용량 + 시간 조건 -->
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10KB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                [%d{yy.MM.dd HH:mm}] %C{1}.%M( ) : %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="COMPRESSOR" class="com.samsung.log.LogCompressingAppender" />
+
+    <root level="INFO">
+        <appender-ref ref="ROLLING"/>
+        <appender-ref ref="COMPRESSOR"/>
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>
