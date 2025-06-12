@@ -14,10 +14,9 @@ public class TestShellApplication {
         if (args.length != 0 && args[0] != null) {
             FileCommandHandler fileCommandHandler = new FileCommandHandler(commandInvoker);
             fileCommandHandler.handle(args[0]);
-            return;
+        } else {
+            InteractiveCommandHandler interactiveCommandHandler = new InteractiveCommandHandler(commandInvoker);
+            interactiveCommandHandler.handle();
         }
-
-        InteractiveCommandHandler interactiveCommandHandler = new InteractiveCommandHandler(commandInvoker);
-        interactiveCommandHandler.handle();
     }
 }
