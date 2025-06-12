@@ -108,7 +108,7 @@ public class TestShellManager {
 
         for(int i = startLBA; i <= finishLBA; i += 10) {
             // jarExecutor.executeErase(i, getEraseLength(i, finishLBA));
-            System.out.println("[ERASE] " + i + " " + getEraseLength(i, finishLBA));
+            System.out.println("SSD : [ERASE] " + i + " " + getEraseLength(i, finishLBA));
         }
 
         System.out.println("[ERASE] " + eraseLBA + " " + eraseLength);
@@ -117,7 +117,7 @@ public class TestShellManager {
     public void eraseRange(int startLBA, int finishLBA) {
         for(int i = startLBA; i <= finishLBA; i += 10) {
             // jarExecutor.executeErase(i, getEraseLength(i, finishLBA));
-            System.out.println("[ERASE] " + i + " " + getEraseLength(i, finishLBA));
+            System.out.println("SSD : [ERASE] " + i + " " + getEraseLength(i, finishLBA));
         }
 
         System.out.println("[ERASE] " + startLBA + " " + finishLBA);
