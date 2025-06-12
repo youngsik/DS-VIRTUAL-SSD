@@ -1,6 +1,6 @@
 package com.samsung;
 
-class SSDManager {
+public class SSDManager {
     private String command = "";
     private int lba = -1;
     private String value = "";

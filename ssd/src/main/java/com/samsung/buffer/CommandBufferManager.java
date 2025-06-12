@@ -1,6 +1,8 @@
 package com.samsung.buffer;
 
 import com.samsung.CmdData;
+import com.samsung.SSDManager;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -189,6 +191,21 @@ public class CommandBufferManager {
         }
 
         createEmptyFiles();  // 빈 파일 다시 생성
+    }
+
+    private void flushToFile(){
+        File bufferDir = new File(BUFFER_DIR);
+        File[] files = bufferDir.listFiles((dir, name) -> name.matches("\\d+_.+\\.txt"));
+        SSDManager ssdManager;
+        for(File file : files){
+            String[] commandList = file.getName().split("_");
+            String command = commandList[1];
+            int lba = Integer.parseInt(commandList[2]);
+            String value = commandList[3];
+
+            ssdManager = new SSDManager(command, lba, value);
+            ssdManager.cmdExecute();
+        }
     }
 }
 
