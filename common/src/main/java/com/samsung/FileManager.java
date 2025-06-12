@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import static com.samsung.Constants.*;
+import static com.samsung.FileConstants.*;
 
 public class FileManager {
 
