@@ -1,6 +1,7 @@
 package com.samsung;
 
 import com.samsung.command.CommandInvoker;
+import com.samsung.handler.FileCommandHandler;
 import com.samsung.handler.InteractiveCommandHandler;
 
 import java.util.HashMap;
@@ -10,7 +11,13 @@ public class TestShellApplication {
         CommandInvoker commandInvoker = new CommandInvoker(new HashMap<>());
         commandInvoker.initAllCommands();
 
-        InteractiveCommandHandler handler = new InteractiveCommandHandler(commandInvoker);
-        handler.handle();
+        if (args.length != 0 && args[0] != null) {
+            FileCommandHandler fileCommandHandler = new FileCommandHandler(commandInvoker);
+            fileCommandHandler.handle(args[0]);
+            return;
+        }
+
+        InteractiveCommandHandler interactiveCommandHandler = new InteractiveCommandHandler(commandInvoker);
+        interactiveCommandHandler.handle();
     }
 }
