@@ -12,7 +12,6 @@ public class WriteCommand implements Command {
 
     @Override
     public void execute(String[] cmdArgs) {
-        // 명령어 길이 체크
         if (cmdArgs.length != 3) {
             throw new RuntimeException("INVALID COMMAND");
         }
@@ -21,17 +20,14 @@ public class WriteCommand implements Command {
             Integer index = Integer.parseInt(cmdArgs[1]);
             String value = cmdArgs[2];
 
-            // lba 범위 검증
             if (index < 0 || index > 99) {
                 throw new RuntimeException("INVALID COMMAND");
             }
 
-            // null 체크
             if (value == null) {
                 throw new RuntimeException("INVALID COMMAND");
             }
 
-            // value 정규표현식 검증
             if (!value.matches("^0x[0-9A-F]{8}$")) {
                 throw new RuntimeException("INVALID COMMAND");
             }

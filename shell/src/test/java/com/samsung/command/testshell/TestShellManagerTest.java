@@ -88,7 +88,7 @@ class TestShellManagerTest {
 
         testShellManager.write(index,value);
 
-        verify(jarExecutor, times(1)).executeWriteJar(index, value);
+        verify(jarExecutor, times(1)).executeWrite(index, value);
     }
 
     @Test
@@ -110,7 +110,7 @@ class TestShellManagerTest {
     void testShellFullWriteExecute() {
         String value = "0xFFFFFFFF";
         testShellManager.fullwrite(value);
-        verify(jarExecutor, times(100)).executeWriteJar(anyInt(),anyString());
+        verify(jarExecutor, times(100)).executeWrite(anyInt(),anyString());
     }
 
     @Test
