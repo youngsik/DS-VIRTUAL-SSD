@@ -1,10 +1,7 @@
 package com.samsung;
 
 import com.samsung.command.CommandInvoker;
-import com.samsung.command.testscript.ScriptManager;
-import com.samsung.command.testscript.TestScript1Command;
-import com.samsung.command.testscript.TestScript2Command;
-import com.samsung.command.testscript.TestScript3Command;
+import com.samsung.command.testscript.*;
 import com.samsung.command.testshell.*;
 import com.samsung.file.FileManager;
 import com.samsung.file.JarExecutor;
@@ -59,9 +56,21 @@ public class TestShellApplication {
 
     private static void initScriptCommand(CommandInvoker commandInvoker) {
         ScriptManager scriptManager = new ScriptManager(new FileManager(), new JarExecutor());
-        commandInvoker.register("1_FullWriteAndReadCompare", new TestScript1Command(scriptManager));
-        commandInvoker.register("2_PartialLBAWrite", new TestScript2Command(scriptManager));
-        commandInvoker.register("3_WriteReadAging", new TestScript3Command(scriptManager));
+
+        TestScript1Command testScript1Command = new TestScript1Command(scriptManager);
+        TestScript2Command testScript2Command = new TestScript2Command(scriptManager);
+        TestScript3Command testScript3Command = new TestScript3Command(scriptManager);
+        TestScript4Command testScript4Command = new TestScript4Command(scriptManager);
+
+        commandInvoker.register("1_FullWriteAndReadCompare", testScript1Command);
+        commandInvoker.register("2_PartialLBAWrite", testScript2Command);
+        commandInvoker.register("3_WriteReadAging", testScript3Command);
+        commandInvoker.register("4_EraseAndWriteAging", testScript4Command);
+
+        commandInvoker.register("1_", testScript1Command);
+        commandInvoker.register("2_", testScript2Command);
+        commandInvoker.register("3_", testScript3Command);
+        commandInvoker.register("4_", testScript4Command);
     }
 
     private static String getInput() {
