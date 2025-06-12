@@ -210,7 +210,7 @@ class TestShellManagerTest {
 
     @Test
     @DisplayName("testShell Erase SSD 실행 size 미변동 case")
-    void testShellEraseSSDExecuteNoChangeSize() throws Exception {
+    void testShellEraseSSDExecuteNoChangeSize() {
 
         int index = 1;
         int size = 5;
@@ -222,7 +222,7 @@ class TestShellManagerTest {
 
     @Test
     @DisplayName("testShell Erase SSD 실행 size 변동 case")
-    void testShellEraseSSDExecuteChangeSize() throws Exception {
+    void testShellEraseSSDExecuteChangeSize() {
 
         int index = 0;
         int size = 15;
@@ -237,7 +237,7 @@ class TestShellManagerTest {
 
     @Test
     @DisplayName("testShell Erase SSD 실행 Multi수행 case")
-    void testShellEraseSSDExecuteMulti() throws Exception {
+    void testShellEraseSSDExecuteMulti() {
 
         int index = 2;
         int size = 12;
@@ -259,7 +259,7 @@ class TestShellManagerTest {
 
     @Test
     @DisplayName("testShell Erase SSD 실행 -Size case")
-    void testShellEraseSSDExecuteMinusSize() throws Exception {
+    void testShellEraseSSDExecuteMinusSize() {
 
         int index = 99;
         int size = -30;
@@ -285,7 +285,7 @@ class TestShellManagerTest {
 
     @Test
     @DisplayName("testShell EraseRange SSD 실행")
-    void testShellEraseSSDExecuteRange() throws Exception {
+    void testShellEraseSSDExecuteRange() {
 
         int first = 0;
         int end = 9;
@@ -303,7 +303,7 @@ class TestShellManagerTest {
 
     @Test
     @DisplayName("testShell EraseRange Multi SSD 실행")
-    void testShellEraseSSDExecuteRangeMulti() throws Exception {
+    void testShellEraseSSDExecuteRangeMulti() {
 
         int first = 0;
         int end = 20;
