@@ -40,6 +40,6 @@ public class JarExecutor {
 
     private String getSsdJarPath() {
         String projectRoot = System.getProperty("user.dir");
-        return projectRoot + "\\ssd.jar";
+        return projectRoot + "\\ssd-all.jar";
     }
 }
