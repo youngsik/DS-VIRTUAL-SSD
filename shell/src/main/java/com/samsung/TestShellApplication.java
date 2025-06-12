@@ -11,12 +11,16 @@ public class TestShellApplication {
         CommandInvoker commandInvoker = new CommandInvoker(new HashMap<>());
         commandInvoker.initAllCommands();
 
-        if (args.length != 0 && args[0] != null) {
-            FileCommandHandler fileCommandHandler = new FileCommandHandler(commandInvoker);
-            fileCommandHandler.handle(args[0]);
-        } else {
-            InteractiveCommandHandler interactiveCommandHandler = new InteractiveCommandHandler(commandInvoker);
-            interactiveCommandHandler.handle();
+        try {
+            if (args.length != 0 && args[0] != null) {
+                FileCommandHandler fileCommandHandler = new FileCommandHandler(commandInvoker);
+                fileCommandHandler.handle(args[0]);
+            } else {
+                InteractiveCommandHandler interactiveCommandHandler = new InteractiveCommandHandler(commandInvoker);
+                interactiveCommandHandler.handle();
+            }
+        } catch (Exception e) {
+            
         }
     }
 }
