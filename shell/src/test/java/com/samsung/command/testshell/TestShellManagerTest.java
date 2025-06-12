@@ -55,15 +55,8 @@ class TestShellManagerTest {
     @DisplayName("testShell 읽기 출력")
     void testShellReadValue() {
         int index = INDEX;
-        String inputCommand = "R " + index;
         String value = "0xFFFFFFFF";
         String expected = "[Read] LBA 03 "+ value;
-
-
-//        Map<Integer, String> hashMap = new HashMap<>();
-//        doNothing().when(fileManager).readFile(index);
-//        hashMap.put(index, DUMMY_VALUE);
-
         when(fileManager.getValueFromFile(index)).thenReturn(value);
 
         testShellManager.read(index);
@@ -75,11 +68,8 @@ class TestShellManagerTest {
     @Test
     @DisplayName("testShell 쓰기 실행")
     void testShellWriteExecute() {
-
         int index = INDEX;
         String value = "0xFFFFFFFF";
-
-        String inputCommand = "W" + " " + index + " " + value;
 
         testShellManager.write(index, value);
 
@@ -89,7 +79,6 @@ class TestShellManagerTest {
     @Test
     @DisplayName("testShell 쓰기 출력")
     void testShellWriteValue() {
-
         int index = INDEX;
         String value = "0xFFFFFFFF";
         String expected = "[Write] Done";
@@ -98,14 +87,15 @@ class TestShellManagerTest {
 
         assertThat(outContent.toString().trim())
                 .isEqualTo(expected);
-
     }
 
     @Test
     @DisplayName("testShell 전체쓰기 실행")
     void testShellFullWriteExecute() {
         String value = "0xFFFFFFFF";
+
         testShellManager.fullwrite(value);
+
         verify(jarExecutor, times(100)).executeWrite(anyInt(), anyString());
     }
 
@@ -116,6 +106,7 @@ class TestShellManagerTest {
         String value = "0xFFFFFFFF";
 
         testShellManager.fullwrite(value);
+
         assertThat(outContent.toString().trim())
                 .isEqualTo(expected);
     }
@@ -123,14 +114,12 @@ class TestShellManagerTest {
     @Test
     @DisplayName("testShell fullread")
     void testFullreadOutput() {
-
         List<String> fakeData = new ArrayList<>();
         fakeData.add("0xFFFFFFFF");
         fakeData.add("0x12345678");
         for (int i = 0; i < 100; i++) {;
             fakeData.add("0x00000000");
         }
-
         doReturn(fakeData).when(fileManager).getAllValuesFromFile();
 
         testShellManager.fullread();
@@ -152,11 +141,9 @@ class TestShellManagerTest {
     @Test
     @DisplayName("testShell help")
     void testShellFullHelp() {
-
         testShellManager.help();
 
         String actualOutput = outContent.toString().trim();
-
         String expectedOutput = String.join("\n",
                 "제작자",
                 "팀명: DeviceSolution",
@@ -188,7 +175,6 @@ class TestShellManagerTest {
     @Test
     @DisplayName("testShell EXIT")
     void testShellFullEXIT() throws Exception {
-
         int statusCode = catchSystemExit(() -> {
             testShellManager.exit(); // exit() 호출
         });
