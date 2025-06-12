@@ -6,6 +6,7 @@ import com.samsung.handler.InteractiveCommandHandler;
 
 import java.util.HashMap;
 
+@Slf4j
 public class TestShellApplication {
     public static void main(String[] args) {
         CommandInvoker commandInvoker = new CommandInvoker(new HashMap<>());
@@ -20,7 +21,7 @@ public class TestShellApplication {
                 interactiveCommandHandler.handle();
             }
         } catch (Exception e) {
-            
+
         }
     }
 }

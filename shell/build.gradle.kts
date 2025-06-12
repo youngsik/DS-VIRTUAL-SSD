@@ -1,16 +1,22 @@
 plugins {
     id("java")
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "org.example"
 
-tasks.jar {
-    manifest {
+tasks {
+    shadowJar {
         destinationDirectory = rootDir
-        attributes["Main-Class"] = "com.samsung.TestShellApplication" // ← 실제 main 클래스 FQCN
+        manifest {
+            attributes["Main-Class"] = "com.samsung.TestShellApplication"
+        }
+    }
+
+    build {
+        dependsOn(shadowJar)
     }
 }
-
 
 repositories {
     mavenCentral()
@@ -19,10 +25,6 @@ repositories {
 dependencies {
     implementation(project(":ssd"))
     implementation(project(":common"))
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("org.assertj:assertj-core:3.27.3")
-    testImplementation("org.mockito:mockito-junit-jupiter:5.18.0")
     testImplementation("com.github.stefanbirkner:system-lambda:1.2.1")
 }
 
