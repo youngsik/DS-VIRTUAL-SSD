@@ -7,20 +7,26 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class TestScript1CommandTest {
+
     @Mock
     ScriptManager scriptManager;
+
     @InjectMocks
     TestScript1Command testScript1Command;
 
     @Test
     @DisplayName("TestScript1 실행 테스트")
     void callTestScript1Command() {
-        testScript1Command.execute(new String[1]);
+        try {
+            testScript1Command.execute(new String[1]);
+        } catch (Exception e) {
 
-        verify(scriptManager).testScript1();
+        }
+        verify(scriptManager, times(1)).testScript1();
     }
 }

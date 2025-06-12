@@ -1,15 +1,11 @@
 package com.samsung;
 
 import com.samsung.command.CommandInvoker;
-import com.samsung.command.testscript.*;
-import com.samsung.command.testshell.*;
-import com.samsung.file.JarExecutor;
-import com.samsung.validator.ArgumentsValidator;
-import com.samsung.validator.CommandValidator;
+import com.samsung.handler.FileCommandHandler;
+import com.samsung.handler.InteractiveCommandHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
-import java.util.Scanner;
 
 @Slf4j
 public class TestShellApplication {
@@ -17,27 +13,16 @@ public class TestShellApplication {
         CommandInvoker commandInvoker = new CommandInvoker(new HashMap<>());
         commandInvoker.initAllCommands();
 
-        // 사용자 입력 받기
-        System.out.println("testshell 명령어: write, read, erase, erase_range, exit, help, fullwrite, fullread");
-        System.out.println("testscript 명령어: 1_FullWriteAndReadCompare, 2_PartialLBAWrite, 3_WriteReadAging");
-
-        while (true) {
-            try {
-                String[] cmdArgs = split(getInput());
-                commandInvoker.execute(cmdArgs);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
+        try {
+            if (args.length != 0 && args[0] != null) {
+                FileCommandHandler fileCommandHandler = new FileCommandHandler(commandInvoker);
+                fileCommandHandler.handle(args[0]);
+            } else {
+                InteractiveCommandHandler interactiveCommandHandler = new InteractiveCommandHandler(commandInvoker);
+                interactiveCommandHandler.handle();
             }
+        } catch (Exception e) {
+
         }
-
-    }
-
-    private static String getInput() {
-        Scanner scanner = new Scanner(System.in);
-        return scanner.nextLine().trim();
-    }
-
-    private static String[] split(String input) {
-        return input.split(" ");
     }
 }
