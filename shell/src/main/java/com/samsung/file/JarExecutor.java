@@ -25,7 +25,6 @@ public class JarExecutor {
             command.addAll(List.of(args));
 
             ProcessBuilder pb = new ProcessBuilder(command);
-            System.out.println("Executing command: " + String.join(" ", command));
 
             pb.inheritIO();
             pb.start();
