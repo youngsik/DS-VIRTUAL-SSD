@@ -1,6 +1,6 @@
 package com.samsung.command.testscript;
 
-import com.samsung.file.FileManager;
+import com.samsung.FileManager;
 import com.samsung.file.JarExecutor;
 
 import java.util.Random;
@@ -84,8 +84,7 @@ public class ScriptManager {
     }
 
     private boolean isVerifyValue(int lba, String expected) {
-        fileManager.readFile(lba);
-        String actual = fileManager.getHashmap().get(lba);
+        String actual = fileManager.getValueFromFile(lba);
         return expected.equals(actual);
     }
 

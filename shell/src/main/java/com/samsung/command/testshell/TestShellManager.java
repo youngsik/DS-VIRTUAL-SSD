@@ -1,6 +1,6 @@
 package com.samsung.command.testshell;
 
-import com.samsung.file.FileManager;
+import com.samsung.FileManager;
 import com.samsung.file.JarExecutor;
 
 public class TestShellManager {
@@ -16,7 +16,7 @@ public class TestShellManager {
 
     public TestShellManager(JarExecutor jarExecutor, FileManager fileManager) {
         this.jarExecutor = jarExecutor;
-        this.fileManager =fileManager;
+        this.fileManager = fileManager;
     }
 
     public void write(int index, String value) {
@@ -32,13 +32,9 @@ public class TestShellManager {
     public void read(int index) {
         String head = "[Read] LBA";
         String location = String.format("%02d", index);
-        String value;
+        String value = fileManager.getValueFromFile(index);
 
-        fileManager.readFile(index);
-        value = fileManager.getHashmap().getOrDefault(index, BLANK_DATA);
-
-        String output = head + " " + location + " " + value;
-        System.out.println(output);
+        System.out.println(head + " " + location + " " + value);
     }
 
     public void exit() {
@@ -67,7 +63,7 @@ public class TestShellManager {
         String head = "[Full Write]";
         String pass = "Done";
 
-        for(int i=0; i<100; i++) {
+        for (int i = 0; i < 100; i++) {
             jarExecutor.executeWrite(i, value);
         }
         System.out.println(head + " " + pass);
@@ -77,13 +73,10 @@ public class TestShellManager {
         String head = "[Full Read] LBA";
 
         for (int index = 0; index < 100; index++) {
-            fileManager.readFile(index);
-            String value = fileManager.getHashmap().getOrDefault(index, BLANK_DATA);
-
+            String value = fileManager.getValueFromFile(index);
             String location = String.format("%02d", index);
-            String output = head + " " + location + " " + value;
 
-            System.out.println(output);
+            System.out.println(head + " " + location + " " + value);
         }
     }
 }
