@@ -199,12 +199,14 @@ class TestShellManagerTest {
 
     @Test
     @DisplayName("testShell EXIT")
-    void testShellFullEXIT() throws Exception {
-
-        int statusCode = catchSystemExit(() -> {
-            testShellManager.exit(); // exit() 호출
-        });
-
+    void testShellFullEXIT() {
+        int statusCode=-1;
+        try {
+            statusCode = catchSystemExit(() -> {
+                testShellManager.exit(); // exit() 호출
+            });
+        } catch (Exception e) {
+        }
         assertThat(statusCode).isEqualTo(0);
     }
 
