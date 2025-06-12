@@ -46,7 +46,7 @@ public class ScriptManagerTest {
             String value = invocation.getArgument(1);
             lastWritten.put(lba, value);
             return null;
-        }).when(jarExecutor).executeWriteJar(anyInt(), anyString());
+        }).when(jarExecutor).executeWrite(anyInt(), anyString());
     }
 
     @Test
@@ -55,7 +55,7 @@ public class ScriptManagerTest {
         boolean result = scriptManager.testScript1();
 
         assertTrue(result);
-        verify(jarExecutor, atLeast(100)).executeWriteJar(anyInt(), eq("0xAAAABBBB"));
+        verify(jarExecutor, atLeast(100)).executeWrite(anyInt(), eq("0xAAAABBBB"));
         verify(fileManager, atLeast(100)).readFile(anyInt());
         verify(fileManager, atLeast(100)).getHashmap();
     }
@@ -67,7 +67,7 @@ public class ScriptManagerTest {
 
         assertTrue(result);
         for (int i = 0; i <= 4; i++) {
-            verify(jarExecutor, atLeastOnce()).executeWriteJar(eq(i), eq("0xAAAABBBB"));
+            verify(jarExecutor, atLeastOnce()).executeWrite(eq(i), eq("0xAAAABBBB"));
             verify(fileManager, atLeastOnce()).readFile(eq(i));
         }
         verify(fileManager, atLeast(30 * 5)).getHashmap(); // 최소 150회 호출 예상
@@ -79,8 +79,8 @@ public class ScriptManagerTest {
         boolean result = scriptManager.testScript3();
 
         assertTrue(result);
-        verify(jarExecutor, times(200)).executeWriteJar(eq(0), anyString());
-        verify(jarExecutor, times(200)).executeWriteJar(eq(99), anyString());
+        verify(jarExecutor, times(200)).executeWrite(eq(0), anyString());
+        verify(jarExecutor, times(200)).executeWrite(eq(99), anyString());
         verify(fileManager, times(200)).readFile(0);
         verify(fileManager, times(200)).readFile(99);
         verify(fileManager, atLeast(400)).getHashmap();

@@ -9,6 +9,8 @@ import java.util.Random;
 
 public class ScriptManager {
     private static final String TEST_VALUE = "0xAAAABBBB";
+    private static final String TEST_VALUE_OVER_WRITE = "0xAAAAAAAA";
+    private static final String EMPTY_VALUE = "0x00000000";
 
     private static final int TEST_LOOP_30 = 30;
     private static final int TEST_LOOP_100 = 100;
@@ -77,6 +79,22 @@ public class ScriptManager {
         return isSuccess;
     }
 
+    public boolean testScript4(){
+        boolean isSuccess = false;
+        jarExecutor.executeErase(0, 3);
+        Integer index = 2;
+        for (int i = 0; i < 30; i++){
+            jarExecutor.executeWrite(index, TEST_VALUE);
+            jarExecutor.executeWrite(index, TEST_VALUE_OVER_WRITE);
+
+            jarExecutor.executeErase(index, 3);
+            for(int j = 0; j < 3; j++) {
+                isSuccess = readAndCompare(index++, EMPTY_VALUE);
+            }
+        }
+        return isSuccess;
+    }
+
     private boolean writeAndVerify(Integer lba, String randHex) {
         write(lba, randHex);
         return readAndCompare(lba, randHex);
@@ -93,7 +111,7 @@ public class ScriptManager {
     }
 
     private void write(Integer lba, String value){
-        jarExecutor.executeWriteJar(lba, value);
+        jarExecutor.executeWrite(lba, value);
     }
 
     private boolean readAndCompare(Integer lba, String compareValue){

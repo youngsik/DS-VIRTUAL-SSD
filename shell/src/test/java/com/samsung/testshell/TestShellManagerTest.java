@@ -10,10 +10,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.PrintStream;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -89,7 +87,7 @@ class TestShellManagerTest {
 
         testShellManager.write(index,value);
 
-        verify(jarExecutor, times(1)).executeWriteJar(index, value);
+        verify(jarExecutor, times(1)).executeWrite(index, value);
     }
 
     @Test
@@ -111,7 +109,7 @@ class TestShellManagerTest {
     void testShellFullWriteExecute() {
         String value = "0xFFFFFFFF";
         testShellManager.fullwrite(value);
-        verify(jarExecutor, times(100)).executeWriteJar(anyInt(),anyString());
+        verify(jarExecutor, times(100)).executeWrite(anyInt(),anyString());
     }
 
     @Test
