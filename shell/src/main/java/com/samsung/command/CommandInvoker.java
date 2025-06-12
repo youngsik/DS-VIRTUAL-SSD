@@ -1,6 +1,6 @@
 package com.samsung.command;
 
-import com.samsung.FileManager;
+import com.samsung.file.FileManager;
 import com.samsung.command.testscript.*;
 import com.samsung.command.testshell.*;
 import com.samsung.file.JarExecutor;

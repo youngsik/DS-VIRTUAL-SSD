@@ -1,11 +1,11 @@
-package com.samsung;
+package com.samsung.file;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import static com.samsung.FileConstants.*;
+import static com.samsung.file.FileConstants.*;
 
 public class FileManager {
 
