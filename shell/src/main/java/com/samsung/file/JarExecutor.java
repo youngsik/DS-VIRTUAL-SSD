@@ -1,11 +1,13 @@
 package com.samsung.file;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class JarExecutor {
-
     private static final int DEFAULT_WAIT_MILLIS = 1000;
 
     public void executeWrite(Integer lba, String value) {
@@ -25,7 +27,7 @@ public class JarExecutor {
             command.addAll(List.of(args));
 
             ProcessBuilder pb = new ProcessBuilder(command);
-            System.out.println("Executing command: " + String.join(" ", command));
+            log.info("Executing command: {}", String.join(" ", command));
 
             pb.inheritIO();
             pb.start();
@@ -38,6 +40,6 @@ public class JarExecutor {
 
     private String getSsdJarPath() {
         String projectRoot = System.getProperty("user.dir");
-        return projectRoot + "\\ssd.jar";
+        return projectRoot + "\\ssd-all.jar";
     }
 }

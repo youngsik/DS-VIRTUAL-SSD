@@ -2,9 +2,11 @@ package com.samsung.command.testscript;
 
 import com.samsung.FileManager;
 import com.samsung.file.JarExecutor;
+import lombok.extern.slf4j.Slf4j;
 
 import static com.samsung.command.testscript.TestScriptConstant.*;
 
+@Slf4j
 public class ScriptManager {
     private final FileManager fileManager;
     private final JarExecutor jarExecutor;
@@ -17,6 +19,7 @@ public class ScriptManager {
     }
 
     public boolean testScript1() {
+        log.info("test script1 테스트");
         int lastVerifyBlock = LOOP_100 - VERIFY_TERM;
         for (int index = LBA_FIRST; index <= lastVerifyBlock; index += VERIFY_TERM) {
             if(!isVerifyBlock(index, TEST_VALUE)) return false;
@@ -25,6 +28,7 @@ public class ScriptManager {
     }
 
     public boolean testScript2() {
+        log.info("test script2 테스트");
         for (int i = 0; i < LOOP_30; i++) {
             script2LbaOrder.forEach(lba -> write(lba, TEST_VALUE));
             for (int j = 0; j <= VERIFY_TERM; j++) {
@@ -35,6 +39,7 @@ public class ScriptManager {
     }
 
     public boolean testScript3() {
+        log.info("test script3 테스트");
         for (int i = 0; i < LOOP_100 * 2; i++) {
             boolean firstValue = writeAndVerify(LBA_FIRST, RandomHex.getInstance().getRandomValue());
             boolean lastValue = writeAndVerify(LBA_LAST, RandomHex.getInstance().getRandomValue());
@@ -48,6 +53,7 @@ public class ScriptManager {
     }
 
     public boolean testScript4() {
+        log.info("test script4 테스트");
         jarExecutor.executeErase(0, ERASE_BLOCK_LENGTH);
 
         int currentLba = 2;

@@ -1,0 +1,27 @@
+<configuration>
+    <property name="LOG_DIR" value="${user.dir}/logs"/>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/latest.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/until_%d{yyyyMMdd_HHmm}.%i.log</fileNamePattern>
+
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10KB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>[%d{yy.MM.dd HH:mm:ss}] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="COMPRESSOR" class="com.samsung.log.LogCompressingAppender" />
+
+    <root level="INFO">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="COMPRESSOR"/>
+    </root>
+</configuration>
