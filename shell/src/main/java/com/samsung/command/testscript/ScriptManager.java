@@ -18,38 +18,36 @@ public class ScriptManager {
     }
 
     public boolean testScript1() {
-        boolean result = false;
         for (int index = LBA_FIRST; index <= LOOP_100 - VERIFY_TERM; index += VERIFY_TERM) {
-            result = verifyBlock(index, TEST_VALUE);
+            if(!isVerifyBlock(index, TEST_VALUE)) return false;
         }
-        return result;
+        return true;
     }
 
     public boolean testScript2() {
-        boolean result = false;
         for (int i = 0; i < LOOP_30; i++) {
             script2LbaOrder.forEach(lba -> write(lba, TEST_VALUE));
             for (int j = 0; j <= VERIFY_TERM; j++) {
-                result = verifyValue(j, TEST_VALUE);
+                if(!isVerifyValue(j, TEST_VALUE)) return false;
             }
         }
-        return result;
+        return true;
     }
 
     public boolean testScript3() {
-        boolean result = false;
         for (int i = 0; i < LOOP_100 * 2; i++) {
-            String hex1 = getRandomHex();
-            String hex2 = getRandomHex();
-            boolean firstOk = writeAndVerify(LBA_FIRST, hex1);
-            boolean lastOk = writeAndVerify(LBA_LAST, hex2);
-            result = firstOk && lastOk;
+            boolean firstValue = writeAndVerify(LBA_FIRST, getRandomHex());
+            boolean lastValue = writeAndVerify(LBA_LAST, getRandomHex());
+            if (!isValidFirstLastValue(firstValue, lastValue)) return false;
         }
-        return result;
+        return true;
+    }
+
+    private boolean isValidFirstLastValue(boolean firstOk, boolean lastOk) {
+        return firstOk && lastOk;
     }
 
     public boolean testScript4() {
-        boolean result = false;
         jarExecutor.executeErase(0, ERASE_BLOCK_LENGTH);
 
         int currentLba = 2;
@@ -57,10 +55,10 @@ public class ScriptManager {
             testScript4Logic(currentLba);
 
             for (int offset = 0; offset < ERASE_BLOCK_LENGTH; offset++) {
-                result = verifyValue(currentLba++, EMPTY_VALUE);
+                if (!isVerifyValue(currentLba++, EMPTY_VALUE)) return false;
             }
         }
-        return result;
+        return true;
     }
 
     private void testScript4Logic(int currentLba) {
@@ -69,22 +67,22 @@ public class ScriptManager {
         jarExecutor.executeErase(currentLba, ERASE_BLOCK_LENGTH);
     }
 
-    private boolean verifyBlock(int startLba, String value) {
+    private boolean isVerifyBlock(int startLba, String value) {
         boolean success = false;
         for (int i = 0; i < VERIFY_TERM; i++) {
             int lba = startLba + i;
             write(lba, value);
-            success = verifyValue(lba, value);
+            success = isVerifyValue(lba, value);
         }
         return success;
     }
 
     private boolean writeAndVerify(int lba, String value) {
         write(lba, value);
-        return verifyValue(lba, value);
+        return isVerifyValue(lba, value);
     }
 
-    private boolean verifyValue(int lba, String expected) {
+    private boolean isVerifyValue(int lba, String expected) {
         fileManager.readFile(lba);
         String actual = fileManager.getHashmap().get(lba);
         return expected.equals(actual);
