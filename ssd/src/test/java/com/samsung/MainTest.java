@@ -37,7 +37,7 @@ class MainTest {
     @DisplayName("parsing 함수 테스트2 - 읽기")
     void testParsing2() {
         String[] args = {"R", "3"};
-        CmdData cmdData = main.cmdValidCheck(args);
+        CmdData cmdData = Main.cmdValidCheck(args);
 
         assertEquals("R", cmdData.getCommand());
         assertEquals(3, cmdData.getLba());
