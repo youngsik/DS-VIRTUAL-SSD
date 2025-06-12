@@ -283,4 +283,48 @@ class TestShellManagerTest {
         verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
     }
 
+    @Test
+    @DisplayName("testShell EraseRange SSD 실행")
+    void testShellEraseSSDExecuteRange() throws Exception {
+
+        int first = 0;
+        int end = 9;
+        int expaectedIndex ;
+        int expaectedSize;
+
+        testShellManager.eraseRange(first,end);
+
+        verify(jarExecutor, times(1)).executeErase(anyInt(), anyInt());
+
+        expaectedIndex=0;
+        expaectedSize=10;
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+    }
+
+    @Test
+    @DisplayName("testShell EraseRange Multi SSD 실행")
+    void testShellEraseSSDExecuteRangeMulti() throws Exception {
+
+        int first = 0;
+        int end = 20;
+        int expaectedIndex ;
+        int expaectedSize;
+
+        testShellManager.eraseRange(first,end);
+
+        verify(jarExecutor, times(3)).executeErase(anyInt(), anyInt());
+
+        expaectedIndex=0;
+        expaectedSize=10;
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+
+        expaectedIndex=10;
+        expaectedSize=10;
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+
+        expaectedIndex=20;
+        expaectedSize=1;
+        verify(jarExecutor, times(1)).executeErase(expaectedIndex, expaectedSize);
+
+    }
 }
