@@ -10,20 +10,18 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+import static com.samsung.CommandType.*;
+
 @Slf4j
-public class SSDManager {
-    private String command = "";
-    private int lba = -1;
-    private String value = "";
+class SSDManager {
+    private CmdData cmdData;
     private final FileManager fileManager;
 
     private static final String BUFFER_DIR = "./ssd/buffer";
     private CmdData[] commandBuffer = new CmdData[SSDConstant.MAX_BUFFER_INDEX];
 
     public SSDManager(CmdData cmdData, FileManager fileManager) {
-        this.command = cmdData.getCommand();
-        this.lba = cmdData.getLba();
-        this.value = cmdData.getValue();
+        this.cmdData = cmdData;
         this.fileManager = fileManager;
 
         createBufferDirectory();
@@ -31,21 +29,17 @@ public class SSDManager {
     }
 
     public void cmdExecute() {
-        if (command.equals(SSDConstant.COMMAND_ERROR)) fileErrorOutput();
-        else if (command.equals(SSDConstant.COMMAND_READ)) fileManager.readFile(lba);
-        else if (command.equals(SSDConstant.COMMAND_WRITE) || command.equals(SSDConstant.COMMAND_ERASE)) {
-            processCommand(command, lba, value);
-        }
-        else if(command.equals(SSDConstant.COMMAND_FLUSH)) {
-            flush();;
-        }
+        if (cmdData.getCommand().equals(ERROR)) fileErrorOutput();
+        else if (cmdData.getCommand().equals(READ)) fileManager.readFile(cmdData.getLba());
+        else if (cmdData.getCommand().equals(WRITE)) fileManager.writeFile(cmdData.getLba(), cmdData.getValue());
+        else if (cmdData.getCommand().equals(ERASE)) fileErase(cmdData.getLba(), Integer.parseInt(cmdData.getValue()));
     }
 
     public void cmdExecuteFromBuffer() {
-        if (command.equals(SSDConstant.COMMAND_ERROR)) fileErrorOutput();
-        else if (command.equals(SSDConstant.COMMAND_READ)) fileManager.readFile(lba);
-        else if (command.equals(SSDConstant.COMMAND_WRITE)) fileManager.writeFile(lba, value);
-        else if (command.equals(SSDConstant.COMMAND_ERASE)) fileErase(lba, Integer.parseInt(value));
+        if (cmdData.getCommand().equals(ERROR)) fileErrorOutput();
+        else if (cmdData.getCommand().equals(READ)) fileManager.readFile(cmdData.getLba());
+        else if (cmdData.getCommand().equals(WRITE)) fileManager.writeFile(cmdData.getLba(), cmdData.getValue());
+        else if (cmdData.getCommand().equals(ERASE)) fileErase(cmdData.getLba(), Integer.parseInt(cmdData.getValue()));
     }
 
     private void fileErase(int startLba, int size) {
@@ -57,7 +51,7 @@ public class SSDManager {
     }
 
     private void fileErrorOutput() {
-        fileManager.writeOnOutputFile(value);
+        fileManager.writeOnOutputFile(cmdData.getValue());
         log.info("[fileErrorOutput] Error output 생성");
     }
 
@@ -111,7 +105,7 @@ public class SSDManager {
                 String[] parts = fileName.split("_");
 
                 if (parts.length == 4) {
-                    String command = parts[1];
+                    CommandType command = CommandType.fromCode(parts[1]);
                     int lba = Integer.parseInt(parts[2]);
                     String value = parts[3].replace(".txt", "");
 
@@ -156,9 +150,7 @@ public class SSDManager {
 
         for (CmdData cmd : commandBuffer) {
             if(cmd == null) break;
-            this.command = cmd.getCommand();
-            this.lba = cmd.getLba();
-            this.value = cmd.getValue();
+            this.cmdData = cmd;
 
             cmdExecuteFromBuffer();
         }

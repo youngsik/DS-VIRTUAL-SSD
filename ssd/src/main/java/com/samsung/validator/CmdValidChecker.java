@@ -1,25 +1,21 @@
 package com.samsung.validator;
 
 import com.samsung.CmdData;
-import com.samsung.SSDConstant;
+import com.samsung.CommandType;
+
+import static com.samsung.CommandType.ERROR;
 
 public class CmdValidChecker {
     public CmdData cmdValidCheckAndParsing(String[] cmdParam) {
         if (cmdParam.length == 0) {
-            return new CmdData(SSDConstant.COMMAND_ERROR, -1, SSDConstant.COMMAND_ERROR);
+            return new CmdData(ERROR, -1, ERROR.name());
         }
-        CommandValidator validator;
-        switch (cmdParam[0]) {
-            case SSDConstant.COMMAND_READ: validator = new ReadCommandValidator(); break;
-            case SSDConstant.COMMAND_WRITE: validator = new WriteCommandValidator(); break;
-            case SSDConstant.COMMAND_ERASE: validator = new EraseCommandValidator(); break;
-            case SSDConstant.COMMAND_FLUSH: validator = new FlushCommandValidator(); break;
-            default: validator = null;
+        try {
+            CommandValidator validator = CommandType.fromCode(cmdParam[0]).getCommandValidator();
+            validator.validate(cmdParam);
+            return validator.validate(cmdParam);
+        } catch (IllegalArgumentException e) {
+            return new CmdData(ERROR, -1, ERROR.name());
         }
-
-        if (validator == null) {
-            return new CmdData(SSDConstant.COMMAND_ERROR, -1, SSDConstant.COMMAND_ERROR);
-        }
-        return validator.validate(cmdParam);
     }
 }

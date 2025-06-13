@@ -1,17 +1,16 @@
 package com.samsung;
 
-import com.samsung.buffer.CommandBufferManager;
 import com.samsung.file.FileManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import static org.mockito.Mockito.*;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.nio.file.Files;
+import static com.samsung.CommandType.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class SSDManagerTest {
@@ -19,10 +18,8 @@ public class SSDManagerTest {
     public static final String WRITE_VALUE = "0x00000000";
     public static final String ERROR_VALUE = "ERROR";
 
-
     @Mock
     FileManager fileManager;
-
     SSDManager writeSsdManager;
     SSDManager readSsdManager;
     SSDManager invalidValueSsdManager;
@@ -30,10 +27,10 @@ public class SSDManagerTest {
 
     @BeforeEach
     void setUp() {
-        writeSsdManager = new SSDManager(new CmdData("W", LBA, WRITE_VALUE), fileManager);
-        readSsdManager = new SSDManager(new CmdData("R", LBA, WRITE_VALUE), fileManager);
-        invalidValueSsdManager = new SSDManager(new CmdData(ERROR_VALUE, -1, ERROR_VALUE), fileManager);
-        eraseSsdManager = new SSDManager(new CmdData("E", 0, "9"), fileManager);
+        writeSsdManager = new SSDManager(new CmdData(WRITE, LBA, WRITE_VALUE), fileManager);
+        readSsdManager = new SSDManager(new CmdData(READ, LBA, WRITE_VALUE), fileManager);
+        invalidValueSsdManager = new SSDManager(new CmdData(ERROR, -1, ERROR_VALUE), fileManager);
+        eraseSsdManager = new SSDManager(new CmdData(ERASE, 0, "9"), fileManager);
     }
 
 
