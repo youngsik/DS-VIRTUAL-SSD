@@ -5,7 +5,7 @@ import com.samsung.support.CommandValidator;
 
 import static com.samsung.CommandType.FLUSH;
 
-public class FlushCMDValidatorInterface implements CMDValidatorInterface {
+public class FlushCommandValidator implements CmdValidatorInterface {
     @Override
     public CmdData validate(String[] cmdParam) {
         CommandValidator.validateOneArgs(cmdParam);

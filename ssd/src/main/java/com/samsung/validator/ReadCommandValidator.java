@@ -6,7 +6,7 @@ import com.samsung.support.CommandValidator;
 
 import static com.samsung.CommandType.READ;
 
-public class ReadCMDValidatorInterface implements CMDValidatorInterface {
+public class ReadCommandValidator implements CmdValidatorInterface {
     @Override
     public CmdData validate(String[] cmdParam) {
         CommandValidator.validateTwoArgs(cmdParam);

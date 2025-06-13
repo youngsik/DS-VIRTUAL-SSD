@@ -9,7 +9,7 @@ public class CmdValidChecker {
             throw new RuntimeException();
         }
         try {
-            CMDValidatorInterface validator = CommandType.fromCode(cmdParam[0]).getCMDValidatorInterface();
+            CmdValidatorInterface validator = CommandType.fromCode(cmdParam[0]).getCMDValidatorInterface();
             validator.validate(cmdParam);
             return validator.validate(cmdParam);
         } catch (IllegalArgumentException e) {

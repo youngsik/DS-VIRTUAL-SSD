@@ -7,7 +7,7 @@ import com.samsung.support.CommandValidator;
 
 import static com.samsung.CommandType.WRITE;
 
-public class WriteCMDValidatorInterface implements CMDValidatorInterface {
+public class WriteCommandValidator implements CmdValidatorInterface {
     @Override
     public CmdData validate(String[] cmdParam) {
         CommandValidator.validateThreeArgs(cmdParam);

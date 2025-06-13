@@ -7,15 +7,16 @@ import java.util.Arrays;
 
 @Getter
 public enum CommandType {
-    WRITE("W", new WriteCMDValidatorInterface()),
-    ERASE("E", new EraseCMDValidatorInterface()),
-    READ("R", new ReadCMDValidatorInterface()),
-    FLUSH("F", new FlushCMDValidatorInterface());
+    WRITE("W", new WriteCommandValidator()),
+    ERASE("E", new EraseCommandValidator()),
+    READ("R", new ReadCommandValidator()),
+    FLUSH("F", new FlushCommandValidator()),
+    ERROR("E", null);
 
     private final String code;
-    private final CMDValidatorInterface CMDValidatorInterface;
+    private final CmdValidatorInterface CMDValidatorInterface;
 
-    CommandType(String code, CMDValidatorInterface CMDValidatorInterface) {
+    CommandType(String code, CmdValidatorInterface CMDValidatorInterface) {
         this.code = code;
         this.CMDValidatorInterface = CMDValidatorInterface;
     }

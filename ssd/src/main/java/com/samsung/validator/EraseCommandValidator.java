@@ -6,7 +6,7 @@ import com.samsung.support.CommandValidator;
 
 import static com.samsung.CommandType.ERASE;
 
-public class EraseCMDValidatorInterface implements CMDValidatorInterface {
+public class EraseCommandValidator implements CmdValidatorInterface {
     @Override
     public CmdData validate(String[] cmdParam) {
         CommandValidator.validateThreeArgs(cmdParam);

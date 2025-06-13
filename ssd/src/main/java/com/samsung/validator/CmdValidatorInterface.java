@@ -2,6 +2,6 @@ package com.samsung.validator;
 
 import com.samsung.CmdData;
 
-public interface CMDValidatorInterface {
+public interface CmdValidatorInterface {
     CmdData validate(String[] cmdParam);
 }
