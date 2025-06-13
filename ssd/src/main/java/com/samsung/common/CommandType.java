@@ -1,5 +1,4 @@
 package com.samsung.common;
-
 import com.samsung.validator.*;
 import lombok.Getter;
 

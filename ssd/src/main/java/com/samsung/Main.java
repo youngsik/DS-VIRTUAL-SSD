@@ -1,8 +1,10 @@
 package com.samsung;
 
+import com.samsung.buffer.BufferProcessor;
 import com.samsung.file.FileManager;
 import com.samsung.resolver.CommandResolver;
 import com.samsung.common.CmdData;
+import com.samsung.ssd.SSDManager;
 
 class Main {
     public static void main(String[] args) {
@@ -24,8 +26,8 @@ class Main {
     }
 
     public static void run(CmdData cmdData) {
-        SSDManager ssdManager = new SSDManager(cmdData, FileManager.getInstance());
-        ssdManager.cmdExecute();
+        com.samsung.ssd.SSDManager ssdManager = new SSDManager(cmdData, FileManager.getInstance(), new BufferProcessor());
+        ssdManager.cmdExecuteFromBuffer();
     }
 
 }

@@ -23,7 +23,6 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class CommandInvokerTest {
     public static final String VALID_COMMAND_NAME = "help";
-
     public static final String INVALID_COMMAND_NAME = "abcde";
     public static final String[] cmdArgs = new String[1];
 
@@ -39,11 +38,9 @@ class CommandInvokerTest {
         invoker = new CommandInvoker(commandMap);
     }
 
-    @DisplayName("initAllCommands 메서드 테스트")
+    @DisplayName("명령어 초기화 검증 테스트 - @BeforeEach에서 생성자 호출 시 명령어 초기화 됨")
     @Test
     void initTest() {
-        invoker.initAllCommands();
-
         assertShellComands();
         assertScriptCommands();
     }

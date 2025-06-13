@@ -13,9 +13,6 @@ public class CommandInvoker {
 
     public CommandInvoker(Map<String, Command> commandMap) {
         this.commandMap = commandMap;
-    }
-
-    public void initAllCommands() {
         initShellCommand();
         initScriptCommand();
     }
