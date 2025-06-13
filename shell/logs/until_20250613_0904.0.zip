@@ -1,7 +1,0 @@
-[25.06.13 09:04:55] INFO  c.s.command.testscript.ScriptManager - test script2 테스트
-[25.06.13 09:04:55] INFO  com.samsung.log.LogCompressor - Compressed until_20250613_0901.0.log → until_20250613_0901.0.zip
-[25.06.13 09:04:55] INFO  com.samsung.file.JarExecutor - Executing command: java -jar C:\Users\User\IdeaProjects\DS-VIRTUAL-SSD\shell\ssd-all.jar W 4 0xAAAABBBB
-[25.06.13 09:04:56] INFO  com.samsung.file.JarExecutor - Executing command: java -jar C:\Users\User\IdeaProjects\DS-VIRTUAL-SSD\shell\ssd-all.jar W 0 0xAAAABBBB
-[25.06.13 09:04:57] INFO  com.samsung.file.JarExecutor - Executing command: java -jar C:\Users\User\IdeaProjects\DS-VIRTUAL-SSD\shell\ssd-all.jar W 3 0xAAAABBBB
-[25.06.13 09:04:58] INFO  com.samsung.file.JarExecutor - Executing command: java -jar C:\Users\User\IdeaProjects\DS-VIRTUAL-SSD\shell\ssd-all.jar W 1 0xAAAABBBB
-[25.06.13 09:04:59] INFO  com.samsung.file.JarExecutor - Executing command: java -jar C:\Users\User\IdeaProjects\DS-VIRTUAL-SSD\shell\ssd-all.jar W 2 0xAAAABBBB

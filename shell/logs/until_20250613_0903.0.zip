@@ -1,6 +1,0 @@
-[25.06.13 09:03:10] INFO  c.s.command.testscript.ScriptManager - test script2 테스트
-[25.06.13 09:03:10] INFO  com.samsung.file.JarExecutor - Executing command: java -jar C:\Users\User\IdeaProjects\DS-VIRTUAL-SSD\shell\ssd-all.jar W 4 0xAAAABBBB
-[25.06.13 09:03:11] INFO  com.samsung.file.JarExecutor - Executing command: java -jar C:\Users\User\IdeaProjects\DS-VIRTUAL-SSD\shell\ssd-all.jar W 0 0xAAAABBBB
-[25.06.13 09:03:12] INFO  com.samsung.file.JarExecutor - Executing command: java -jar C:\Users\User\IdeaProjects\DS-VIRTUAL-SSD\shell\ssd-all.jar W 3 0xAAAABBBB
-[25.06.13 09:03:13] INFO  com.samsung.file.JarExecutor - Executing command: java -jar C:\Users\User\IdeaProjects\DS-VIRTUAL-SSD\shell\ssd-all.jar W 1 0xAAAABBBB
-[25.06.13 09:03:14] INFO  com.samsung.file.JarExecutor - Executing command: java -jar C:\Users\User\IdeaProjects\DS-VIRTUAL-SSD\shell\ssd-all.jar W 2 0xAAAABBBB
