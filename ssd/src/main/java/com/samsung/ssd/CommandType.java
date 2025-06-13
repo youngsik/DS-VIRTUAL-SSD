@@ -1,4 +1,4 @@
-package com.samsung;
+package com.samsung.ssd;
 
 import com.samsung.validator.*;
 import lombok.Getter;
