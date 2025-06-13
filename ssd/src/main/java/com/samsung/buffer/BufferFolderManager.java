@@ -1,5 +1,6 @@
 package com.samsung.buffer;
 
+import com.samsung.common.CmdData;
 import com.samsung.common.SSDConstant;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,6 +13,7 @@ import java.nio.file.Paths;
 @Slf4j
 public class BufferFolderManager {
     private static final String BUFFER_DIR = "./buffer";
+    public static final int FULL_BUFFER = -1;
 
     public BufferFolderManager() {
         createBufferDirectory();
@@ -72,6 +74,31 @@ public class BufferFolderManager {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void updateFiles(CmdData cmdData, int index) {
+        String newFileName = String.format("%d_%s_%d_%s.txt",
+                index, cmdData.getCommand().getCode(), cmdData.getLba(), cmdData.getValue());
+        Path oldFilePath = Paths.get(BUFFER_DIR, index + "_empty.txt");
+        Path newFilePath = Paths.get(BUFFER_DIR, newFileName);
+
+        try {
+            Files.move(oldFilePath, newFilePath);
+        } catch (IOException e) {
+            log.error("[processCommand] 파일명 변경 오류");
+        }
+    }
+
+    public int findAvailableBufferIndex() {
+        for (int i = SSDConstant.MIN_BUFFER_INDEX; i <= SSDConstant.MAX_BUFFER_INDEX; i++) {
+            Path filePath = Paths.get(BUFFER_DIR, i + "_empty.txt");
+            File file = filePath.toFile();
+
+            if (file.exists() && file.getName().endsWith("empty.txt")) {
+                return i;
+            }
+        }
+        return FULL_BUFFER;
     }
 
     private void deleteRecursively(File file) {
