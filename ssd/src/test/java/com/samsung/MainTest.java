@@ -13,6 +13,8 @@ import org.mockito.quality.Strictness;
 
 import static com.samsung.common.CommandType.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -26,7 +28,7 @@ class MainTest {
     @BeforeEach
     void setUp() {
         main = new Main();
-        when(mockFileManager.getResultFromOutputFile()).thenReturn("ERROR");
+        when(mockFileManager.getResultFromOutputFile(anyLong())).thenReturn("ERROR");
     }
 
     @Test
@@ -59,7 +61,7 @@ class MainTest {
         String[] args = {"X", "5", "0x99999999"};
         CmdData cmdData = main.getCmdData(args);
 
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
 
     }
 
@@ -68,14 +70,14 @@ class MainTest {
     void testParsingWithInvalidLbaLocation() {
         String[] args = {"W", "notInt", "0x12345678"};
         CmdData cmdData = main.getCmdData(args);
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test
     @DisplayName("Command에 잘못된 개수의 인수 쓰기")
     void testTwoParameters() {
         CmdData cmdData = main.getCmdData(new String[]{"W", "0"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
         
     }
 
@@ -83,7 +85,7 @@ class MainTest {
     @DisplayName("Command에 잘못된 개수의 인수 읽기")
     void testThreeParameters() {
         CmdData cmdData = main.getCmdData(new String[]{"R", "0", "0x00000000", "0"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
         
     }
 
@@ -91,7 +93,7 @@ class MainTest {
     @DisplayName("Command에 음수 인수 입력")
     void negativeParameter() {
         CmdData cmdData = main.getCmdData(new String[]{"W", "-1", "0x00000000"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
         
     }
 
@@ -99,7 +101,7 @@ class MainTest {
     @DisplayName("Command에 잘못된 value 쓰기")
     void valueErrorTest() {
         CmdData cmdData = main.getCmdData(new String[]{"W", "0", "0x0000000011"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
         
     }
 
@@ -109,7 +111,7 @@ class MainTest {
         String[] args = {"W", "3", "0xG(GGGGG,"};
         CmdData cmdData = main.getCmdData(args);
 
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
         
     }
 
@@ -135,14 +137,14 @@ class MainTest {
     @Test
     void testR_50_0x1234ABCD() {
         CmdData cmdData = main.getCmdData(new String[]{"R", "50", "0x1234ABCD"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
         
     }
 
     @Test
     void testR_1_0xA0B0C0D0() {
         CmdData cmdData = main.getCmdData(new String[]{"R", "1", "0xA0B0C0D0"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
         
     }
 
@@ -158,25 +160,25 @@ class MainTest {
     @Test
     void testNoSpaceBetweenWorkAndLba() {
         CmdData cmdData = main.getCmdData(new String[]{"W10", "0x12345678"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test
     void testValueMissing() {
         CmdData cmdData = main.getCmdData(new String[]{"W", "10"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test
     void testWorkMissing() {
         CmdData cmdData = main.getCmdData(new String[]{"10", "0x12345678"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test
     void testLbaAndValueMissing() {
         CmdData cmdData = main.getCmdData(new String[]{"W"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test
@@ -191,34 +193,34 @@ class MainTest {
     @DisplayName("Erase 실패 - value")
     void testEraseInput_fail_value1() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "5", "11"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test
     @DisplayName("Erase 실패 - value")
     void testEraseInput_fail_value2() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "5", "-1"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test@DisplayName("Erase 실패 - value")
     void testEraseInput_fail_value3() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "5", "aa"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test
     @DisplayName("Erase 실패 - value & lba")
     void testEraseInput_fail_lba3() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "100", "aa"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test
     @DisplayName("Erase 실패 - paramQty")
     void testEraseInput_fail_paramQty() {
         CmdData cmdData = main.getCmdData(new String[]{"E"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test
@@ -285,7 +287,7 @@ class MainTest {
     @DisplayName("E 명령 - 음수 LBA 입력 오류")
     void testEraseNegativeLba() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "-1", "5"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
         
     }
 
@@ -293,7 +295,7 @@ class MainTest {
     @DisplayName("E 명령 - LBA 99 초과 입력 오류")
     void testEraseLbaOver99() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "100", "1"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
         
     }
 
@@ -301,7 +303,7 @@ class MainTest {
     @DisplayName("E 명령 - LBA 소수점 입력 오류")
     void testEraseLbaWithDecimal() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "10.5", "2"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
         
     }
 
@@ -309,7 +311,7 @@ class MainTest {
     @DisplayName("E 명령 - LBA 문자 입력 오류")
     void testEraseLbaWithAlphabet() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "abc", "2"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
         
     }
 
@@ -317,7 +319,7 @@ class MainTest {
     @DisplayName("E 명령 - LBA 특수문자 입력 오류")
     void testEraseLbaWithSpecialChar() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "1-2", "2"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
         
     }
 
@@ -325,7 +327,7 @@ class MainTest {
     @DisplayName("E 명령 - value 음수 입력 오류")
     void testEraseNegativeValue() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "1", "-1"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
         
     }
 
@@ -333,7 +335,7 @@ class MainTest {
     @DisplayName("E 명령 - value 10 초과 입력 오류")
     void testEraseValueOver10() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "1", "11"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
         
     }
 
@@ -341,7 +343,7 @@ class MainTest {
     @DisplayName("E 명령 - value 소수점 입력 오류")
     void testEraseValueWithDecimal() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "1", "1.5"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
         
     }
 
@@ -349,14 +351,14 @@ class MainTest {
     @DisplayName("E 명령 - value 문자 입력 오류")
     void testEraseValueWithAlphabet() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "1", "abc"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
         
     }
 
     @Test @DisplayName("E110 - 공백 없음")
     void testNoSpace() {
         CmdData cmdData = main.getCmdData(new String[]{"E110"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test @DisplayName("E 1   10 - 공백이 두 칸 이상")
@@ -371,127 +373,127 @@ class MainTest {
     @Test @DisplayName("E 1 - 값 부족")
     void testMissingValue() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "1"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test @DisplayName("E 1 10 5 - 너무 많은 값")
     void testTooManyValues() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "1", "10", "5"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test @DisplayName("E 95 5 - lba+size=100 오류")
     void testLbaPlusSizeEquals100() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "95", "5"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test @DisplayName("E 99 2 - lba+size=101 오류")
     void testLbaPlusSizeOver99() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "99", "2"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test @DisplayName("E @ 1 - lba에 특수문자 포함")
     void testLbaWithSpecialChar() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "@", "1"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test @DisplayName("E 5 # - size에 특수문자 포함")
     void testSizeWithSpecialChar() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "5", "#"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test @DisplayName("E $ % - lba, size 모두 특수문자 포함")
     void testLbaAndSizeWithSpecialChar() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "$", "%"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test @DisplayName("E ! 10 - lba에 느낌표 포함")
     void testLbaWithExclamation() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "!", "10"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test @DisplayName("E 3 & - size에 앰퍼샌드 포함")
     void testSizeWithAmpersand() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "3", "&"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test @DisplayName("E * 1 - lba에 별표 포함")
     void testLbaWithAsterisk() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "*", "1"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test @DisplayName("E 1 10# - size 끝에 특수문자 포함")
     void testSizeEndsWithSpecialChar() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "1", "10#"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test @DisplayName("E 1@ 10 - lba 숫자와 특수문자 붙음")
     void testLbaNumberWithSpecialChar() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "1@", "10"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test @DisplayName("E 1 1\\n - size 뒤에 개행문자 포함")
     void testSizeWithNewline() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "1", "1\n"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test @DisplayName("E - command만 있고 lba, size 없음")
     void testOnlyCommand() {
         CmdData cmdData = main.getCmdData(new String[]{"E"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test @DisplayName("E 1 - command, lba만 있고 size 없음")
     void testCommandAndLbaOnly() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "1"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test @DisplayName("E 1 2 3 - 파라미터 4개")
     void testFourParameters() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "1", "2", "3"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test @DisplayName("빈 문자열 - 아무 입력도 없는 경우")
     void testEmptyInput() {
         CmdData cmdData = main.getCmdData(new String[]{});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test @DisplayName("E 1 2 3 4 - 파라미터 5개 이상")
     void testFiveParameters() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "1", "2", "3", "4"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test @DisplayName(" E 1 2 - 앞에 공백 포함")
     void testLeadingSpace() {
         CmdData cmdData = main.getCmdData(new String[]{" E", "1", "2"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test @DisplayName("E 1 2 - 끝에 공백 포함")
     void testTrailingSpace() {
         CmdData cmdData = main.getCmdData(new String[]{"E", "1", "2 "});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test @DisplayName("     E 1 2 - 앞에 여러 공백 포함")
     void testMultipleLeadingSpaces() {
         CmdData cmdData = main.getCmdData(new String[]{"     E", "1", "2"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test @DisplayName("F 정상실행")
@@ -504,13 +506,13 @@ class MainTest {
     @Test @DisplayName("F 앞에 공백")
     void testFSpaces() {
         CmdData cmdData = main.getCmdData(new String[]{"     F"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 
     @Test @DisplayName("F 파라미터 추가")
     void testFinValidParam() {
         CmdData cmdData = main.getCmdData(new String[]{"F", "invalid"});
-        assertEquals("ERROR", mockFileManager.getResultFromOutputFile());
+        assertEquals("ERROR", mockFileManager.getResultFromOutputFile(anyLong()));
     }
 }
 

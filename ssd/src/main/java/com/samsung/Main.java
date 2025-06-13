@@ -1,7 +1,6 @@
 package com.samsung;
 
 import com.samsung.file.FileManager;
-import com.samsung.file.FileManagerInterface;
 import com.samsung.resolver.CommandResolver;
 import com.samsung.common.CmdData;
 
@@ -18,7 +17,7 @@ class Main {
             CommandResolver commandResolver = new CommandResolver();
             cmdData = commandResolver.cmdValidCheckAndParsing(args);
         }catch (RuntimeException e){
-            FileManagerInterface fileManager = FileManager.getInstance();
+            FileManager fileManager = FileManager.getInstance();
             fileManager.writeOnOutputFile("ERROR");
         }
         return cmdData;
