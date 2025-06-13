@@ -73,7 +73,7 @@ public class FileManager {
         if(new File(SSD_NAND_FILE_NAME).exists())
             return;
         try(RandomAccessFile file = new RandomAccessFile(SSD_NAND_FILE_NAME, "rw")) {
-            for (int i = 0; i < 99; i++) {
+            for (int i = 0; i < FILE_MAX_LINE; i++) {
                 file.writeBytes(BLANK_DATA + "\n");
             }
             file.writeBytes(BLANK_DATA);
