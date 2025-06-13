@@ -5,7 +5,9 @@ import com.samsung.file.FileManager;
 import com.samsung.resolver.CommandResolver;
 import com.samsung.common.CmdData;
 import com.samsung.ssd.SSDManager;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 class Main {
     public static void main(String[] args) {
         CmdData cmdData = getCmdData(args);
@@ -21,6 +23,7 @@ class Main {
         }catch (RuntimeException e){
             FileManager fileManager = FileManager.getInstance();
             fileManager.writeOnOutputFile("ERROR");
+            log.info("[fileErrorOutput] Error output 생성");
         }
         return cmdData;
     }
