@@ -1,4 +1,4 @@
-package com.samsung.validator;
+package com.samsung.command.support;
 
 public class CommandValidator {
 

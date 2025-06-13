@@ -1,8 +1,8 @@
 package com.samsung.command.testshell;
 
-import com.samsung.command.ArgumentResolver;
+import com.samsung.command.support.ArgumentResolver;
 import com.samsung.command.Command;
-import com.samsung.validator.CommandValidator;
+import com.samsung.command.support.CommandValidator;
 
 public class ReadCommand implements Command {
 

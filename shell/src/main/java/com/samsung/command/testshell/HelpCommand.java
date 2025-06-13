@@ -1,7 +1,7 @@
 package com.samsung.command.testshell;
 
 import com.samsung.command.Command;
-import com.samsung.validator.CommandValidator;
+import com.samsung.command.support.CommandValidator;
 
 public class HelpCommand implements Command {
 
