@@ -13,7 +13,7 @@ public class CmdValidChecker {
             case SSDConstant.COMMAND_READ: validator = new ReadCommandValidator(); break;
             case SSDConstant.COMMAND_WRITE: validator = new WriteCommandValidator(); break;
             case SSDConstant.COMMAND_ERASE: validator = new EraseCommandValidator(); break;
-            case SSDConstant.COMMAN_FLUSH: validator = new FlushCommandValidator(); break;
+            case SSDConstant.COMMAND_FLUSH: validator = new FlushCommandValidator(); break;
             default: validator = null;
         }
 

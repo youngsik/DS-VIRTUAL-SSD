@@ -23,6 +23,10 @@ public class SSDManager {
             CommandBufferManager commandBufferManager = new CommandBufferManager();
             commandBufferManager.processCommand(command, lba, value);
         }
+        else if(command.equals(SSDConstant.COMMAND_FLUSH)) {
+            CommandBufferManager commandBufferManager = new CommandBufferManager();
+            commandBufferManager.flushToFile();;
+        }
     }
 
     public void cmdExecuteFromBuffer() {

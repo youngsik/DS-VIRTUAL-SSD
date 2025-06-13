@@ -8,7 +8,7 @@ public class FlushCommandValidator implements CommandValidator {
     @Override
     public CmdData validate(String[] cmdParam) {
         if (cmdParam.length != 1) return error();
-        return new CmdData(COMMAN_FLUSH, -1, null);
+        return new CmdData(COMMAND_FLUSH, -1, null);
     }
 
     private CmdData error() {

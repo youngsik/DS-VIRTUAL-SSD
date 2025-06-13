@@ -127,7 +127,8 @@ public class CommandBufferManager {
         loadCommandsFromBuffer();
         SSDManager ssdManager;
 
-        for(CmdData commandBuffer : commandBuffers){
+        for (CmdData commandBuffer : commandBuffers) {
+            if(commandBuffer == null) break;
             ssdManager = new SSDManager(commandBuffer);
             ssdManager.cmdExecuteFromBuffer();
         }
