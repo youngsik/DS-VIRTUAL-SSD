@@ -20,7 +20,7 @@ public class ReadCommand implements Command {
             CommandValidator.validateLbaRange(index);
             testShellManager.read(index);
         } catch (NumberFormatException e) {
-            throw new RuntimeException("INVALID COMMAND"); // 숫자 아니면 Exception
+            throw new RuntimeException("INVALID COMMAND");
         }
     }
 

@@ -25,7 +25,7 @@ public class WriteCommand implements Command {
 
             testShellManager.write(index, value);
         } catch (NumberFormatException e) {
-            throw new RuntimeException("INVALID COMMAND"); // 숫자 아니면 Exception
+            throw new RuntimeException("INVALID COMMAND");
         }
     }
 

@@ -14,13 +14,19 @@ public class InteractiveCommandHandler {
 
     public void handle() {
         while (true) {
+            printPrompt();
             try {
                 String[] cmdArgs = getInput().split(" ");
                 commandInvoker.execute(cmdArgs);
             } catch (Exception e) {
-                System.err.println(e.getMessage());
+                System.out.println(e.getMessage());
             }
         }
+    }
+
+    private void printPrompt() {
+        System.out.println();
+        System.out.print("Shell > ");
     }
 
     private String getInput() {
