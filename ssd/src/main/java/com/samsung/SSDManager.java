@@ -1,6 +1,7 @@
 package com.samsung;
 
 import com.samsung.file.FileManager;
+import com.samsung.file.FileManagerInterface;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -15,12 +16,12 @@ import static com.samsung.CommandType.*;
 @Slf4j
 class SSDManager {
     private CmdData cmdData;
-    private final FileManager fileManager;
+    private final FileManagerInterface fileManager;
 
     private static final String BUFFER_DIR = "./ssd/buffer";
     private CmdData[] commandBuffer = new CmdData[SSDConstant.MAX_BUFFER_INDEX];
 
-    public SSDManager(CmdData cmdData, FileManager fileManager) {
+    public SSDManager(CmdData cmdData, FileManagerInterface fileManager) {
         this.cmdData = cmdData;
         this.fileManager = fileManager;
 
