@@ -1,12 +1,12 @@
 package com.samsung.buffer;
 
-import com.samsung.ssd.CmdData;
+import com.samsung.common.CmdData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.samsung.ssd.CommandType.*;
+import static com.samsung.common.CommandType.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BufferProcessorTest {
