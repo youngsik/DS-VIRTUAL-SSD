@@ -1,16 +1,14 @@
 package com.samsung.validator;
 
-import com.samsung.CmdData;
-import com.samsung.support.ArgumentResolver;
-import com.samsung.support.ArgumentValidator;
-import com.samsung.support.CommandValidator;
+import com.samsung.common.CmdData;
+import com.samsung.resolver.ArgumentResolver;
 
-import static com.samsung.CommandType.WRITE;
+import static com.samsung.common.CommandType.WRITE;
 
-public class WriteCommandValidator implements CmdValidatorInterface {
+public class WriteCommandValidator implements CommandValidator {
     @Override
     public CmdData validate(String[] cmdParam) {
-        CommandValidator.validateThreeArgs(cmdParam);
+        ArgumentCountValidator.validateThreeArgs(cmdParam);
         int lba = ArgumentResolver.resolveLba(cmdParam[1]);
         ArgumentValidator.validateValueFormat(cmdParam[2]);
         return new CmdData(WRITE, lba, cmdParam[2]);

@@ -1,4 +1,4 @@
-package com.samsung.support;
+package com.samsung.validator;
 
 public class ArgumentValidator {
 

@@ -2,7 +2,8 @@ package com.samsung;
 
 import com.samsung.file.FileManager;
 import com.samsung.file.FileManagerInterface;
-import com.samsung.validator.CmdValidChecker;
+import com.samsung.resolver.CommandResolver;
+import com.samsung.common.CmdData;
 
 class Main {
     public static void main(String[] args) {
@@ -14,8 +15,8 @@ class Main {
     public static CmdData getCmdData(String[] args) {
         CmdData cmdData = null;
         try {
-            CmdValidChecker cmdValidChecker = new CmdValidChecker();
-            cmdData = cmdValidChecker.cmdValidCheckAndParsing(args);
+            CommandResolver commandResolver = new CommandResolver();
+            cmdData = commandResolver.cmdValidCheckAndParsing(args);
         }catch (RuntimeException e){
             FileManagerInterface fileManager = FileManager.getInstance();
             fileManager.writeOnOutputFile("ERROR");

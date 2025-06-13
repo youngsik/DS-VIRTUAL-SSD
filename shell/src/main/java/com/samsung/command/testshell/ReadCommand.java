@@ -1,8 +1,8 @@
 package com.samsung.command.testshell;
 
-import com.samsung.support.ArgumentResolver;
+import com.samsung.resolver.ArgumentResolver;
 import com.samsung.command.Command;
-import com.samsung.support.CommandValidator;
+import com.samsung.validator.ArgumentCountValidator;
 
 public class ReadCommand implements Command {
 
@@ -16,7 +16,7 @@ public class ReadCommand implements Command {
 
     @Override
     public void execute(String[] cmdArgs) {
-        CommandValidator.validateTwoArgs(cmdArgs);
+        ArgumentCountValidator.validateTwoArgs(cmdArgs);
         testShellManager.read(extractValidatedLba(cmdArgs));
     }
 

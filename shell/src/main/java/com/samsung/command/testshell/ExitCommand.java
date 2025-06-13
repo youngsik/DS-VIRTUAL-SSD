@@ -1,7 +1,7 @@
 package com.samsung.command.testshell;
 
 import com.samsung.command.Command;
-import com.samsung.support.CommandValidator;
+import com.samsung.validator.ArgumentCountValidator;
 
 public class ExitCommand implements Command {
 
@@ -13,7 +13,7 @@ public class ExitCommand implements Command {
 
     @Override
     public void execute(String[] cmdArgs) {
-        CommandValidator.validateOneArgs(cmdArgs);
+        ArgumentCountValidator.validateOneArgs(cmdArgs);
         testShellManager.exit();
     }
 }

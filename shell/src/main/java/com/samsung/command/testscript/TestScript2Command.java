@@ -1,7 +1,7 @@
 package com.samsung.command.testscript;
 
 import com.samsung.command.Command;
-import com.samsung.support.CommandValidator;
+import com.samsung.validator.ArgumentCountValidator;
 
 public class TestScript2Command implements Command {
     private final ScriptManager scriptManager;
@@ -12,7 +12,7 @@ public class TestScript2Command implements Command {
 
     @Override
     public void execute(String[] cmdArgs) {
-        CommandValidator.validateOneArgs(cmdArgs);
+        ArgumentCountValidator.validateOneArgs(cmdArgs);
         boolean isTestPassed = scriptManager.testScript2();
         validatePostcondition(isTestPassed);
     }

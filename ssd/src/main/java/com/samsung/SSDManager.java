@@ -1,7 +1,9 @@
 package com.samsung;
 
-import com.samsung.file.FileManager;
+import com.samsung.common.SSDConstant;
 import com.samsung.file.FileManagerInterface;
+import com.samsung.common.CmdData;
+import com.samsung.common.CommandType;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -11,7 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
-import static com.samsung.CommandType.*;
+import static com.samsung.common.CommandType.*;
 
 @Slf4j
 class SSDManager {

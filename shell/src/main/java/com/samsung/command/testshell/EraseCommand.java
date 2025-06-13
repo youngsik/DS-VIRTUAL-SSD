@@ -1,8 +1,8 @@
 package com.samsung.command.testshell;
 
-import com.samsung.support.ArgumentResolver;
+import com.samsung.resolver.ArgumentResolver;
 import com.samsung.command.Command;
-import com.samsung.support.CommandValidator;
+import com.samsung.validator.ArgumentCountValidator;
 
 public class EraseCommand implements Command {
 
@@ -17,7 +17,7 @@ public class EraseCommand implements Command {
 
     @Override
     public void execute(String[] cmdArgs) {
-        CommandValidator.validateThreeArgs(cmdArgs);
+        ArgumentCountValidator.validateThreeArgs(cmdArgs);
         testShellManager.erase(
                 extractValidatedEraseLba(cmdArgs),
                 extractValidatedEraseSize(cmdArgs));

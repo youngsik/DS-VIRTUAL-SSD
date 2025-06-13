@@ -1,4 +1,4 @@
-package com.samsung;
+package com.samsung.common;
 
 import com.samsung.validator.*;
 import lombok.Getter;
@@ -14,11 +14,11 @@ public enum CommandType {
     ERROR("ERROR", null);
 
     private final String code;
-    private final CmdValidatorInterface CMDValidatorInterface;
+    private final CommandValidator CommandValidator;
 
-    CommandType(String code, CmdValidatorInterface CMDValidatorInterface) {
+    CommandType(String code, CommandValidator CommandValidator) {
         this.code = code;
-        this.CMDValidatorInterface = CMDValidatorInterface;
+        this.CommandValidator = CommandValidator;
     }
 
     public static CommandType fromCode(String code) {

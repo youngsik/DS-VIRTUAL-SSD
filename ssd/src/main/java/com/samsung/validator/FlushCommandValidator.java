@@ -1,14 +1,13 @@
 package com.samsung.validator;
 
-import com.samsung.CmdData;
-import com.samsung.support.CommandValidator;
+import com.samsung.common.CmdData;
 
-import static com.samsung.CommandType.FLUSH;
+import static com.samsung.common.CommandType.FLUSH;
 
-public class FlushCommandValidator implements CmdValidatorInterface {
+public class FlushCommandValidator implements CommandValidator {
     @Override
     public CmdData validate(String[] cmdParam) {
-        CommandValidator.validateOneArgs(cmdParam);
+        ArgumentCountValidator.validateOneArgs(cmdParam);
         return new CmdData(FLUSH, -1, null);
     }
 }

@@ -1,15 +1,16 @@
-package com.samsung.validator;
+package com.samsung.resolver;
 
-import com.samsung.CmdData;
-import com.samsung.CommandType;
+import com.samsung.common.CmdData;
+import com.samsung.common.CommandType;
+import com.samsung.validator.CommandValidator;
 
-public class CmdValidChecker {
+public class CommandResolver {
     public CmdData cmdValidCheckAndParsing(String[] cmdParam) {
         if (cmdParam.length == 0) {
             throw new RuntimeException();
         }
         try {
-            CmdValidatorInterface validator = CommandType.fromCode(cmdParam[0]).getCMDValidatorInterface();
+            CommandValidator validator = CommandType.fromCode(cmdParam[0]).getCommandValidator();
             validator.validate(cmdParam);
             return validator.validate(cmdParam);
         } catch (IllegalArgumentException e) {

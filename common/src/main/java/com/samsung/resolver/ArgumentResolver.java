@@ -1,4 +1,6 @@
-package com.samsung.support;
+package com.samsung.resolver;
+
+import com.samsung.validator.ArgumentValidator;
 
 public class ArgumentResolver {
 

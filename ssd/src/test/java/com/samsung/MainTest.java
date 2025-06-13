@@ -1,6 +1,7 @@
 package com.samsung;
 
 import com.samsung.file.FileManager;
+import com.samsung.common.CmdData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-import static com.samsung.CommandType.*;
+import static com.samsung.common.CommandType.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 

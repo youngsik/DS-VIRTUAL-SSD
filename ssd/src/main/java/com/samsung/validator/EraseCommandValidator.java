@@ -1,15 +1,14 @@
 package com.samsung.validator;
 
-import com.samsung.CmdData;
-import com.samsung.support.ArgumentResolver;
-import com.samsung.support.CommandValidator;
+import com.samsung.common.CmdData;
+import com.samsung.resolver.ArgumentResolver;
 
-import static com.samsung.CommandType.ERASE;
+import static com.samsung.common.CommandType.ERASE;
 
-public class EraseCommandValidator implements CmdValidatorInterface {
+public class EraseCommandValidator implements CommandValidator {
     @Override
     public CmdData validate(String[] cmdParam) {
-        CommandValidator.validateThreeArgs(cmdParam);
+        ArgumentCountValidator.validateThreeArgs(cmdParam);
         int lba = ArgumentResolver.resolveLba(cmdParam[1]);
         int size = ArgumentResolver.resolveSize(cmdParam[2]);
         if (lba + size > 100) throw new RuntimeException();
