@@ -15,10 +15,13 @@ public class FullWriteCommand implements Command {
     @Override
     public void execute(String[] cmdArgs) {
         ArgumentsValidator.validateTwoArgs(cmdArgs);
+        testShellManager.fullwrite(extractValidatedValue(cmdArgs));
+    }
+
+    private String extractValidatedValue(String[] cmdArgs) {
         String value = cmdArgs[1];
         CommandValidator.validateNull(value);
         CommandValidator.validateValueFormat(value);
-
-        testShellManager.fullwrite(value);
+        return value;
     }
 }
