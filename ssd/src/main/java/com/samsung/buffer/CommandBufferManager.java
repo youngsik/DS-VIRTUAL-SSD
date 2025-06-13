@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CommandBufferManager {
 
     private static final String BUFFER_DIR = "./ssd/buffer";
-    private CmdData[] commandBuffers = new CmdData[SSDConstant.MAX_BUFFER_NUMBER];
+    private CmdData[] commandBuffer = new CmdData[SSDConstant.MAX_BUFFER_INDEX];
 
     public CommandBufferManager() {
         createBufferDirectory();
@@ -38,11 +38,11 @@ public class CommandBufferManager {
         File bufferDir = new File(BUFFER_DIR);
         File[] files = bufferDir.listFiles((dir, name) -> name.endsWith(".txt"));
 
-        if (files != null && files.length >= SSDConstant.MAX_BUFFER_NUMBER) {
+        if (files != null && files.length >= SSDConstant.MAX_BUFFER_INDEX) {
             return;
         }
 
-        for (int i = SSDConstant.MIN_BUFFER_NUMBER; i <= SSDConstant.MAX_BUFFER_NUMBER; i++) {
+        for (int i = SSDConstant.MIN_BUFFER_INDEX; i <= SSDConstant.MAX_BUFFER_INDEX; i++) {
             Path filePath = Paths.get(BUFFER_DIR, i + "_empty.txt");
             File file = filePath.toFile();
 
@@ -60,12 +60,12 @@ public class CommandBufferManager {
         File bufferDir = new File(BUFFER_DIR);
         File[] files = bufferDir.listFiles((dir, name) -> name.matches("\\d+_.+\\.txt"));
 
-        Arrays.fill(commandBuffers, null);
+        Arrays.fill(commandBuffer, null);
 
         int index = 0;
         if (files != null) {
             for (File file : files) {
-                if (index >= SSDConstant.MAX_BUFFER_NUMBER) {
+                if (index >= SSDConstant.MAX_BUFFER_INDEX) {
                     break;
                 }
 
@@ -73,24 +73,19 @@ public class CommandBufferManager {
                 String[] parts = fileName.split("_");
 
                 if (parts.length == 4) {
-                    String command = parts[SSDConstant.MIN_BUFFER_NUMBER];
+                    String command = parts[SSDConstant.MIN_BUFFER_INDEX];
                     int lba = Integer.parseInt(parts[2]);
                     String value = parts[3].replace(".txt", "");
 
-                    commandBuffers[index++] = new CmdData(command, lba, value);
+                    commandBuffer[index++] = new CmdData(command, lba, value);
                 }
-            }
-        }
-        for (CmdData cmd : commandBuffers) {
-            if (cmd != null) {
-                System.out.println(cmd);
             }
         }
     }
 
     public void processCommand(String command, int lba, String value) {
         int availableIndex = findAvailableFileIndex();
-        if (availableIndex == -SSDConstant.MIN_BUFFER_NUMBER) {
+        if (availableIndex == -SSDConstant.MIN_BUFFER_INDEX) {
             return;
         }
 
@@ -106,7 +101,7 @@ public class CommandBufferManager {
     }
 
     private int findAvailableFileIndex() {
-        for (int i = SSDConstant.MIN_BUFFER_NUMBER; i <= SSDConstant.MAX_BUFFER_NUMBER; i++) {
+        for (int i = SSDConstant.MIN_BUFFER_INDEX; i <= SSDConstant.MAX_BUFFER_INDEX; i++) {
             Path filePath = Paths.get(BUFFER_DIR, i + "_empty.txt");
             File file = filePath.toFile();
 
@@ -114,17 +109,17 @@ public class CommandBufferManager {
                 return i;
             }
         }
-        flushToFile();
-        return SSDConstant.MIN_BUFFER_NUMBER;
+        flush();
+        return SSDConstant.MIN_BUFFER_INDEX;
     }
 
-    public void flushToFile(){
+    public void flush(){
         loadCommandsFromBuffer();
         SSDManager ssdManager;
 
-        for (CmdData commandBuffer : commandBuffers) {
-            if(commandBuffer == null) break;
-            ssdManager = new SSDManager(commandBuffer);
+        for (CmdData cmd : commandBuffer) {
+            if(cmd == null) break;
+            ssdManager = new SSDManager(cmd);
             ssdManager.cmdExecuteFromBuffer();
         }
         deleteAndInitBuffer();
@@ -144,24 +139,6 @@ public class CommandBufferManager {
 
     // buffer에 저장된 명령어들을 정리하는 함수
     public void organizeCommand() {
-        // 1) 현재 buffer에 저장된 명령어들을 가져온다.
-        loadCommandsFromBuffer();
-
-        // 2) buffer 명령어를 정리한다.
-        // 이 부분은 나중에 불필요한 명령어를 정리하는 로직을 추가할 예정
-        // 예를 들어, 오래된 명령어 또는 특정 조건을 만족하는 명령어를 삭제할 수 있음.
-        // 임시로 빈 함수로 두겠습니다.
-
-        // 3) 정리된 명령어를 새로 저장한다.
-        // flush()로 buffer를 비운 후, 정리된 명령어들을 processCommand로 다시 저장
-        flushToFile();
-
-        // 정리된 명령어 배열에서 다시 저장
-        for (CmdData cmd : commandBuffers) {
-            if (cmd != null) {
-                processCommand(cmd.getCommand(), cmd.getLba(), cmd.getValue());
-            }
-        }
     }
 
     private void ignoreCommand() {

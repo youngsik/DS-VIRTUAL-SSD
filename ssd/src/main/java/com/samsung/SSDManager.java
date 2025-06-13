@@ -10,24 +10,24 @@ public class SSDManager {
     private int lba = -1;
     private String value = "";
     private final FileManager fileManager;
+    private CommandBufferManager commandBufferManager;
 
     public SSDManager(CmdData cmdData) {
         this.command = cmdData.getCommand();
         this.lba = cmdData.getLba();
         this.value = cmdData.getValue();
         this.fileManager = FileManager.getInstance();
+        this.commandBufferManager = new CommandBufferManager();
     }
 
     public void cmdExecute() {
         if (command.equals(SSDConstant.COMMAND_ERROR)) fileErrorOutput();
         else if (command.equals(SSDConstant.COMMAND_READ)) fileManager.readFile(lba);
         else if (command.equals(SSDConstant.COMMAND_WRITE) || command.equals(SSDConstant.COMMAND_ERASE)) {
-            CommandBufferManager commandBufferManager = new CommandBufferManager();
             commandBufferManager.processCommand(command, lba, value);
         }
         else if(command.equals(SSDConstant.COMMAND_FLUSH)) {
-            CommandBufferManager commandBufferManager = new CommandBufferManager();
-            commandBufferManager.flushToFile();;
+            commandBufferManager.flush();;
         }
     }
 
