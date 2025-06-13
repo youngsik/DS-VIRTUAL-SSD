@@ -6,13 +6,13 @@ class SSDManager {
     private String command = "";
     private int lba = -1;
     private String value = "";
-    private FileManager fileManager;
+    private final FileManager fileManager;
 
     public SSDManager(String command, int lba, String value) {
         this.command = command;
         this.lba = lba;
         this.value = value;
-        this.fileManager = new FileManager();
+        this.fileManager = FileManager.getInstance();
     }
 
     public void cmdExecute() {

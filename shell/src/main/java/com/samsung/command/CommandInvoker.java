@@ -37,7 +37,7 @@ public class CommandInvoker {
     }
 
     private void initShellCommand() {
-        TestShellManager testShellManager = new TestShellManager(new JarExecutor(), new FileManager());
+        TestShellManager testShellManager = new TestShellManager(new JarExecutor(), FileManager.getInstance());
         register("write", new WriteCommand(testShellManager));
         register("read", new ReadCommand(testShellManager));
         register("erase", new EraseCommand(testShellManager));
@@ -53,7 +53,7 @@ public class CommandInvoker {
     }
 
     private void initScriptCommand() {
-        ScriptManager scriptManager = new ScriptManager(new FileManager(), new JarExecutor(), RandomHex.getInstance());
+        ScriptManager scriptManager = new ScriptManager(FileManager.getInstance(), new JarExecutor(), RandomHex.getInstance());
 
         String[] script1CommandNames = {"1_FullWriteAndReadCompare", "1_"};
         String[] script2CommandNames = {"2_PartialLBAWrite", "2_"};
