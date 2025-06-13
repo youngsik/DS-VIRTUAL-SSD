@@ -2,24 +2,22 @@ package com.samsung;
 
 import com.samsung.file.FileManager;
 
+import static com.samsung.CommandType.*;
+
 class SSDManager {
-    private String command = "";
-    private int lba = -1;
-    private String value = "";
+    private final CmdData cmdData;
     private final FileManager fileManager;
 
-    public SSDManager(String command, int lba, String value) {
-        this.command = command;
-        this.lba = lba;
-        this.value = value;
-        this.fileManager = FileManager.getInstance();
+    public SSDManager(CmdData cmdData, FileManager fileManager) {
+        this.cmdData = cmdData;
+        this.fileManager = fileManager;
     }
 
     public void cmdExecute() {
-        if (command.equals(SSDConstant.COMMAND_ERROR)) fileErrorOutput();
-        else if (command.equals(SSDConstant.COMMAND_READ)) fileManager.readFile(lba);
-        else if (command.equals(SSDConstant.COMMAND_WRITE)) fileManager.writeFile(lba, value);
-        else if (command.equals(SSDConstant.COMMAND_ERASE)) fileErase(lba, Integer.parseInt(value));
+        if (cmdData.getCommand().equals(ERROR)) fileErrorOutput();
+        else if (cmdData.getCommand().equals(READ)) fileManager.readFile(cmdData.getLba());
+        else if (cmdData.getCommand().equals(WRITE)) fileManager.writeFile(cmdData.getLba(), cmdData.getValue());
+        else if (cmdData.getCommand().equals(ERASE)) fileErase(cmdData.getLba(), Integer.parseInt(cmdData.getValue()));
     }
 
     private void fileErase(int startLba, int size) {
@@ -31,6 +29,6 @@ class SSDManager {
     }
 
     private void fileErrorOutput() {
-        fileManager.writeOnOutputFile(value);
+        fileManager.writeOnOutputFile(cmdData.getValue());
     }
 }
