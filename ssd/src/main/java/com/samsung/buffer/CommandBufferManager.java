@@ -179,7 +179,7 @@ public class CommandBufferManager {
 
     }
 
-    public String fastRead() {
+    public String fastRead(int lba) {
         return "";
     }
 
