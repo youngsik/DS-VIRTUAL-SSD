@@ -11,7 +11,7 @@ public enum CommandType {
     ERASE("E", new EraseCommandValidator()),
     READ("R", new ReadCommandValidator()),
     FLUSH("F", new FlushCommandValidator()),
-    ERROR("E", null);
+    ERROR("ERROR", null);
 
     private final String code;
     private final CmdValidatorInterface CMDValidatorInterface;

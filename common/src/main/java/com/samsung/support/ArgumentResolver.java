@@ -14,8 +14,6 @@ public class ArgumentResolver {
         return size;
     }
 
-
-
     public static String resolveValue(String value) {
         ArgumentValidator.validateNull(value);
         ArgumentValidator.validateValueFormat(value);
