@@ -3,7 +3,6 @@ package com.samsung.command.testshell;
 import com.samsung.file.FileManager;
 import com.samsung.file.JarExecutor;
 import lombok.extern.slf4j.Slf4j;
-import java.util.List;
 
 @Slf4j
 public class TestShellManager {
@@ -29,7 +28,9 @@ public class TestShellManager {
     public void read(int index) {
         String head = "[Read] LBA";
         String location = String.format("%02d", index);
-        String value = fileManager.getValueFromFile(index);
+
+        jarExecutor.executeRead(index);
+        String value = fileManager.getResultFromOutputFile();
 
         System.out.println(head + " " + location + " " + value);
     }
@@ -69,12 +70,12 @@ public class TestShellManager {
 
     public void fullread() {
         String head = "[Full Read] LBA";
-        List<String> values = fileManager.getAllValuesFromFile();
-        int index = 0;
-        for(String value : values){
-            if(index == 100) break;
-            String location = String.format("%02d", index++);
-            System.out.println(head + " " + location + " " + value);
+
+        for(int i = 0; i < 100; i++) {
+            jarExecutor.executeRead(i);
+            String value = fileManager.getResultFromOutputFile();
+
+            System.out.println(head + " " + i + " " + value);
         }
     }
 
