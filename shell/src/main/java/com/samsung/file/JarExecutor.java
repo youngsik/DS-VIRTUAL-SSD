@@ -5,10 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class JarExecutor {
-    private static final int DEFAULT_WAIT_MILLIS = 100;
+    private static final int DEFAULT_WAIT_MILLIS = 500;
 
     public void executeRead(Integer lba) {
         executeCommand("R", String.valueOf(lba));
@@ -41,7 +42,9 @@ public class JarExecutor {
             pb.inheritIO();
             pb.start();
 
-            Thread.sleep(DEFAULT_WAIT_MILLIS);
+            pb.start().waitFor(1000L, TimeUnit.MILLISECONDS);
+
+            // Thread.sleep(DEFAULT_WAIT_MILLIS);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }

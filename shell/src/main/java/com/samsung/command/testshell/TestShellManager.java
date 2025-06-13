@@ -31,7 +31,7 @@ public class TestShellManager {
 
         Long requestCommandTime = System.currentTimeMillis();
         jarExecutor.executeRead(index);
-        String value = fileManager.getResultFromOutputFile(requestCommandTime);
+        String value = fileManager.getResultFromOutputFile();
 
         System.out.println(head + " " + location + " " + value);
     }
@@ -75,7 +75,7 @@ public class TestShellManager {
         for(int i = 0; i < 100; i++) {
             Long requestCommandTime = System.currentTimeMillis();
             jarExecutor.executeRead(i);
-            String value = fileManager.getResultFromOutputFile(requestCommandTime);
+            String value = fileManager.getResultFromOutputFile();
 
             System.out.println(head + " " + String.format("%02d", i) + " " + value);
         }
