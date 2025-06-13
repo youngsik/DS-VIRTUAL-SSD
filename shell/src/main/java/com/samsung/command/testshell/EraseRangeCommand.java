@@ -2,7 +2,7 @@ package com.samsung.command.testshell;
 
 import com.samsung.command.ArgumentResolver;
 import com.samsung.command.Command;
-import com.samsung.validator.ArgumentsValidator;
+import com.samsung.validator.CommandValidator;
 
 public class EraseRangeCommand implements Command {
 
@@ -17,7 +17,7 @@ public class EraseRangeCommand implements Command {
 
     @Override
     public void execute(String[] cmdArgs) {
-        ArgumentsValidator.validateThreeArgs(cmdArgs);
+        CommandValidator.validateThreeArgs(cmdArgs);
         testShellManager.eraseRange(
                 extractValidatedBeginLba(cmdArgs),
                 extractValidatedEndLba(cmdArgs));

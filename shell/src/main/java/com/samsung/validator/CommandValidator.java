@@ -2,20 +2,20 @@ package com.samsung.validator;
 
 public class CommandValidator {
 
-    public static void validateNull(Object object) {
-        if (object == null) {
+    public static void validateOneArgs(String[] cmdArgs) {
+        if (cmdArgs.length != 1) {
             throw new RuntimeException("INVALID COMMAND");
         }
     }
 
-    public static void validateValueFormat(String value) {
-        if (!value.matches("^0x[0-9A-F]{8}$")) {
+    public static void validateTwoArgs(String[] cmdArgs) {
+        if (cmdArgs.length != 2) {
             throw new RuntimeException("INVALID COMMAND");
         }
     }
 
-    public static void validateLbaRange(Integer lba) {
-        if (lba < 0 || lba > 99) {
+    public static void validateThreeArgs(String[] cmdArgs) {
+        if (cmdArgs.length != 3) {
             throw new RuntimeException("INVALID COMMAND");
         }
     }

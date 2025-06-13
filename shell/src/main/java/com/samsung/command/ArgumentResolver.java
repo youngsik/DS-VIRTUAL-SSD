@@ -1,18 +1,18 @@
 package com.samsung.command;
 
-import com.samsung.validator.CommandValidator;
+import com.samsung.validator.ArgumentValidator;
 
 public class ArgumentResolver {
 
     public static Integer resolveLba(String lbaString) {
         Integer lba = toInt(lbaString);
-        CommandValidator.validateLbaRange(lba);
+        ArgumentValidator.validateLbaRange(lba);
         return lba;
     }
 
     public static String resolveValue(String value) {
-        CommandValidator.validateNull(value);
-        CommandValidator.validateValueFormat(value);
+        ArgumentValidator.validateNull(value);
+        ArgumentValidator.validateValueFormat(value);
         return value;
     }
 
