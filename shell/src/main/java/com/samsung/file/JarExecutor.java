@@ -8,7 +8,11 @@ import java.util.List;
 
 @Slf4j
 public class JarExecutor {
-    private static final int DEFAULT_WAIT_MILLIS = 1000;
+    private static final int DEFAULT_WAIT_MILLIS = 100;
+
+    public void executeRead(Integer lba) {
+        executeCommand("R", String.valueOf(lba));
+    }
 
     public void executeWrite(Integer lba, String value) {
         executeCommand("W", lba.toString(), value);

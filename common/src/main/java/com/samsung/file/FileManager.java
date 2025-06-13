@@ -41,6 +41,18 @@ public class FileManager {
         return result;
     }
 
+    public String getResultFromOutputFile() {
+        String result = null;
+
+        try{
+            result = Files.readString(Path.of(SSD_OUTPUT_FILE_NAME));
+        }catch(IOException e) {
+
+        }
+
+        return result;
+    }
+
     public List<String> getAllValuesFromFile(){
         List<String> result = null;
         try {
