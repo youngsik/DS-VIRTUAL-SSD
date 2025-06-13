@@ -24,6 +24,9 @@ public class ScriptManagerTest {
     @Mock
     private JarExecutor jarExecutor;
 
+    @Mock
+    private RandomHex randomHex;
+
     @InjectMocks
     private ScriptManager scriptManager;
 
@@ -58,8 +61,7 @@ public class ScriptManagerTest {
     @Test
     @DisplayName("testScript3 - 랜덤 HEX를 LBA 0과 99에 반복 write 후 검증")
     void testScript3() {
-        mockStatic(RandomHex.class);
-        when(RandomHex.getRandomValue()).thenReturn(VALUE);
+        when(randomHex.getRandomValue()).thenReturn(VALUE);
 
         doReturn(VALUE).when(fileManager).getValueFromFile(anyInt());
 

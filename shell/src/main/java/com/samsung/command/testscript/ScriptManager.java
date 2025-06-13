@@ -19,72 +19,64 @@ public class ScriptManager {
     }
 
     public boolean testScript1() {
-        log.info("test script1 테스트");
+        log.info("[Script1] VERIFY_TERM 단위로 순차 쓰기/검증 시작");
         int lastVerifyBlock = LOOP_100 - VERIFY_TERM;
         for (int index = LBA_FIRST; index <= lastVerifyBlock; index += VERIFY_TERM) {
-            if(!isVerifyBlock(index, TEST_VALUE)) return false;
+            if (!isVerifyBlock(index)) return false;
         }
         return true;
     }
 
     public boolean testScript2() {
-        log.info("test script2 테스트");
+        log.info("[Script2] LBA 순서대로 쓰기/검증 반복 시작");
         for (int i = 0; i < LOOP_30; i++) {
-            script2LbaOrder.forEach(lba -> write(lba, TEST_VALUE));
-            for (int j = 0; j <= VERIFY_TERM; j++) {
-                if(!isVerifyValue(j, TEST_VALUE)) return false;
-            }
+            script2LbaOrder.forEach(lba -> jarExecutor.executeWrite(lba, TEST_VALUE));
+            boolean isVerified = verifyRange(0, VERIFY_TERM + 1, TEST_VALUE);
+            if (!isVerified) return false;
         }
         return true;
     }
 
     public boolean testScript3() {
-        log.info("test script3 테스트");
+        log.info("[Script3] LBA_FIRST & LBA_LAST 무작위 쓰기/검증 시작");
         for (int i = 0; i < LOOP_100 * 2; i++) {
-            boolean firstValue = writeAndVerify(LBA_FIRST, RandomHex.getInstance().getRandomValue());
-            boolean lastValue = writeAndVerify(LBA_LAST, RandomHex.getInstance().getRandomValue());
-            if (!isValidFirstLastValue(firstValue, lastValue)) return false;
+            boolean firstOk = writeAndVerify(LBA_FIRST, randomHex.getRandomValue());
+            boolean lastOk = writeAndVerify(LBA_LAST, randomHex.getRandomValue());
+            if (!(firstOk && lastOk)) return false;
         }
         return true;
     }
 
-    private boolean isValidFirstLastValue(boolean firstOk, boolean lastOk) {
-        return firstOk && lastOk;
-    }
-
     public boolean testScript4() {
-        log.info("test script4 테스트");
+        log.info("[Script4] Overwrite 후 Erase → 검증 테스트 시작");
         jarExecutor.executeErase(0, ERASE_BLOCK_LENGTH);
 
         int currentLba = 2;
         for (int i = 0; i < LOOP_30; i++) {
-            testScript4Logic(currentLba);
-
-            for (int offset = 0; offset < ERASE_BLOCK_LENGTH; offset++) {
-                if (!isVerifyValue(currentLba++, EMPTY_VALUE)) return false;
-            }
+            overwriteThenErase(currentLba);
+            boolean isVerified = verifyRange(currentLba, ERASE_BLOCK_LENGTH, EMPTY_VALUE);
+            if (!isVerified) return false;
+            currentLba += ERASE_BLOCK_LENGTH;
         }
         return true;
     }
 
-    private void testScript4Logic(int currentLba) {
-        jarExecutor.executeWrite(currentLba, TEST_VALUE);
-        jarExecutor.executeWrite(currentLba, TEST_VALUE_OVERWRITE);
-        jarExecutor.executeErase(currentLba, ERASE_BLOCK_LENGTH);
+    private void overwriteThenErase(int lba) {
+        jarExecutor.executeWrite(lba, TEST_VALUE);
+        jarExecutor.executeWrite(lba, TEST_VALUE_OVERWRITE);
+        jarExecutor.executeErase(lba, ERASE_BLOCK_LENGTH);
     }
 
-    private boolean isVerifyBlock(int startLba, String value) {
-        boolean success = false;
-        for (int i = 0; i < VERIFY_TERM; i++) {
-            int lba = startLba + i;
-            write(lba, value);
-            success = isVerifyValue(lba, value);
+    private boolean isVerifyBlock(int startLba) {
+        for (int offset = 0; offset < VERIFY_TERM; offset++) {
+            int lba = startLba + offset;
+            if (!writeAndVerify(lba, TestScriptConstant.TEST_VALUE)) return false;
         }
-        return success;
+        return true;
     }
 
     private boolean writeAndVerify(int lba, String value) {
-        write(lba, value);
+        jarExecutor.executeWrite(lba, value);
         return isVerifyValue(lba, value);
     }
 
@@ -93,12 +85,15 @@ public class ScriptManager {
         return expected.equals(actual);
     }
 
-    private void write(int lba, String value) {
-        jarExecutor.executeWrite(lba, value);
+    private boolean verifyRange(int startLba, int length, String expected) {
+        for (int offset = 0; offset < length; offset++) {
+            int lba = startLba + offset;
+            String actual = fileManager.getValueFromFile(lba);
+            if (!expected.equals(actual)) {
+                log.warn("Verification failed at LBA {}: expected={}, actual={}", lba, expected, actual);
+                return false;
+            }
+        }
+        return true;
     }
-
-//    private String getRandomHex() {
-//        int randomInt = random.nextInt(MAX_RAND_BOUND);
-//        return String.format("0x%08X", randomInt);
-//    }
 }
