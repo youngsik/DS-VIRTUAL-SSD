@@ -1,10 +1,11 @@
-package com.samsung.handler;
+package com.samsung.handler.impl;
 
 import com.samsung.command.CommandInvoker;
+import com.samsung.handler.CommandHandler;
 
 import java.util.Scanner;
 
-public class InteractiveCommandHandler {
+public class InteractiveCommandHandler implements CommandHandler {
 
     private final CommandInvoker commandInvoker;
 
@@ -12,7 +13,8 @@ public class InteractiveCommandHandler {
         this.commandInvoker = commandInvoker;
     }
 
-    public void handle() {
+    @Override
+    public void handle(String... args) {
         while (true) {
             printPrompt();
             try {

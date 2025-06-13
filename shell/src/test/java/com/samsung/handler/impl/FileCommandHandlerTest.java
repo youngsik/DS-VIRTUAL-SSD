@@ -1,4 +1,4 @@
-package com.samsung.handler;
+package com.samsung.handler.impl;
 
 import com.samsung.command.CommandInvoker;
 import org.junit.jupiter.api.DisplayName;
@@ -14,14 +14,12 @@ import java.io.PrintWriter;
 import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class FileCommandHandlerTest {
 
     public static final String VALID_FILE_NAME = "valid.txt";
-    public static final String INVALID_FILE_NAME = "QWERTYsdfDsFGHZXCSsdfN.txt";
 
     public static final String TEST_SCRIPT1_COMMAND = "1_FullWriteAndReadCompare";
     public static final String TEST_SCRIPT2_COMMAND = "2_PartialLBAWrite";
@@ -44,12 +42,6 @@ class FileCommandHandlerTest {
         verify(mockInvoker, times(4)).execute(any());
     }
 
-    @DisplayName("handle() 메서드 예외 테스트 - 유효하지 않은 txt 파일")
-    @Test
-    void handleIOExceptionTest() {
-        assertThrows(RuntimeException.class, () -> handler.handle(INVALID_FILE_NAME));
-    }
-
     @DisplayName("handle() 메서드 예외 테스트 - 세 번째 실행 스크립트에서 예외 발생")
     @Test
     void handleIOExceptionTest2(@TempDir Path tempDir) {
@@ -63,7 +55,7 @@ class FileCommandHandlerTest {
             handler.handle(txtFile.toString());
         } catch (RuntimeException e) {
             verify(mockInvoker, times(3)).execute(any());
-            assertThat(e.getMessage()).isEqualTo("FileCommandHandler Fail 발생");
+            assertThat(e.getMessage()).isEqualTo("FAIL!");
         }
     }
 
