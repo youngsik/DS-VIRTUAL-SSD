@@ -24,15 +24,12 @@ public class CommandBufferManager {
     // buffer 폴더 생성 함수
     private void createBufferDirectory() {
         Path bufferPath = Paths.get(BUFFER_DIR);
+        if (Files.exists(bufferPath)) return;
 
-        if (!Files.exists(bufferPath)) {
-            try {
-                Files.createDirectories(bufferPath);
-            } catch (IOException e) {
-                //ERROR
-            }
-        } else {
-            //ERROR
+        try {
+            Files.createDirectories(bufferPath);
+        } catch (IOException e) {
+
         }
     }
 
@@ -50,11 +47,9 @@ public class CommandBufferManager {
 
             if (!file.exists()) {
                 try {
-                    if (!file.createNewFile()) {
-                        // ERROR
-                    }
+                    file.createNewFile();
                 } catch (IOException e) {
-                    // ERROR
+
                 }
             }
         }
