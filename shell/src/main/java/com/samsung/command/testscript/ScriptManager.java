@@ -1,6 +1,7 @@
 package com.samsung.command.testscript;
 
 import com.samsung.file.FileManager;
+import com.samsung.file.FileManagerInterface;
 import com.samsung.file.JarExecutor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -8,11 +9,11 @@ import static com.samsung.command.testscript.TestScriptConstant.*;
 
 @Slf4j
 public class ScriptManager {
-    private final FileManager fileManager;
+    private final FileManagerInterface fileManager;
     private final JarExecutor jarExecutor;
     private final RandomHex randomHex;
 
-    public ScriptManager(FileManager fileManager, JarExecutor jarExecutor, RandomHex randomHex) {
+    public ScriptManager(FileManagerInterface fileManager, JarExecutor jarExecutor, RandomHex randomHex) {
         this.fileManager = fileManager;
         this.jarExecutor = jarExecutor;
         this.randomHex = randomHex;
