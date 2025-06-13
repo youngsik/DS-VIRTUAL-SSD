@@ -4,13 +4,16 @@ import com.samsung.CmdData;
 import com.samsung.SSDConstant;
 import com.samsung.SSDManager;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class CommandBufferManager {
 
     private static final String BUFFER_DIR = "./ssd/buffer";
@@ -20,8 +23,6 @@ public class CommandBufferManager {
         createBufferDirectory();
         createEmptyFiles();
     }
-
-    // buffer 폴더 생성 함수
     private void createBufferDirectory() {
         Path bufferPath = Paths.get(BUFFER_DIR);
         if (Files.exists(bufferPath)) return;
@@ -29,7 +30,7 @@ public class CommandBufferManager {
         try {
             Files.createDirectories(bufferPath);
         } catch (IOException e) {
-
+            log.info("[createBufferDirectory] 파일 생성 오류");
         }
     }
 
@@ -49,7 +50,7 @@ public class CommandBufferManager {
                 try {
                     file.createNewFile();
                 } catch (IOException e) {
-
+                    log.info("[createEmptyFiles] 파일 생성 오류");
                 }
             }
         }
@@ -94,14 +95,13 @@ public class CommandBufferManager {
         }
 
         String newFileName = String.format("%d_%s_%d_%s.txt", availableIndex, command, lba, value);
-
         Path oldFilePath = Paths.get(BUFFER_DIR, availableIndex + "_empty.txt");
         Path newFilePath = Paths.get(BUFFER_DIR, newFileName);
 
         try {
             Files.move(oldFilePath, newFilePath);
         } catch (IOException e) {
-            //ERROR
+            log.info("[processCommand] 파일명 변경 오류");
         }
     }
 

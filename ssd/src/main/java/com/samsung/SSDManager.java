@@ -2,7 +2,9 @@ package com.samsung;
 
 import com.samsung.buffer.CommandBufferManager;
 import com.samsung.file.FileManager;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class SSDManager {
     private String command = "";
     private int lba = -1;
@@ -46,5 +48,6 @@ public class SSDManager {
 
     private void fileErrorOutput() {
         fileManager.writeOnOutputFile(value);
+        log.info("[fileErrorOutput] Error output 생성");
     }
 }
