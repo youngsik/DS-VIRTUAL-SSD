@@ -38,10 +38,7 @@ public class JarExecutor {
             System.out.println("Executing command: " + String.join(" ", command));
 
             pb.inheritIO();
-            pb.start();
-
-            pb.start().waitFor(1000L, TimeUnit.MILLISECONDS);
-
+            pb.start().waitFor(5000L, TimeUnit.MILLISECONDS);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
