@@ -1,16 +1,24 @@
-package com.samsung;
+package com.samsung.file;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import static com.samsung.FileConstants.*;
+import static com.samsung.file.FileConstants.*;
 
 public class FileManager {
 
-    public FileManager() {
+    private static FileManager instance;
+
+    private FileManager() {
         resetNandFile();
+    }
+
+    public static FileManager getInstance(){
+        if(instance == null)
+            instance = new FileManager();
+        return instance;
     }
 
     public void readFile(int index) {
@@ -61,7 +69,9 @@ public class FileManager {
     }
 
     private void resetNandFile() {
-        try(RandomAccessFile file = new RandomAccessFile(SSD_NAND_FILE_NAME, "rw");) {
+        if(new File(SSD_NAND_FILE_NAME).exists())
+            return;
+        try(RandomAccessFile file = new RandomAccessFile(SSD_NAND_FILE_NAME, "rw")) {
             for (int i = 0; i < 98; i++) {
                 file.writeBytes(BLANK_DATA + "\n");
             }

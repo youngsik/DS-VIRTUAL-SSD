@@ -13,7 +13,14 @@ public class TestScript1Command implements Command {
     @Override
     public void execute(String[] cmdArgs) {
         ArgumentsValidator.validateOneArgs(cmdArgs);
-        scriptManager.testScript1();
+        boolean isTestPassed = scriptManager.testScript1();
+        validatePostcondition(isTestPassed);
+    }
+
+    private static void validatePostcondition(boolean isTestPassed) {
+        if (!isTestPassed) {
+            throw new RuntimeException("TestScript1 is Failed!");
+        }
     }
 
 }

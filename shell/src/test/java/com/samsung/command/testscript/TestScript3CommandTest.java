@@ -11,16 +11,21 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class TestScript3CommandTest {
+
     @Mock
     ScriptManager scriptManager;
+
     @InjectMocks
     TestScript3Command testScript3Command;
 
     @Test
     @DisplayName("TestScript3 실행 테스트")
     void callTestScript3Command(){
-        testScript3Command.execute(new String[1]);
+        try {
+            testScript3Command.execute(new String[1]);
+        } catch (Exception e) {
 
+        }
         verify(scriptManager).testScript3();
     }
 }

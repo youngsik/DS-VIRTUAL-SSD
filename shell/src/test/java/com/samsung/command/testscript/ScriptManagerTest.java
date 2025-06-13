@@ -1,6 +1,6 @@
 package com.samsung.command.testscript;
 
-import com.samsung.FileManager;
+import com.samsung.file.FileManager;
 import com.samsung.file.JarExecutor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
