@@ -13,14 +13,15 @@ public class TestScript2Command implements Command {
     @Override
     public void execute(String[] cmdArgs) {
         ArgumentCountValidator.validateOneArgs(cmdArgs);
-        boolean isTestPassed = scriptManager.testScript2();
-        validatePostcondition(isTestPassed);
+        printTestScriptResult(scriptManager.testScript2());
     }
 
-    private void validatePostcondition(boolean isTestPassed) {
-        if (!isTestPassed) {
-            throw new RuntimeException("TestScript2 is Failed!");
+    private static void printTestScriptResult(boolean isTestPassed) {
+        if (isTestPassed) {
+            System.out.println("PASS");
+            return;
         }
+        System.out.println("FAIL");
     }
 
 }
