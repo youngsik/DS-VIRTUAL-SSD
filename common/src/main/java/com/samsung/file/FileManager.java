@@ -30,7 +30,7 @@ public class FileManager {
         String result = null;
         try {
             RandomAccessFile file = new RandomAccessFile(SSD_NAND_FILE_NAME, "r");
-            file.seek(index * OFFSET);
+            file.seek((long) index * OFFSET);
             byte[] buf = new byte[10];
             file.read(buf);
             result = new String(buf);
@@ -53,7 +53,7 @@ public class FileManager {
     public void writeFile(int index, String value) {
         try {
             RandomAccessFile file = new RandomAccessFile(SSD_NAND_FILE_NAME, "rw");
-            file.seek(index * OFFSET);
+            file.seek((long) index * OFFSET);
             file.writeBytes(value);
         } catch (IOException e) {
 
