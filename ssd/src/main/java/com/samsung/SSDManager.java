@@ -34,11 +34,13 @@ class SSDManager {
     }
 
     public void cmdExecuteFromBuffer() {
-        if (cmdData.getCommand().equals(ERROR)) fileErrorOutput();
-        else if (cmdData.getCommand().equals(READ)) fileManager.readFile(cmdData.getLba());
-        else if (cmdData.getCommand().equals(WRITE)) fileManager.writeFile(cmdData.getLba(), cmdData.getValue());
-        else if (cmdData.getCommand().equals(ERASE)) fileErase(cmdData.getLba(), Integer.parseInt(cmdData.getValue()));
-        else if (cmdData.getCommand().equals(FLUSH)) flush();
+        CommandType command = cmdData.getCommand();
+        if (command.equals(ERROR)) fileErrorOutput();
+        else if (command.equals(READ)) fileManager.readFile(cmdData.getLba());
+        else if (command.equals(WRITE)) fileManager.writeFile(cmdData.getLba(), cmdData.getValue());
+        else if (command.equals(ERASE)) fileErase(cmdData.getLba(), Integer.parseInt(cmdData.getValue()));
+        else if (command.equals(FLUSH)) flush();
+
         applyBufferAlgorithm();
     }
 
