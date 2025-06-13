@@ -15,18 +15,29 @@ public class WriteCommand implements Command {
     @Override
     public void execute(String[] cmdArgs) {
         ArgumentsValidator.validateThreeArgs(cmdArgs);
-        try {
-            Integer index = Integer.parseInt(cmdArgs[1]);
-            String value = cmdArgs[2];
+        testShellManager.write(
+                extractValidatedLba(cmdArgs),
+                extractValidatedValue(cmdArgs));
+    }
 
-            CommandValidator.validateLbaRange(index);
-            CommandValidator.validateNull(value);
-            CommandValidator.validateValueFormat(value);
+    private Integer extractValidatedLba(String[] cmdArgs) {
+        Integer lba = toInt(cmdArgs[1]);
+        CommandValidator.validateLbaRange(lba);
+        return lba;
+    }
 
-            testShellManager.write(index, value);
+    private String extractValidatedValue(String[] cmdArgs) {
+        String value = cmdArgs[2];
+        CommandValidator.validateNull(value);
+        CommandValidator.validateValueFormat(value);
+        return value;
+    }
+
+    private Integer toInt(String arg) {
+        try{
+            return Integer.parseInt(arg);
         } catch (NumberFormatException e) {
             throw new RuntimeException("INVALID COMMAND");
         }
     }
-
 }
