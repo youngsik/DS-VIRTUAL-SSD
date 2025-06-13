@@ -8,6 +8,8 @@ import java.util.List;
 
 public class FileCommandHandler implements CommandHandler {
 
+    public static final int FILE_NAME_INDEX = 0;
+
     private final CommandInvoker commandInvoker;
 
     public FileCommandHandler(CommandInvoker commandInvoker) {
@@ -16,18 +18,11 @@ public class FileCommandHandler implements CommandHandler {
 
     @Override
     public void handle(String... args) {
-        String fileName = args[0];
-        validatePrecondition(fileName);
         try {
+            String fileName = args[FILE_NAME_INDEX];
             executeAllCommands(Files.readAllLines(Paths.get(fileName)));
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    private void validatePrecondition(String fileName) {
-        if (!fileName.endsWith(".txt")) {
-            throw new RuntimeException("유효하지 않은 파일 타입입니다.");
+            System.out.println(e.getMessage());
         }
     }
 
@@ -38,15 +33,13 @@ public class FileCommandHandler implements CommandHandler {
     }
 
     private void executeCommand(String commandName) {
-        String[] cmdArgs = new String[]{commandName};
-
         System.out.print(commandName + "  ---  Run... ");
         try {
+            String[] cmdArgs = { commandName };
             commandInvoker.execute(cmdArgs);
             System.out.println("PASS");
         } catch (RuntimeException e) {
-            System.out.println("FAIL!");
-            throw new RuntimeException("FileCommandHandler Fail 발생");
+            throw new RuntimeException("FAIL!");
         }
     }
 }
