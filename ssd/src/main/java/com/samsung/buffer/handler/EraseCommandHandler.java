@@ -1,14 +1,15 @@
 package com.samsung.buffer.handler;
 
 
-import com.samsung.CmdData;
+import com.samsung.ssd.CmdData;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
-import static com.samsung.CommandType.*;
+import static com.samsung.ssd.CommandType.ERASE;
+import static com.samsung.ssd.CommandType.WRITE;
 
 public class EraseCommandHandler implements CommandHandler {
     private final List<CmdData> buffer;
@@ -25,17 +26,6 @@ public class EraseCommandHandler implements CommandHandler {
         int length = Integer.parseInt(cmd.getValue());
         int end = start + length - 1;
 
-        removeOverlappingCommands(start, end);
-        eraseMemoryRange(start, end);
-
-        List<CmdData> merged = mergeErases(getExistingErases(), cmd);
-        buffer.removeIf(c -> c.getCommand().equals(ERASE));
-        buffer.addAll(merged);
-
-        return "void";
-    }
-
-    private void removeOverlappingCommands(int start, int end) {
         buffer.removeIf(prev -> {
             if (prev.getCommand().equals(WRITE)) {
                 int lba = prev.getLba();
@@ -48,49 +38,55 @@ public class EraseCommandHandler implements CommandHandler {
             }
             return false;
         });
-    }
 
-    private void eraseMemoryRange(int start, int end) {
         for (int i = start; i <= end; i++) {
             memory.put(i, "0x00000000");
         }
+
+        buffer.add(cmd);
+        mergeAdjacentErases();
+        return "void";
     }
 
-    private List<CmdData> getExistingErases() {
-        List<CmdData> erases = new ArrayList<>();
-        for (CmdData c : buffer) {
-            if (c.getCommand().equals(ERASE)) {
-                erases.add(c);
+    private void mergeAdjacentErases() {
+        List<CmdData> merged = new ArrayList<>();
+        ListIterator<CmdData> iter = buffer.listIterator();
+
+        while (iter.hasNext()) {
+            CmdData current = iter.next();
+            if (!current.getCommand().equals(ERASE)) {
+                merged.add(current);
+                continue;
             }
-        }
-        return erases;
-    }
 
-    private List<CmdData> mergeErases(List<CmdData> erases, CmdData newErase) {
-        List<CmdData> result = new ArrayList<>();
-        erases.add(newErase);
-        erases.sort(Comparator.comparingInt(CmdData::getLba));
+            int start = current.getLba();
+            int end = start + Integer.parseInt(current.getValue()) - 1;
 
-        int i = 0;
-        while (i < erases.size()) {
-            int start = erases.get(i).getLba();
-            int end = start + Integer.parseInt(erases.get(i).getValue()) - 1;
-            i++;
+            while (iter.hasNext()) {
+                CmdData next = iter.next();
+                if (!next.getCommand().equals(ERASE)) {
+                    iter.previous(); // rollback
+                    break;
+                }
 
-            while (i < erases.size()) {
-                int nextStart = erases.get(i).getLba();
-                int nextEnd = nextStart + Integer.parseInt(erases.get(i).getValue()) - 1;
+                int nextStart = next.getLba();
+                int nextEnd = nextStart + Integer.parseInt(next.getValue()) - 1;
+
                 if (nextStart <= end + 1) {
                     end = Math.max(end, nextEnd);
-                    i++;
-                } else break;
+                } else {
+                    iter.previous(); // rollback
+                    break;
+                }
             }
 
             for (int s = start; s <= end; s += 10) {
                 int len = Math.min(10, end - s + 1);
-                result.add(new CmdData(ERASE, s, String.valueOf(len)));
+                merged.add(new CmdData(ERASE, s, String.valueOf(len)));
             }
         }
-        return result;
+
+        buffer.clear();
+        buffer.addAll(merged);
     }
 }

@@ -1,4 +1,4 @@
-package com.samsung;
+package com.samsung.ssd;
 
 import com.samsung.buffer.BufferProcessor;
 import com.samsung.file.FileManagerInterface;
@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.samsung.CommandType.*;
+import static com.samsung.ssd.CommandType.*;
 
 @Slf4j
-class SSDManager {
+public class SSDManager {
     public static final int FULL_BUFFER = -1;
     private CmdData cmdData;
     private final FileManagerInterface fileManager;
@@ -34,15 +34,24 @@ class SSDManager {
 
         createBufferDirectory();
         createEmptyFiles();
+
         applyBufferAlgorithm();
     }
 
     public void cmdExecuteFromBuffer() {
+        List<CmdData> calculatedCmdList = bufferProcessor.getBuffer();
+        if (calculatedCmdList.size() == 5 && !isReadOrFlush()) {
+            flush();
+            bufferProcessor.clear();
+        }
         executeSingleCommand(cmdData);
 
-        if (cmdData.getCommand().equals(READ)
-                || cmdData.getCommand().equals(FLUSH)) return;
+        if (isReadOrFlush()) return;
         applyBufferAlgorithm();
+    }
+
+    private boolean isReadOrFlush() {
+        return cmdData.getCommand().equals(READ) || cmdData.getCommand().equals(FLUSH);
     }
 
     private void executeSingleCommand(CmdData cmd) {
@@ -60,6 +69,7 @@ class SSDManager {
         if ("0x00000000".equals(result)) {
             fileManager.readFile(cmd.getLba());
         }
+        fileManager.writeOnOutputFile(result);
     }
 
     private void applyBufferAlgorithm() {
@@ -199,7 +209,6 @@ class SSDManager {
     public static void deleteBuffer() {
         File targetDir = new File(BUFFER_DIR);
 
-        // 1. 폴더 안의 모든 파일 및 하위 디렉토리 삭제
         if (targetDir.exists() && targetDir.isDirectory()) {
             deleteRecursively(targetDir);
         }
@@ -226,9 +235,8 @@ class SSDManager {
                 if (f.isDirectory()) {
                     deleteRecursively(f);
                 }
-                boolean delete = f.delete();
+                f.delete();
             }
         }
     }
-
 }

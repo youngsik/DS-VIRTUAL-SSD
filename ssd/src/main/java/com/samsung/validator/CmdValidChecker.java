@@ -1,9 +1,9 @@
 package com.samsung.validator;
 
-import com.samsung.CmdData;
-import com.samsung.CommandType;
+import com.samsung.ssd.CmdData;
+import com.samsung.ssd.CommandType;
 
-import static com.samsung.CommandType.ERROR;
+import static com.samsung.ssd.CommandType.ERROR;
 
 public class CmdValidChecker {
     public CmdData cmdValidCheckAndParsing(String[] cmdParam) {

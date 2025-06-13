@@ -1,11 +1,11 @@
 package com.samsung.validator;
 
-import com.samsung.CmdData;
+import com.samsung.ssd.CmdData;
 
-import static com.samsung.CommandType.ERROR;
-import static com.samsung.CommandType.WRITE;
-import static com.samsung.SSDConstant.ERROR_MESSAGE;
-import static com.samsung.SSDConstant.MAX_LBA;
+import static com.samsung.ssd.CommandType.ERROR;
+import static com.samsung.ssd.CommandType.WRITE;
+import static com.samsung.ssd.SSDConstant.ERROR_MESSAGE;
+import static com.samsung.ssd.SSDConstant.MAX_LBA;
 
 public class WriteCommandValidator implements CommandValidator {
     @Override

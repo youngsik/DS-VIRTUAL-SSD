@@ -1,10 +1,10 @@
 package com.samsung.validator;
 
-import com.samsung.CmdData;
+import com.samsung.ssd.CmdData;
 
-import static com.samsung.CommandType.ERASE;
-import static com.samsung.CommandType.ERROR;
-import static com.samsung.SSDConstant.*;
+import static com.samsung.ssd.CommandType.ERASE;
+import static com.samsung.ssd.CommandType.ERROR;
+import static com.samsung.ssd.SSDConstant.*;
 
 public class EraseCommandValidator implements CommandValidator {
     @Override

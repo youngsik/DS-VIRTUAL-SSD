@@ -1,7 +1,7 @@
 package com.samsung.buffer.handler;
 
 
-import com.samsung.CmdData;
+import com.samsung.ssd.CmdData;
 
 import java.util.Map;
 

@@ -1,11 +1,11 @@
 package com.samsung.buffer.handler;
 
-import com.samsung.CmdData;
+import com.samsung.ssd.CmdData;
 
 import java.util.List;
 import java.util.Map;
 
-import static com.samsung.CommandType.WRITE;
+import static com.samsung.ssd.CommandType.WRITE;
 
 public class WriteCommandHandler implements CommandHandler {
     private final List<CmdData> buffer;

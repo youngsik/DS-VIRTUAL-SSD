@@ -1,10 +1,10 @@
 package com.samsung.validator;
 
-import com.samsung.CmdData;
+import com.samsung.ssd.CmdData;
 
-import static com.samsung.CommandType.ERROR;
-import static com.samsung.CommandType.FLUSH;
-import static com.samsung.SSDConstant.ERROR_MESSAGE;
+import static com.samsung.ssd.CommandType.ERROR;
+import static com.samsung.ssd.CommandType.FLUSH;
+import static com.samsung.ssd.SSDConstant.ERROR_MESSAGE;
 
 public class FlushCommandValidator implements CommandValidator {
     @Override

@@ -1,8 +1,8 @@
 package com.samsung.buffer;
 
 
-import com.samsung.CmdData;
-import com.samsung.CommandType;
+import com.samsung.ssd.CmdData;
+import com.samsung.ssd.CommandType;
 import com.samsung.buffer.handler.CommandHandler;
 import com.samsung.buffer.handler.EraseCommandHandler;
 import com.samsung.buffer.handler.ReadCommandHandler;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.samsung.CommandType.*;
+import static com.samsung.ssd.CommandType.*;
 
 @Slf4j
 public class BufferProcessor {
@@ -36,5 +36,10 @@ public class BufferProcessor {
             log.error("Buffer 내 이상 데이터 발견: {}", cmd.getCommand());
         }
         return handler.handle(cmd);
+    }
+
+    public void clear(){
+        buffer.clear();
+        memory.clear();
     }
 }
