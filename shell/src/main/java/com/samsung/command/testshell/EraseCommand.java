@@ -1,6 +1,8 @@
 package com.samsung.command.testshell;
 
 import com.samsung.command.Command;
+import com.samsung.validator.ArgumentsValidator;
+import com.samsung.validator.CommandValidator;
 
 public class EraseCommand implements Command {
     private final TestShellManager testShellManager;
@@ -11,9 +13,7 @@ public class EraseCommand implements Command {
 
     @Override
     public void execute(String[] cmdArgs) {
-        if(cmdArgs.length != 3) {
-            throw new RuntimeException("INVALID COMMAND PARAMETER");
-        }
+        ArgumentsValidator.validateThreeArgs(cmdArgs);
 
         int eraseLBA;
         int eraseSize;
@@ -25,9 +25,7 @@ public class EraseCommand implements Command {
             throw new RuntimeException("INVALID ERASE START LOCATION");
         }
 
-        if(eraseLBA < 0 || eraseLBA > 99) {
-            throw new RuntimeException("INVALID ERASE START LOCATION");
-        }
+        CommandValidator.validateLbaRange(eraseLBA);
 
         testShellManager.erase(eraseLBA, eraseSize);
     }
