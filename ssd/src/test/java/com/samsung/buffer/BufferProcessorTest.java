@@ -483,14 +483,14 @@ class BufferProcessorTest {
     @DisplayName("Test 39: Buffer Verification Test 8: Erase followed by write survives")
     void bufferVerificationTest_8() {
         BufferProcessor processor = new BufferProcessor();
-        processor.process(new CmdData(WRITE, 5, "0xAAAA"));
-        processor.process(new CmdData(WRITE, 6, "0xBBBB"));
+        processor.process(new CmdData(WRITE, 5, "0x0000AAAA"));
+        processor.process(new CmdData(WRITE, 6, "0x0000BBBB"));
         processor.process(new CmdData(ERASE, 5, "2"));
-        processor.process(new CmdData(WRITE, 5, "0xCCCC"));
+        processor.process(new CmdData(WRITE, 5, "0x0000CCCC"));
 
         List<CmdData> expected = List.of(
                 new CmdData(ERASE, 5, "2"),
-                new CmdData(WRITE, 5, "0xCCCC")
+                new CmdData(WRITE, 5, "0x0000CCCC")
         );
 
         assertEquals(expected.size(), processor.getBuffer().size());
@@ -508,7 +508,7 @@ class BufferProcessorTest {
     void bufferVerificationTest_9() {
         BufferProcessor processor = new BufferProcessor();
         processor.process(new CmdData(ERASE, 1, "2"));
-        processor.process(new CmdData(WRITE, 2, "0x1234"));
+        processor.process(new CmdData(WRITE, 2, "0x00001234"));
         processor.process(new CmdData(ERASE, 2, "1"));
 
         List<CmdData> expected = List.of(
