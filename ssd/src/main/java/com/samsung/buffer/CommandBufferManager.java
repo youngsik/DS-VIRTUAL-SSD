@@ -32,7 +32,7 @@ public class CommandBufferManager {
         try {
             Files.createDirectories(bufferPath);
         } catch (IOException e) {
-            log.info("[createBufferDirectory] 파일 생성 오류");
+            log.error("[createBufferDirectory] 파일 생성 오류");
         }
     }
 
@@ -52,7 +52,7 @@ public class CommandBufferManager {
                 try {
                     file.createNewFile();
                 } catch (IOException e) {
-                    log.info("[createEmptyFiles] 파일 생성 오류");
+                    log.error("[createEmptyFiles] 파일 생성 오류");
                 }
             }
         }
@@ -98,7 +98,7 @@ public class CommandBufferManager {
         try {
             Files.move(oldFilePath, newFilePath);
         } catch (IOException e) {
-            log.info("[processCommand] 파일명 변경 오류");
+            log.error("[processCommand] 파일명 변경 오류");
         }
     }
 
