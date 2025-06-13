@@ -6,6 +6,8 @@ import com.samsung.validator.ArgumentsValidator;
 
 public class ReadCommand implements Command {
 
+    private static final int LBA_INDEX = 1;
+
     private final TestShellManager testShellManager;
 
     public ReadCommand(TestShellManager testShellManager) {
@@ -19,7 +21,7 @@ public class ReadCommand implements Command {
     }
 
     private Integer extractValidatedLba(String[] cmdArgs) {
-        return ArgumentResolver.resolveLba(cmdArgs[1]);
+        return ArgumentResolver.resolveLba(cmdArgs[LBA_INDEX]);
     }
 
 }

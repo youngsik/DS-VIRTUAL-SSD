@@ -6,6 +6,9 @@ import com.samsung.validator.ArgumentsValidator;
 
 public class EraseCommand implements Command {
 
+    private static final int LBA_INDEX = 1;
+    private static final int ERASE_SIZE_INDEX = 2;
+
     private final TestShellManager testShellManager;
 
     public EraseCommand(TestShellManager testShellManager) {
@@ -21,10 +24,10 @@ public class EraseCommand implements Command {
     }
 
     private Integer extractValidatedEraseLba(String[] cmdArgs) {
-        return ArgumentResolver.resolveLba(cmdArgs[1]);
+        return ArgumentResolver.resolveLba(cmdArgs[LBA_INDEX]);
     }
 
     private Integer extractValidatedEraseSize(String[] cmdArgs) {
-        return ArgumentResolver.toInt(cmdArgs[2]);
+        return ArgumentResolver.toInt(cmdArgs[ERASE_SIZE_INDEX]);
     }
 }

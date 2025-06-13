@@ -6,6 +6,8 @@ import com.samsung.validator.ArgumentsValidator;
 
 public class FullWriteCommand implements Command {
 
+    private static final int VALUE_INDEX = 1;
+
     private final TestShellManager testShellManager;
 
     public FullWriteCommand(TestShellManager testShellManager) {
@@ -19,6 +21,6 @@ public class FullWriteCommand implements Command {
     }
 
     private String extractValidatedValue(String[] cmdArgs) {
-        return ArgumentResolver.resolveValue(cmdArgs[1]);
+        return ArgumentResolver.resolveValue(cmdArgs[VALUE_INDEX]);
     }
 }

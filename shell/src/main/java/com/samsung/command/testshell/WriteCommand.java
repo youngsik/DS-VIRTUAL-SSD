@@ -6,6 +6,9 @@ import com.samsung.validator.ArgumentsValidator;
 
 public class WriteCommand implements Command {
 
+    private static final int LBA_INDEX = 1;
+    private static final int VALUE_INDEX = 2;
+
     private final TestShellManager testShellManager;
 
     public WriteCommand(TestShellManager testShellManager) {
@@ -21,10 +24,10 @@ public class WriteCommand implements Command {
     }
 
     private Integer extractValidatedLba(String[] cmdArgs) {
-        return ArgumentResolver.resolveLba(cmdArgs[1]);
+        return ArgumentResolver.resolveLba(cmdArgs[LBA_INDEX]);
     }
 
     private String extractValidatedValue(String[] cmdArgs) {
-        return ArgumentResolver.resolveValue(cmdArgs[2]);
+        return ArgumentResolver.resolveValue(cmdArgs[VALUE_INDEX]);
     }
 }

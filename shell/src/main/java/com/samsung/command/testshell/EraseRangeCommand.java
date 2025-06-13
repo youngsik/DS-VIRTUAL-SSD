@@ -6,6 +6,9 @@ import com.samsung.validator.ArgumentsValidator;
 
 public class EraseRangeCommand implements Command {
 
+    private static final int BEGIN_LBA_INDEX = 1;
+    private static final int END_LBA_INDEX = 2;
+
     private final TestShellManager testShellManager;
 
     public EraseRangeCommand(TestShellManager testShellManager) {
@@ -21,10 +24,10 @@ public class EraseRangeCommand implements Command {
     }
 
     private Integer extractValidatedBeginLba(String[] cmdArgs) {
-        return ArgumentResolver.resolveLba(cmdArgs[1]);
+        return ArgumentResolver.resolveLba(cmdArgs[BEGIN_LBA_INDEX]);
     }
 
     private Integer extractValidatedEndLba(String[] cmdArgs) {
-        return ArgumentResolver.resolveLba(cmdArgs[2]);
+        return ArgumentResolver.resolveLba(cmdArgs[END_LBA_INDEX]);
     }
 }
