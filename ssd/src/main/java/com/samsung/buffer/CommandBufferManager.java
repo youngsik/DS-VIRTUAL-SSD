@@ -75,7 +75,7 @@ public class CommandBufferManager {
                 String[] parts = fileName.split("_");
 
                 if (parts.length == 4) {
-                    String command = parts[SSDConstant.MIN_BUFFER_INDEX];
+                    String command = parts[1];
                     int lba = Integer.parseInt(parts[2]);
                     String value = parts[3].replace(".txt", "");
 
@@ -124,10 +124,11 @@ public class CommandBufferManager {
             ssdManager = new SSDManager(cmd, FileManager.getInstance(), new CommandBufferManager());
             ssdManager.cmdExecuteFromBuffer();
         }
-        deleteAndInitBuffer();
+        deleteFiles();
+        createEmptyFiles();  // 빈 파일 다시 생성
     }
 
-    public void deleteAndInitBuffer() {
+    public void deleteFiles() {
         File bufferDir = new File(BUFFER_DIR);
         File[] files = bufferDir.listFiles((dir, name) -> name.matches("\\d+_.+\\.txt"));
 
@@ -136,7 +137,6 @@ public class CommandBufferManager {
                 file.delete();
             }
         }
-        createEmptyFiles();  // 빈 파일 다시 생성
     }
 
     // buffer에 저장된 명령어들을 정리하는 함수
