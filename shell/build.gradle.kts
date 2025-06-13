@@ -8,6 +8,7 @@ group = "org.example"
 tasks {
     shadowJar {
         destinationDirectory = rootDir
+        archiveFileName = "shell.jar"
         manifest {
             attributes["Main-Class"] = "com.samsung.TestShellApplication"
         }
