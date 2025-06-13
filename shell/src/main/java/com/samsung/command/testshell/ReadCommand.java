@@ -15,10 +15,18 @@ public class ReadCommand implements Command {
     @Override
     public void execute(String[] cmdArgs) {
         ArgumentsValidator.validateTwoArgs(cmdArgs);
-        try {
-            Integer index = Integer.parseInt(cmdArgs[1]);
-            CommandValidator.validateLbaRange(index);
-            testShellManager.read(index);
+        testShellManager.read(extractValidatedLba(cmdArgs));
+    }
+
+    private Integer extractValidatedLba(String[] cmdArgs) {
+        Integer lba = toInt(cmdArgs[1]);
+        CommandValidator.validateLbaRange(lba);
+        return lba;
+    }
+
+    private Integer toInt(String arg) {
+        try{
+            return Integer.parseInt(arg);
         } catch (NumberFormatException e) {
             throw new RuntimeException("INVALID COMMAND");
         }
