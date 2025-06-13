@@ -34,7 +34,7 @@ public class SSDManager {
     public SSDManager(CmdData cmdData, FileManager fileManager, BufferProcessor bufferProcessor) {
         this.cmdData = cmdData;
         this.fileManager = fileManager;
-        this.bufferProcessor =  bufferProcessor;
+        this.bufferProcessor = bufferProcessor;
 
         createBufferDirectory();
         createEmptyFiles();
@@ -61,8 +61,7 @@ public class SSDManager {
     private void executeSingleCommand(CmdData cmd) {
         CommandType command = cmd.getCommand();
         switch (command) {
-            case ERROR -> fileErrorOutput();
-            case READ  -> handleRead(cmd);
+            case READ -> handleRead(cmd);
             case WRITE, ERASE -> executeCommandInBuffer(cmd);
             case FLUSH -> flush();
         }
@@ -94,14 +93,9 @@ public class SSDManager {
     private void fileErase(int startLba, int size) {
         int endLba = startLba + size;
         for (int currentLba = startLba; currentLba < endLba; currentLba++) {
-            if(currentLba > SSDConstant.MAX_LBA) break;
+            if (currentLba > SSDConstant.MAX_LBA) break;
             fileManager.writeFile(currentLba, SSDConstant.ERASE_VALUE);
         }
-    }
-
-    private void fileErrorOutput() {
-        fileManager.writeOnOutputFile(cmdData.getValue());
-        log.info("[fileErrorOutput] Error output 생성");
     }
 
     private void createBufferDirectory() {
@@ -198,7 +192,7 @@ public class SSDManager {
         return FULL_BUFFER;
     }
 
-    public void flush(){
+    public void flush() {
         List<CmdData> cmdDataList = loadCommandsFromBuffer();
 
         for (CmdData cmd : cmdDataList) {
