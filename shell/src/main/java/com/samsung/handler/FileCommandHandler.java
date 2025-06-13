@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class FileCommandHandler {
+public class FileCommandHandler implements CommandHandler {
 
     private final CommandInvoker commandInvoker;
 
@@ -14,7 +14,9 @@ public class FileCommandHandler {
         this.commandInvoker = commandInvoker;
     }
 
-    public void handle(String fileName) {
+    @Override
+    public void handle(String... args) {
+        String fileName = args[0];
         validatePrecondition(fileName);
         try {
             executeAllCommands(Files.readAllLines(Paths.get(fileName)));
