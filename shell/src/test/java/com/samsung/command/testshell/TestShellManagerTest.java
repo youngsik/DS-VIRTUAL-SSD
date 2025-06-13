@@ -45,7 +45,7 @@ class TestShellManagerTest {
     void testShellReadExecute() {
         testShellManager.read(INDEX);
 
-        verify(fileManager, times(1)).getResultFromOutputFile();
+        verify(fileManager, times(1)).getResultFromOutputFile(anyLong());
     }
 
     @Test
@@ -54,7 +54,7 @@ class TestShellManagerTest {
         int index = INDEX;
         String value = "0xFFFFFFFF";
         String expected = "[Read] LBA 03 "+ value;
-        when(fileManager.getResultFromOutputFile()).thenReturn(value);
+        when(fileManager.getResultFromOutputFile(anyLong())).thenReturn(value);
 
         testShellManager.read(index);
 
@@ -118,13 +118,13 @@ class TestShellManagerTest {
             fakeData.add("0x00000000");
         }
 
-        when(fileManager.getResultFromOutputFile()).thenReturn(fakeData.get(0))
+        when(fileManager.getResultFromOutputFile(anyLong())).thenReturn(fakeData.get(0))
                 .thenReturn(fakeData.get(1))
                 .thenReturn(fakeData.get(2));
 
         testShellManager.fullread();
 
-        verify(fileManager, times(100)).getResultFromOutputFile();
+        verify(fileManager, times(100)).getResultFromOutputFile(anyLong());
 
         String[] outputLines = outContent.toString().trim().split("\n");
         assertThat(outputLines).hasSize(100);
