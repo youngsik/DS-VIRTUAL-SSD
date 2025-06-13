@@ -1,5 +1,6 @@
 package com.samsung;
 
+import com.samsung.buffer.CommandBufferManager;
 import com.samsung.file.FileManager;
 
 public class SSDManager {
@@ -8,14 +9,23 @@ public class SSDManager {
     private String value = "";
     private final FileManager fileManager;
 
-    public SSDManager(String command, int lba, String value) {
-        this.command = command;
-        this.lba = lba;
-        this.value = value;
+    public SSDManager(CmdData cmdData) {
+        this.command = cmdData.getCommand();
+        this.lba = cmdData.getLba();
+        this.value = cmdData.getValue();
         this.fileManager = FileManager.getInstance();
     }
 
     public void cmdExecute() {
+        if (command.equals(SSDConstant.COMMAND_ERROR)) fileErrorOutput();
+        else if (command.equals(SSDConstant.COMMAND_READ)) fileManager.readFile(lba);
+        else if (command.equals(SSDConstant.COMMAND_WRITE) || command.equals(SSDConstant.COMMAND_ERASE)) {
+            CommandBufferManager commandBufferManager = new CommandBufferManager();
+            commandBufferManager.processCommand(command, lba, value);
+        }
+    }
+
+    public void cmdExecuteFromBuffer() {
         if (command.equals(SSDConstant.COMMAND_ERROR)) fileErrorOutput();
         else if (command.equals(SSDConstant.COMMAND_READ)) fileManager.readFile(lba);
         else if (command.equals(SSDConstant.COMMAND_WRITE)) fileManager.writeFile(lba, value);

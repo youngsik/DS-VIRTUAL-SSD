@@ -14,7 +14,7 @@ import java.util.Arrays;
 public class CommandBufferManager {
 
     private static final String BUFFER_DIR = "./ssd/buffer";
-    private CmdData[] commandBuffer = new CmdData[SSDConstant.MAX_BUFFER_NUMBER];
+    private CmdData[] commandBuffers = new CmdData[SSDConstant.MAX_BUFFER_NUMBER];
 
     public CommandBufferManager() {
         createBufferDirectory();
@@ -64,7 +64,7 @@ public class CommandBufferManager {
         File bufferDir = new File(BUFFER_DIR);
         File[] files = bufferDir.listFiles((dir, name) -> name.matches("\\d+_.+\\.txt"));
 
-        Arrays.fill(commandBuffer, null);
+        Arrays.fill(commandBuffers, null);
 
         int index = 0;
         if (files != null) {
@@ -81,11 +81,11 @@ public class CommandBufferManager {
                     int lba = Integer.parseInt(parts[2]);
                     String value = parts[3].replace(".txt", "");
 
-                    commandBuffer[index++] = new CmdData(command, lba, value);
+                    commandBuffers[index++] = new CmdData(command, lba, value);
                 }
             }
         }
-        for (CmdData cmd : commandBuffer) {
+        for (CmdData cmd : commandBuffers) {
             if (cmd != null) {
                 System.out.println(cmd);
             }
@@ -124,23 +124,20 @@ public class CommandBufferManager {
     }
 
     public void flushToFile(){
-        File bufferDir = new File(BUFFER_DIR);
-        File[] files = bufferDir.listFiles((dir, name) -> name.matches("\\d+_.+\\.txt"));
+        loadCommandsFromBuffer();
         SSDManager ssdManager;
 
-        for(File file : files){
-            String[] commandList = file.getName().split("_");
-            String command = commandList[SSDConstant.MIN_BUFFER_NUMBER];
-            int lba = Integer.parseInt(commandList[2]);
-            String value = commandList[3];
-
-            ssdManager = new SSDManager(command, lba, value);
-            ssdManager.cmdExecute();
+        for(CmdData commandBuffer : commandBuffers){
+            ssdManager = new SSDManager(commandBuffer);
+            ssdManager.cmdExecuteFromBuffer();
         }
-        deleteAndInitBuffer(files);
+        deleteAndInitBuffer();
     }
 
-    public void deleteAndInitBuffer(File[] files) {
+    public void deleteAndInitBuffer() {
+        File bufferDir = new File(BUFFER_DIR);
+        File[] files = bufferDir.listFiles((dir, name) -> name.matches("\\d+_.+\\.txt"));
+
         if (files != null) {
             for (File file : files) {
                 file.delete();
@@ -164,7 +161,7 @@ public class CommandBufferManager {
         flushToFile();
 
         // 정리된 명령어 배열에서 다시 저장
-        for (CmdData cmd : commandBuffer) {
+        for (CmdData cmd : commandBuffers) {
             if (cmd != null) {
                 processCommand(cmd.getCommand(), cmd.getLba(), cmd.getValue());
             }
