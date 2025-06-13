@@ -1,5 +1,6 @@
 package com.samsung.ssd;
 
+import com.samsung.buffer.BufferFolderManager;
 import com.samsung.buffer.BufferProcessor;
 import com.samsung.common.CmdData;
 import com.samsung.common.CommandType;
@@ -27,6 +28,7 @@ public class SSDManager {
     private CmdData cmdData;
     private final FileManager fileManager;
     private final BufferProcessor bufferProcessor;
+    private final BufferFolderManager bufferFolderManager;
 
     private static final String BUFFER_DIR = "./buffer";
     private final CmdData[] commandBuffer = new CmdData[SSDConstant.MAX_BUFFER_INDEX];
@@ -35,9 +37,7 @@ public class SSDManager {
         this.cmdData = cmdData;
         this.fileManager = fileManager;
         this.bufferProcessor = bufferProcessor;
-
-        createBufferDirectory();
-        createEmptyFiles();
+        this.bufferFolderManager = new BufferFolderManager();
 
         applyBufferAlgorithm();
     }
@@ -83,7 +83,7 @@ public class SSDManager {
 
         List<CmdData> calculatedCmdList = bufferProcessor.getBuffer();
 
-        deleteBuffer();
+        bufferFolderManager.deleteBuffer();
 
         for (CmdData command : calculatedCmdList) {
             executeCommandInBuffer(command);
@@ -95,39 +95,6 @@ public class SSDManager {
         for (int currentLba = startLba; currentLba < endLba; currentLba++) {
             if (currentLba > SSDConstant.MAX_LBA) break;
             fileManager.writeFile(currentLba, SSDConstant.ERASE_VALUE);
-        }
-    }
-
-    private void createBufferDirectory() {
-        Path bufferPath = Paths.get(BUFFER_DIR);
-        if (Files.exists(bufferPath)) return;
-
-        try {
-            Files.createDirectories(bufferPath);
-        } catch (IOException e) {
-            log.error("[createBufferDirectory] 파일 생성 오류");
-        }
-    }
-
-    private void createEmptyFiles() {
-        File bufferDir = new File(BUFFER_DIR);
-        File[] files = bufferDir.listFiles((dir, name) -> name.endsWith(".txt"));
-
-        if (files != null && files.length >= SSDConstant.MAX_BUFFER_INDEX) {
-            return;
-        }
-
-        for (int i = SSDConstant.MIN_BUFFER_INDEX; i <= SSDConstant.MAX_BUFFER_INDEX; i++) {
-            Path filePath = Paths.get(BUFFER_DIR, i + "_empty.txt");
-            File file = filePath.toFile();
-
-            if (!file.exists()) {
-                try {
-                    file.createNewFile();
-                } catch (IOException e) {
-                    log.error("[createEmptyFiles] 파일 생성 오류");
-                }
-            }
         }
     }
 
@@ -201,40 +168,6 @@ public class SSDManager {
             else if (command.equals(ERASE)) fileErase(cmd.getLba(), Integer.parseInt(cmd.getValue()));
         }
 
-        deleteBuffer();
-    }
-
-    public static void deleteBuffer() {
-        File targetDir = new File(BUFFER_DIR);
-
-        if (targetDir.exists() && targetDir.isDirectory()) {
-            deleteRecursively(targetDir);
-        }
-
-        // 2. 폴더 다시 생성
-        targetDir.mkdirs();
-
-        // 3. 빈 파일 5개 생성
-        for (int i = 1; i <= 5; i++) {
-            File emptyFile = new File(targetDir, i + "_empty.txt");
-            try {
-                emptyFile.createNewFile();  // 이미 존재하지 않는다는 전제
-            } catch (IOException e) {
-                System.err.println("파일 생성 실패: " + emptyFile.getName());
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private static void deleteRecursively(File file) {
-        File[] contents = file.listFiles();
-        if (contents != null) {
-            for (File f : contents) {
-                if (f.isDirectory()) {
-                    deleteRecursively(f);
-                }
-                f.delete();
-            }
-        }
+        bufferFolderManager.deleteBuffer();
     }
 }
