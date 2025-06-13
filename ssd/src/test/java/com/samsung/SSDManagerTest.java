@@ -19,13 +19,13 @@ public class SSDManagerTest {
     FileManager fileManager;
 
     @InjectMocks
-    SSDManager writeSsdManager = new SSDManager("W", LBA, WRITE_VALUE);
+    SSDManager writeSsdManager = new SSDManager(new CmdData("W", LBA, WRITE_VALUE));
     @InjectMocks
-    SSDManager readSsdManager = new SSDManager("R", LBA, WRITE_VALUE);
+    SSDManager readSsdManager = new SSDManager(new CmdData("R", LBA, WRITE_VALUE));
     @InjectMocks
-    SSDManager invalidValueSsdManager = new SSDManager(ERROR_VALUE, -1, ERROR_VALUE);
+    SSDManager invalidValueSsdManager = new SSDManager(new CmdData(ERROR_VALUE, -1, ERROR_VALUE));
     @InjectMocks
-    SSDManager eraseSsdManager = new SSDManager("E", 0, "9");
+    SSDManager eraseSsdManager = new SSDManager(new CmdData("E", 0, "9"));
 
     @Test
     @DisplayName("읽기 테스트")
