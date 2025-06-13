@@ -1,8 +1,8 @@
 package com.samsung.command.testshell;
 
+import com.samsung.command.ArgumentResolver;
 import com.samsung.command.Command;
 import com.samsung.validator.ArgumentsValidator;
-import com.samsung.validator.CommandValidator;
 
 public class WriteCommand implements Command {
 
@@ -21,23 +21,10 @@ public class WriteCommand implements Command {
     }
 
     private Integer extractValidatedLba(String[] cmdArgs) {
-        Integer lba = toInt(cmdArgs[1]);
-        CommandValidator.validateLbaRange(lba);
-        return lba;
+        return ArgumentResolver.resolveLba(cmdArgs[1]);
     }
 
     private String extractValidatedValue(String[] cmdArgs) {
-        String value = cmdArgs[2];
-        CommandValidator.validateNull(value);
-        CommandValidator.validateValueFormat(value);
-        return value;
-    }
-
-    private Integer toInt(String arg) {
-        try{
-            return Integer.parseInt(arg);
-        } catch (NumberFormatException e) {
-            throw new RuntimeException("INVALID COMMAND");
-        }
+        return ArgumentResolver.resolveValue(cmdArgs[2]);
     }
 }

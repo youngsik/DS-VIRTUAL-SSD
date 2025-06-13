@@ -1,8 +1,8 @@
 package com.samsung.command.testshell;
 
+import com.samsung.command.ArgumentResolver;
 import com.samsung.command.Command;
 import com.samsung.validator.ArgumentsValidator;
-import com.samsung.validator.CommandValidator;
 
 public class EraseCommand implements Command {
 
@@ -21,21 +21,10 @@ public class EraseCommand implements Command {
     }
 
     private Integer extractValidatedEraseLba(String[] cmdArgs) {
-        Integer eraseLBA = toInt(cmdArgs[1]);
-        CommandValidator.validateLbaRange(eraseLBA);
-        return eraseLBA;
+        return ArgumentResolver.resolveLba(cmdArgs[1]);
     }
 
     private Integer extractValidatedEraseSize(String[] cmdArgs) {
-        Integer eraseSize = toInt(cmdArgs[2]);
-        return eraseSize;
-    }
-
-    private Integer toInt(String arg) {
-        try{
-            return Integer.parseInt(arg);
-        } catch (NumberFormatException e) {
-            throw new RuntimeException("INVALID COMMAND");
-        }
+        return ArgumentResolver.toInt(cmdArgs[2]);
     }
 }

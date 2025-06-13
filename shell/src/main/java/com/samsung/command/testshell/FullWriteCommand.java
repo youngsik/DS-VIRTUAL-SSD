@@ -1,8 +1,8 @@
 package com.samsung.command.testshell;
 
+import com.samsung.command.ArgumentResolver;
 import com.samsung.command.Command;
 import com.samsung.validator.ArgumentsValidator;
-import com.samsung.validator.CommandValidator;
 
 public class FullWriteCommand implements Command {
 
@@ -19,9 +19,6 @@ public class FullWriteCommand implements Command {
     }
 
     private String extractValidatedValue(String[] cmdArgs) {
-        String value = cmdArgs[1];
-        CommandValidator.validateNull(value);
-        CommandValidator.validateValueFormat(value);
-        return value;
+        return ArgumentResolver.resolveValue(cmdArgs[1]);
     }
 }

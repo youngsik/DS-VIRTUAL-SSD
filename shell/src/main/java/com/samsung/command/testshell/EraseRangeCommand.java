@@ -1,7 +1,8 @@
 package com.samsung.command.testshell;
+
+import com.samsung.command.ArgumentResolver;
 import com.samsung.command.Command;
 import com.samsung.validator.ArgumentsValidator;
-import com.samsung.validator.CommandValidator;
 
 public class EraseRangeCommand implements Command {
 
@@ -20,24 +21,10 @@ public class EraseRangeCommand implements Command {
     }
 
     private Integer extractValidatedBeginLba(String[] cmdArgs) {
-        Integer beginLBA = toInt(cmdArgs[1]);
-        CommandValidator.validateLbaRange(beginLBA);
-        return beginLBA;
+        return ArgumentResolver.resolveLba(cmdArgs[1]);
     }
 
     private Integer extractValidatedEndLba(String[] cmdArgs) {
-        Integer endLba = toInt(cmdArgs[2]);
-        CommandValidator.validateLbaRange(endLba);
-        return endLba;
+        return ArgumentResolver.resolveLba(cmdArgs[2]);
     }
-
-
-    private Integer toInt(String arg) {
-        try{
-            return Integer.parseInt(arg);
-        } catch (NumberFormatException e) {
-            throw new RuntimeException("INVALID COMMAND");
-        }
-    }
-
 }
