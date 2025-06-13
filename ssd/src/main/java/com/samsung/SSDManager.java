@@ -8,7 +8,7 @@ class SSDManager {
 
     public SSDManager(CmdData newCmdData) {
         this.cmdData = newCmdData;
-        this.fileManager = new FileManager();
+        this.fileManager = FileManager.getInstance();
     }
 
     public void cmdExecute() {
