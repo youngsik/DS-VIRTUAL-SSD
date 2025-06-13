@@ -7,6 +7,7 @@ import com.samsung.validator.CmdValidChecker;
 class Main {
     public static void main(String[] args) {
         CmdData cmdData = getCmdData(args);
+        if (cmdData == null) return;
         run(cmdData);
     }
 
