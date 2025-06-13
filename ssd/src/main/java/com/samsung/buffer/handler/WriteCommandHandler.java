@@ -34,7 +34,6 @@ public class WriteCommandHandler implements CommandHandler {
         int eLen = Integer.parseInt(erase.getValue());
         int wLba = write.getLba();
 
-        // 지우는 범위가 write와 딱 한 칸만 겹쳐야 함
         return eStart == wLba && eLen == 1;
     }
 }
