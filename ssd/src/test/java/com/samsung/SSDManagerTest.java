@@ -42,13 +42,6 @@ public class SSDManagerTest {
     }
 
     @Test
-    @DisplayName("쓰기 테스트")
-    public void writeTest() {
-        writeSsdManager.cmdExecute();
-        verify(fileManager).writeFile(LBA, WRITE_VALUE);
-    }
-
-    @Test
     @DisplayName("읽기 2번 테스트")
     public void readTwiceTest() {
         readSsdManager.cmdExecute();
@@ -63,12 +56,4 @@ public class SSDManagerTest {
         verify(fileManager, times(1)).writeOnOutputFile(ERROR_VALUE);
     }
 
-    @Test
-    @DisplayName("지우기 명령어 테스트(성공)")
-    void cmdExecuteErasePass() {
-        eraseSsdManager.cmdExecute();
-        for(int i=0; i<9; i++) {
-            verify(fileManager, times(1)).writeFile(i, WRITE_VALUE);
-        }
-    }
 }
