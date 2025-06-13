@@ -10,20 +10,20 @@ import java.util.List;
 
 import static com.samsung.file.FileConstants.*;
 
-public class FileManager {
+public class FileManager implements FileManagerInterface{
 
-    private static volatile FileManager instance;
+    private static volatile FileManagerInterface instance;
 
     private FileManager() {
         resetNandFile();
     }
 
-    public static FileManager getInstance(){
+    public static FileManagerInterface getInstance(){
         if (instance == null) {
-            synchronized (FileManager.class) {
+            synchronized (FileManagerInterface.class) {
                 if (instance == null) {
                     instance = new FileManager();
-                    instance = (FileManager) Proxy.newProxyInstance(
+                    instance = (FileManagerInterface) Proxy.newProxyInstance(
                             instance.getClass().getClassLoader(),
                             instance.getClass().getInterfaces(),
                             new ExceptionHandlingProxy(instance)

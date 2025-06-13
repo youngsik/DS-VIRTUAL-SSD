@@ -1,6 +1,7 @@
 package com.samsung;
 
 import com.samsung.file.FileManager;
+import com.samsung.file.FileManagerInterface;
 import com.samsung.validator.CmdValidChecker;
 
 class Main {
