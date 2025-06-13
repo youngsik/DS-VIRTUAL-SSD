@@ -40,7 +40,8 @@ class SSDManager {
     public void cmdExecuteFromBuffer() {
         executeSingleCommand(cmdData);
 
-        if (cmdData.getCommand().equals(READ)) return;
+        if (cmdData.getCommand().equals(READ)
+                || cmdData.getCommand().equals(FLUSH)) return;
         applyBufferAlgorithm();
     }
 
@@ -70,7 +71,6 @@ class SSDManager {
         List<CmdData> calculatedCmdList = bufferProcessor.getBuffer();
 
         deleteBuffer();
-        createEmptyFiles();
 
         for (CmdData command : calculatedCmdList) {
             executeCommandInBuffer(command);
@@ -194,17 +194,41 @@ class SSDManager {
         }
 
         deleteBuffer();
-        createEmptyFiles();
     }
 
-    public void deleteBuffer() {
-        File bufferDir = new File(BUFFER_DIR);
-        File[] files = bufferDir.listFiles((dir, name) -> name.matches("\\d+_.+\\.txt"));
+    public static void deleteBuffer() {
+        File targetDir = new File(BUFFER_DIR);
 
-        if (files != null) {
-            for (File file : files) {
-                file.delete();
+        // 1. 폴더 안의 모든 파일 및 하위 디렉토리 삭제
+        if (targetDir.exists() && targetDir.isDirectory()) {
+            deleteRecursively(targetDir);
+        }
+
+        // 2. 폴더 다시 생성
+        targetDir.mkdirs();
+
+        // 3. 빈 파일 5개 생성
+        for (int i = 1; i <= 5; i++) {
+            File emptyFile = new File(targetDir, i + "_empty.txt");
+            try {
+                emptyFile.createNewFile();  // 이미 존재하지 않는다는 전제
+            } catch (IOException e) {
+                System.err.println("파일 생성 실패: " + emptyFile.getName());
+                e.printStackTrace();
             }
         }
     }
+
+    private static void deleteRecursively(File file) {
+        File[] contents = file.listFiles();
+        if (contents != null) {
+            for (File f : contents) {
+                if (f.isDirectory()) {
+                    deleteRecursively(f);
+                }
+                boolean delete = f.delete();
+            }
+        }
+    }
+
 }
