@@ -16,7 +16,7 @@ class Main {
     }
 
     public static void run(CmdData cmdData) {
-        SSDManager ssdManager = new SSDManager(cmdData, FileManager.getInstance(), new CommandBufferManager());
+        SSDManager ssdManager = new SSDManager(cmdData, FileManager.getInstance());
         ssdManager.cmdExecute();
     }
 

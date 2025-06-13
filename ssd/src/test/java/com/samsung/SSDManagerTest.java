@@ -11,6 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.nio.file.Files;
+
 @ExtendWith(MockitoExtension.class)
 public class SSDManagerTest {
     public static final int LBA = 0;
@@ -21,9 +23,6 @@ public class SSDManagerTest {
     @Mock
     FileManager fileManager;
 
-    @Mock
-    CommandBufferManager commandBufferManager;
-
     SSDManager writeSsdManager;
     SSDManager readSsdManager;
     SSDManager invalidValueSsdManager;
@@ -31,10 +30,10 @@ public class SSDManagerTest {
 
     @BeforeEach
     void setUp() {
-        writeSsdManager = new SSDManager(new CmdData("W", LBA, WRITE_VALUE), fileManager, commandBufferManager);
-        readSsdManager = new SSDManager(new CmdData("R", LBA, WRITE_VALUE), fileManager, commandBufferManager);
-        invalidValueSsdManager = new SSDManager(new CmdData(ERROR_VALUE, -1, ERROR_VALUE), fileManager, commandBufferManager);
-        eraseSsdManager = new SSDManager(new CmdData("E", 0, "9"), fileManager, commandBufferManager);
+        writeSsdManager = new SSDManager(new CmdData("W", LBA, WRITE_VALUE), fileManager);
+        readSsdManager = new SSDManager(new CmdData("R", LBA, WRITE_VALUE), fileManager);
+        invalidValueSsdManager = new SSDManager(new CmdData(ERROR_VALUE, -1, ERROR_VALUE), fileManager);
+        eraseSsdManager = new SSDManager(new CmdData("E", 0, "9"), fileManager);
     }
 
 
@@ -43,13 +42,6 @@ public class SSDManagerTest {
     public void readTest() {
         readSsdManager.cmdExecute();
         verify(fileManager, times(1)).readFile(LBA);
-    }
-
-    @Test
-    @DisplayName("쓰기 테스트")
-    public void writeTest() {
-        writeSsdManager.cmdExecute();
-        verify(commandBufferManager, times(1)).processCommand("W", LBA, WRITE_VALUE);
     }
 
     @Test
@@ -67,10 +59,4 @@ public class SSDManagerTest {
         verify(fileManager, times(1)).writeOnOutputFile(ERROR_VALUE);
     }
 
-    @Test
-    @DisplayName("지우기 명령어 테스트(성공)")
-    void cmdExecuteErasePass() {
-        eraseSsdManager.cmdExecute();
-        verify(commandBufferManager, times(1)).processCommand("E", LBA, "9");
-    }
 }
