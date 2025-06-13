@@ -1,5 +1,6 @@
 package com.samsung.validator;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -11,16 +12,19 @@ class CommandValidatorTest {
     public static final String[] NOT_NULL_OBJECT = {};
     public static final Object NULL_OBJECT = null;
 
+    @DisplayName("NULL 체크 PASS 테스트")
     @Test
     void validateNull_PassTest() {
         assertDoesNotThrow(() -> CommandValidator.validateNull(NOT_NULL_OBJECT));
     }
 
+    @DisplayName("NULL 체크 FAIL 테스트")
     @Test
     void validateNull_FailTest() {
         assertThrows(RuntimeException.class, () -> CommandValidator.validateNull(NULL_OBJECT));
     }
 
+    @DisplayName("Value 포맷 체크 PASS 테스트")
     @ParameterizedTest
     @ValueSource(strings = {
             "0x12345678",
@@ -32,6 +36,7 @@ class CommandValidatorTest {
         assertDoesNotThrow(() -> CommandValidator.validateValueFormat(value));
     }
 
+    @DisplayName("Value 포맷 체크 FAIL 테스트")
     @ParameterizedTest(name = "Invalid value format: {0}")
     @ValueSource(strings = {
             "1A2B3C4D",
@@ -51,12 +56,14 @@ class CommandValidatorTest {
         assertThrows(RuntimeException.class, () -> CommandValidator.validateValueFormat(value));
     }
 
+    @DisplayName("LBA 범위 체크 PASS 테스트")
     @ParameterizedTest(name = "Valid LBA: {0}")
     @ValueSource(ints = {0, 1, 50, 98, 99})
     void validateLbaRange_PassCases(int lba) {
         assertDoesNotThrow(() -> CommandValidator.validateLbaRange(lba));
     }
 
+    @DisplayName("LBA 범위 체크 FAIL 테스트")
     @ParameterizedTest(name = "Invalid LBA: {0}")
     @ValueSource(ints = {-100, -1, 100, 101, Integer.MAX_VALUE, Integer.MIN_VALUE})
     void validateLbaRange_FailCases(int lba) {
