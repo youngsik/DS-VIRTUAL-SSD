@@ -1,7 +1,7 @@
 package com.samsung;
 
 import com.samsung.handler.CommandHandler;
-import com.samsung.handler.CommandHandlerFactory;
+import com.samsung.handler.factory.CommandHandlerFactory;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

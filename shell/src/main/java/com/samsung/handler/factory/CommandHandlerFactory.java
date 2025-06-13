@@ -1,6 +1,9 @@
-package com.samsung.handler;
+package com.samsung.handler.factory;
 
 import com.samsung.command.CommandInvoker;
+import com.samsung.handler.CommandHandler;
+import com.samsung.handler.impl.FileCommandHandler;
+import com.samsung.handler.impl.InteractiveCommandHandler;
 
 import java.util.HashMap;
 

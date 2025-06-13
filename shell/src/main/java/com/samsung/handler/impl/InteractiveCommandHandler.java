@@ -1,6 +1,7 @@
-package com.samsung.handler;
+package com.samsung.handler.impl;
 
 import com.samsung.command.CommandInvoker;
+import com.samsung.handler.CommandHandler;
 
 import java.util.Scanner;
 

@@ -1,4 +1,4 @@
-package com.samsung.handler;
+package com.samsung.handler.impl;
 
 import com.samsung.command.CommandInvoker;
 import org.junit.jupiter.api.DisplayName;
