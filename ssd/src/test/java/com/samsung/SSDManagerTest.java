@@ -29,7 +29,7 @@ public class SSDManagerTest {
     void setUp() {
         writeSsdManager = new SSDManager(new CmdData(WRITE, LBA, WRITE_VALUE), fileManager);
         readSsdManager = new SSDManager(new CmdData(READ, LBA, WRITE_VALUE), fileManager);
-        invalidValueSsdManager = new SSDManager(new CmdData(ERROR, -1, ERROR_VALUE), fileManager);
+        //invalidValueSsdManager = new SSDManager(new CmdData(ERROR, -1, ERROR_VALUE), fileManager);
         eraseSsdManager = new SSDManager(new CmdData(ERASE, 0, "9"), fileManager);
     }
 

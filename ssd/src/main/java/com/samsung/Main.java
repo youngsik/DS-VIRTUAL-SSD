@@ -6,13 +6,20 @@ import com.samsung.validator.CmdValidChecker;
 
 class Main {
     public static void main(String[] args) {
-        CmdData cmdData = cmdValidCheck(args);
+        CmdData cmdData = getCmdData(args);
         run(cmdData);
     }
 
-    public static CmdData cmdValidCheck(String[] args) {
-        CmdValidChecker cmdValidChecker = new CmdValidChecker();
-        return cmdValidChecker.cmdValidCheckAndParsing(args);
+    public static CmdData getCmdData(String[] args) {
+        CmdData cmdData = null;
+        try {
+            CmdValidChecker cmdValidChecker = new CmdValidChecker();
+            cmdData = cmdValidChecker.cmdValidCheckAndParsing(args);
+        }catch (RuntimeException e){
+            FileManagerInterface fileManager = FileManager.getInstance();
+            fileManager.writeOnOutputFile("ERROR");
+        }
+        return cmdData;
     }
 
     public static void run(CmdData cmdData) {

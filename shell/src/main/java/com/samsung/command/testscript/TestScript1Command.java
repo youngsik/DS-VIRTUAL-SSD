@@ -1,7 +1,7 @@
 package com.samsung.command.testscript;
 
 import com.samsung.command.Command;
-import com.samsung.command.support.CommandValidator;
+import com.samsung.support.CommandValidator;
 
 public class TestScript1Command implements Command {
     private final ScriptManager scriptManager;

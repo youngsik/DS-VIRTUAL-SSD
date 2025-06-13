@@ -30,15 +30,13 @@ class SSDManager {
     }
 
     public void cmdExecute() {
-        if (cmdData.getCommand().equals(ERROR)) fileErrorOutput();
-        else if (cmdData.getCommand().equals(READ)) fileManager.readFile(cmdData.getLba());
+        if (cmdData.getCommand().equals(READ)) fileManager.readFile(cmdData.getLba());
         else if (cmdData.getCommand().equals(WRITE)) fileManager.writeFile(cmdData.getLba(), cmdData.getValue());
         else if (cmdData.getCommand().equals(ERASE)) fileErase(cmdData.getLba(), Integer.parseInt(cmdData.getValue()));
     }
 
     public void cmdExecuteFromBuffer() {
-        if (cmdData.getCommand().equals(ERROR)) fileErrorOutput();
-        else if (cmdData.getCommand().equals(READ)) fileManager.readFile(cmdData.getLba());
+        if (cmdData.getCommand().equals(READ)) fileManager.readFile(cmdData.getLba());
         else if (cmdData.getCommand().equals(WRITE)) fileManager.writeFile(cmdData.getLba(), cmdData.getValue());
         else if (cmdData.getCommand().equals(ERASE)) fileErase(cmdData.getLba(), Integer.parseInt(cmdData.getValue()));
     }

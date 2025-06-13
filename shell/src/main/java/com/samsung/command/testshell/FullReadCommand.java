@@ -1,7 +1,7 @@
 package com.samsung.command.testshell;
 
 import com.samsung.command.Command;
-import com.samsung.command.support.CommandValidator;
+import com.samsung.support.CommandValidator;
 
 public class FullReadCommand implements Command {
 

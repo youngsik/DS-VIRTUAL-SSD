@@ -7,24 +7,23 @@ import java.util.Arrays;
 
 @Getter
 public enum CommandType {
-    WRITE("W", new WriteCommandValidator()),
-    ERASE("E", new EraseCommandValidator()),
-    READ("R", new ReadCommandValidator()),
-    FLUSH("F", new FlushCommandValidator()),
-    ERROR("ERROR", null);
+    WRITE("W", new WriteCMDValidatorInterface()),
+    ERASE("E", new EraseCMDValidatorInterface()),
+    READ("R", new ReadCMDValidatorInterface()),
+    FLUSH("F", new FlushCMDValidatorInterface());
 
     private final String code;
-    private final CommandValidator commandValidator;
+    private final CMDValidatorInterface CMDValidatorInterface;
 
-    CommandType(String code, CommandValidator commandValidator) {
+    CommandType(String code, CMDValidatorInterface CMDValidatorInterface) {
         this.code = code;
-        this.commandValidator = commandValidator;
+        this.CMDValidatorInterface = CMDValidatorInterface;
     }
 
     public static CommandType fromCode(String code) {
         return Arrays.stream(values())
                 .filter(c -> c.code.equals(code))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Unknown command: " + code));
+                .orElseThrow(RuntimeException::new);
     }
 }

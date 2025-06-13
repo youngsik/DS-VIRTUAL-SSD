@@ -1,5 +1,6 @@
 package com.samsung.command.support;
 
+import com.samsung.support.CommandValidator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
