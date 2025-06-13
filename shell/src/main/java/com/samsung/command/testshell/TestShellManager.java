@@ -1,7 +1,6 @@
 package com.samsung.command.testshell;
 
 import com.samsung.file.FileManager;
-import com.samsung.file.FileManagerInterface;
 import com.samsung.file.JarExecutor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -9,9 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 public class TestShellManager {
 
     private final JarExecutor jarExecutor;
-    private final FileManagerInterface fileManager;
+    private final FileManager fileManager;
 
-    public TestShellManager(JarExecutor jarExecutor, FileManagerInterface fileManager) {
+    public TestShellManager(JarExecutor jarExecutor, FileManager fileManager) {
         this.jarExecutor = jarExecutor;
         this.fileManager = fileManager;
     }
