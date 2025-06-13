@@ -1,8 +1,10 @@
 package com.samsung.command.testshell;
 
 import com.samsung.command.Command;
+import com.samsung.validator.ArgumentsValidator;
 
 public class FlushCommand implements Command {
+
     private final TestShellManager testShellManager;
 
     public FlushCommand(TestShellManager testShellManager) {
@@ -11,10 +13,7 @@ public class FlushCommand implements Command {
 
     @Override
     public void execute(String[] cmdArgs) {
-        if(cmdArgs.length != 1) {
-            throw new RuntimeException("FLUSH COMMAND ERROR");
-        }
-
+        ArgumentsValidator.validateOneArgs(cmdArgs);
         testShellManager.flush();
     }
 }
