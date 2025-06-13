@@ -37,8 +37,8 @@ public class JarExecutor {
             pb.inheritIO();
             pb.start();
 
-            Thread.sleep(DEFAULT_WAIT_MILLIS);
-        } catch (IOException | InterruptedException e) {
+            // Thread.sleep(DEFAULT_WAIT_MILLIS);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
