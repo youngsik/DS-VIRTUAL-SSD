@@ -9,8 +9,6 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class JarExecutor {
-    private static final int DEFAULT_WAIT_MILLIS = 500;
-
     public void executeRead(Integer lba) {
         executeCommand("R", String.valueOf(lba));
     }
@@ -44,7 +42,6 @@ public class JarExecutor {
 
             pb.start().waitFor(1000L, TimeUnit.MILLISECONDS);
 
-            // Thread.sleep(DEFAULT_WAIT_MILLIS);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
