@@ -10,15 +10,12 @@ import java.util.HashMap;
 @Slf4j
 public class TestShellApplication {
     public static void main(String[] args) {
-        CommandInvoker commandInvoker = new CommandInvoker(new HashMap<>());
-        commandInvoker.initAllCommands();
-
         try {
             if (args.length != 0 && args[0] != null) {
-                FileCommandHandler fileCommandHandler = new FileCommandHandler(commandInvoker);
+                FileCommandHandler fileCommandHandler = new FileCommandHandler(new CommandInvoker(new HashMap<>()));
                 fileCommandHandler.handle(args[0]);
             } else {
-                InteractiveCommandHandler interactiveCommandHandler = new InteractiveCommandHandler(commandInvoker);
+                InteractiveCommandHandler interactiveCommandHandler = new InteractiveCommandHandler(new CommandInvoker(new HashMap<>()));
                 interactiveCommandHandler.handle();
             }
         } catch (Exception e) {
