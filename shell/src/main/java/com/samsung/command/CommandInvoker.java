@@ -28,7 +28,6 @@ public class CommandInvoker {
     private Command getCommand(String commandName) {
         Command command = commandMap.get(commandName);
 
-        // 명령어 존재 여부 체크
         if (command == null) {
             throw new RuntimeException("INVALID COMMAND");
         }
