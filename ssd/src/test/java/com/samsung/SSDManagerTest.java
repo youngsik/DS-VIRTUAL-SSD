@@ -1,6 +1,8 @@
 package com.samsung;
 
+import com.samsung.buffer.CommandBufferManager;
 import com.samsung.file.FileManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,17 +17,26 @@ public class SSDManagerTest {
     public static final String WRITE_VALUE = "0x00000000";
     public static final String ERROR_VALUE = "ERROR";
 
+
     @Mock
     FileManager fileManager;
 
-    @InjectMocks
-    SSDManager writeSsdManager = new SSDManager("W", LBA, WRITE_VALUE);
-    @InjectMocks
-    SSDManager readSsdManager = new SSDManager("R", LBA, WRITE_VALUE);
-    @InjectMocks
-    SSDManager invalidValueSsdManager = new SSDManager(ERROR_VALUE, -1, ERROR_VALUE);
-    @InjectMocks
-    SSDManager eraseSsdManager = new SSDManager("E", 0, "9");
+    @Mock
+    CommandBufferManager commandBufferManager;
+
+    SSDManager writeSsdManager;
+    SSDManager readSsdManager;
+    SSDManager invalidValueSsdManager;
+    SSDManager eraseSsdManager;
+
+    @BeforeEach
+    void setUp() {
+        writeSsdManager = new SSDManager(new CmdData("W", LBA, WRITE_VALUE), fileManager, commandBufferManager);
+        readSsdManager = new SSDManager(new CmdData("R", LBA, WRITE_VALUE), fileManager, commandBufferManager);
+        invalidValueSsdManager = new SSDManager(new CmdData(ERROR_VALUE, -1, ERROR_VALUE), fileManager, commandBufferManager);
+        eraseSsdManager = new SSDManager(new CmdData("E", 0, "9"), fileManager, commandBufferManager);
+    }
+
 
     @Test
     @DisplayName("읽기 테스트")
@@ -38,7 +49,7 @@ public class SSDManagerTest {
     @DisplayName("쓰기 테스트")
     public void writeTest() {
         writeSsdManager.cmdExecute();
-        verify(fileManager, times(1)).writeFile(LBA, WRITE_VALUE);
+        verify(commandBufferManager, times(1)).processCommand("W", LBA, WRITE_VALUE);
     }
 
     @Test
@@ -60,8 +71,6 @@ public class SSDManagerTest {
     @DisplayName("지우기 명령어 테스트(성공)")
     void cmdExecuteErasePass() {
         eraseSsdManager.cmdExecute();
-        for(int i=0; i<9; i++) {
-            verify(fileManager, times(1)).writeFile(i, WRITE_VALUE);
-        }
+        verify(commandBufferManager, times(1)).processCommand("E", LBA, "9");
     }
 }

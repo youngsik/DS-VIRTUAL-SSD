@@ -11,6 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+
+import com.samsung.file.FileManager;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -119,7 +121,7 @@ public class CommandBufferManager {
 
         for (CmdData cmd : commandBuffer) {
             if(cmd == null) break;
-            ssdManager = new SSDManager(cmd);
+            ssdManager = new SSDManager(cmd, FileManager.getInstance(), new CommandBufferManager());
             ssdManager.cmdExecuteFromBuffer();
         }
         deleteAndInitBuffer();

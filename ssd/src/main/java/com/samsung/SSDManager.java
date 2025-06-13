@@ -10,14 +10,14 @@ public class SSDManager {
     private int lba = -1;
     private String value = "";
     private final FileManager fileManager;
-    private CommandBufferManager commandBufferManager;
+    private final CommandBufferManager commandBufferManager;
 
-    public SSDManager(CmdData cmdData) {
+    public SSDManager(CmdData cmdData, FileManager fileManager, CommandBufferManager commandBufferManager) {
         this.command = cmdData.getCommand();
         this.lba = cmdData.getLba();
         this.value = cmdData.getValue();
-        this.fileManager = FileManager.getInstance();
-        this.commandBufferManager = new CommandBufferManager();
+        this.fileManager = fileManager;
+        this.commandBufferManager = commandBufferManager;
     }
 
     public void cmdExecute() {
