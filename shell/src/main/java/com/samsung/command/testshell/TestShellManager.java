@@ -75,7 +75,7 @@ public class TestShellManager {
             jarExecutor.executeRead(i);
             String value = fileManager.getResultFromOutputFile();
 
-            System.out.println(head + " " + i + " " + value);
+            System.out.println(head + " " + String.format("%02d", i) + " " + value);
         }
     }
 
