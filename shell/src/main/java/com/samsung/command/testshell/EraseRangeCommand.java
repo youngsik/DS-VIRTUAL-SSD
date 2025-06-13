@@ -1,5 +1,7 @@
 package com.samsung.command.testshell;
 import com.samsung.command.Command;
+import com.samsung.validator.ArgumentsValidator;
+import com.samsung.validator.CommandValidator;
 
 public class EraseRangeCommand implements Command {
     private final TestShellManager testShellManager;
@@ -10,9 +12,7 @@ public class EraseRangeCommand implements Command {
 
     @Override
     public void execute(String[] cmdArgs) {
-        if(cmdArgs.length != 3) {
-            throw new RuntimeException("INVALID COMMAND PARAMETER");
-        }
+        ArgumentsValidator.validateThreeArgs(cmdArgs);
 
         int beginLBA;
         int endLBA;
@@ -24,14 +24,9 @@ public class EraseRangeCommand implements Command {
             throw new RuntimeException("INVALID COMMAND PARAMETER");
         }
 
-        if(!isLBAValid(beginLBA) || !isLBAValid(endLBA)) {
-            throw new RuntimeException("INVALID COMMAND PARMETER");
-        }
+        CommandValidator.validateLbaRange(beginLBA);
+        CommandValidator.validateLbaRange(endLBA);
 
         testShellManager.eraseRange(beginLBA, endLBA);
-    }
-
-    private boolean isLBAValid(int LBA) {
-        return LBA >= 0 && LBA < 100;
     }
 }
