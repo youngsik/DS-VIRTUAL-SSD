@@ -475,5 +475,22 @@ class MainTest {
         assertEquals("ERROR", cmdData.getCommand());
     }
 
+    @Test @DisplayName("F 정상실행")
+    void testFPass() {
+        CmdData cmdData = main.cmdValidCheck(new String[]{"F"});
+        assertEquals("F", cmdData.getCommand());
+    }
+
+    @Test @DisplayName("F 앞에 공백")
+    void testFSpaces() {
+        CmdData cmdData = main.cmdValidCheck(new String[]{"     F"});
+        assertEquals("ERROR", cmdData.getCommand());
+    }
+
+    @Test @DisplayName("F 파라미터 추가")
+    void testFinValidParam() {
+        CmdData cmdData = main.cmdValidCheck(new String[]{"F", "invalid"});
+        assertEquals("ERROR", cmdData.getCommand());
+    }
 }
 

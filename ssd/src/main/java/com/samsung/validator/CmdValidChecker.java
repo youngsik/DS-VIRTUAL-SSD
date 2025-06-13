@@ -3,8 +3,6 @@ package com.samsung.validator;
 import com.samsung.CmdData;
 import com.samsung.SSDConstant;
 
-import static com.samsung.SSDConstant.*;
-
 public class CmdValidChecker {
     public CmdData cmdValidCheckAndParsing(String[] cmdParam) {
         if (cmdParam.length == 0) {
@@ -12,9 +10,10 @@ public class CmdValidChecker {
         }
         CommandValidator validator;
         switch (cmdParam[0]) {
-            case COMMAND_READ: validator = new ReadCommandValidator(); break;
-            case COMMAND_WRITE: validator = new WriteCommandValidator(); break;
-            case COMMAND_ERASE: validator = new EraseCommandValidator(); break;
+            case SSDConstant.COMMAND_READ: validator = new ReadCommandValidator(); break;
+            case SSDConstant.COMMAND_WRITE: validator = new WriteCommandValidator(); break;
+            case SSDConstant.COMMAND_ERASE: validator = new EraseCommandValidator(); break;
+            case SSDConstant.COMMAN_FLUSH: validator = new FlushCommandValidator(); break;
             default: validator = null;
         }
 
