@@ -12,13 +12,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.samsung.ssd.CommandType.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class SSDManagerTest {
     public static final int LBA = 0;
-    public static final String WRITE_VALUE = "0x00000000";
+    public static final String WRITE_VALUE = "0x12341234";
     public static final String ERROR_VALUE = "ERROR";
 
     @Mock
@@ -42,16 +41,20 @@ public class SSDManagerTest {
     @Test
     @DisplayName("읽기 테스트")
     public void readTest() {
+        when(bufferProcessor.process(any(CmdData.class))).thenReturn(WRITE_VALUE);
+
         readSsdManager.cmdExecuteFromBuffer();
-        verify(fileManager, times(1)).readFile(LBA);
+
+        verify(fileManager).writeOnOutputFile(WRITE_VALUE);
     }
 
     @Test
     @DisplayName("읽기 2번 테스트")
     public void readTwiceTest() {
+        when(bufferProcessor.process(any(CmdData.class))).thenReturn(WRITE_VALUE);
         readSsdManager.cmdExecuteFromBuffer();
         readSsdManager.cmdExecuteFromBuffer();
-        verify(fileManager, times(2)).readFile(LBA);
+        verify(fileManager,times(2)).writeOnOutputFile(WRITE_VALUE);
     }
 
     @Test
