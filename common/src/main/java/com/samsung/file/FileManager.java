@@ -44,30 +44,16 @@ public class FileManager{
         return result;
     }
 
-    public String getResultFromOutputFile(Long commandRequestTime) {
+    public String getResultFromOutputFile() {
         String result = null;
 
-        Long currentTime = System.currentTimeMillis();
-
         try{
-            while(System.currentTimeMillis() <= currentTime + 1000 && !isReadable(commandRequestTime)) {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
             result = Files.readString(Path.of(SSD_OUTPUT_FILE_NAME));
         } catch (IOException e) {
 
         }
 
         return result;
-    }
-
-    private boolean isReadable(Long currentTime) throws IOException {
-        return Files.exists(Path.of(SSD_OUTPUT_FILE_NAME)) && Files.getLastModifiedTime(Path.of(SSD_OUTPUT_FILE_NAME)).toMillis() >= currentTime;
     }
 
     public void writeFile(int index, String value) {

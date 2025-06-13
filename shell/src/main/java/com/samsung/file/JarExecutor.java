@@ -5,11 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class JarExecutor {
-    private static final int DEFAULT_WAIT_MILLIS = 100;
-
     public void executeRead(Integer lba) {
         executeCommand("R", String.valueOf(lba));
     }
@@ -39,9 +38,7 @@ public class JarExecutor {
             System.out.println("Executing command: " + String.join(" ", command));
 
             pb.inheritIO();
-            pb.start();
-
-            Thread.sleep(DEFAULT_WAIT_MILLIS);
+            pb.start().waitFor(5000L, TimeUnit.MILLISECONDS);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -49,6 +46,6 @@ public class JarExecutor {
 
     private String getSsdJarPath() {
         String projectRoot = System.getProperty("user.dir");
-        return projectRoot + "\\ssd-all.jar";
+        return projectRoot + "\\ssd.jar";
     }
 }
