@@ -43,11 +43,9 @@ class TestShellManagerTest {
     @Test
     @DisplayName("testShell 읽기 실행")
     void testShellReadExecute() {
-        doReturn("0xFFFFFFFE").when(fileManager).getValueFromFile(anyInt());
-
         testShellManager.read(INDEX);
 
-        verify(fileManager, times(1)).getValueFromFile(INDEX);
+        verify(fileManager, times(1)).getResultFromOutputFile(anyLong());
     }
 
     @Test
@@ -56,7 +54,7 @@ class TestShellManagerTest {
         int index = INDEX;
         String value = "0xFFFFFFFF";
         String expected = "[Read] LBA 03 "+ value;
-        when(fileManager.getValueFromFile(index)).thenReturn(value);
+        when(fileManager.getResultFromOutputFile(anyLong())).thenReturn(value);
 
         testShellManager.read(index);
 
@@ -119,11 +117,15 @@ class TestShellManagerTest {
         for (int i = 0; i < 100; i++) {;
             fakeData.add("0x00000000");
         }
-        doReturn(fakeData).when(fileManager).getAllValuesFromFile();
+
+        when(fileManager.getResultFromOutputFile(anyLong())).thenReturn(fakeData.get(0))
+                .thenReturn(fakeData.get(1))
+                .thenReturn(fakeData.get(2));
 
         testShellManager.fullread();
 
-        verify(fileManager).getAllValuesFromFile();
+        verify(fileManager, times(100)).getResultFromOutputFile(anyLong());
+
         String[] outputLines = outContent.toString().trim().split("\n");
         assertThat(outputLines).hasSize(100);
         assertThat(outputLines[0].replace("\n", "").replace("\r", "").trim())
