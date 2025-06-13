@@ -21,7 +21,8 @@ public class WriteCommandHandler implements CommandHandler {
     public String handle(CmdData cmd) {
         memory.put(cmd.getLba(), cmd.getValue());
         buffer.removeIf(c -> c.getCommand() == WRITE && c.getLba() == cmd.getLba());
-        buffer.removeIf(c -> c.getCommand() == CommandType.ERASE && isLbaInEraseRange(cmd.getLba(), c));        buffer.add(cmd);
+        buffer.removeIf(c -> c.getCommand() == CommandType.ERASE && isLbaInEraseRange(cmd.getLba(), c));
+        buffer.add(cmd);
         return "void";
     }
 

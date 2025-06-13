@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.samsung.file.FileConstants.BLANK_DATA;
 import static com.samsung.ssd.CommandType.*;
 
 @Slf4j
@@ -66,7 +67,7 @@ public class SSDManager {
 
     private void handleRead(CmdData cmd) {
         String result = bufferProcessor.process(cmd);
-        if ("0x00000000".equals(result)) {
+        if (BLANK_DATA.equals(result)) {
             fileManager.readFile(cmd.getLba());
         }
         fileManager.writeOnOutputFile(result);
