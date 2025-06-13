@@ -2,7 +2,10 @@ package com.samsung.validator;
 
 import com.samsung.CmdData;
 
-import static com.samsung.SSDConstant.*;
+import static com.samsung.CommandType.ERROR;
+import static com.samsung.CommandType.WRITE;
+import static com.samsung.SSDConstant.ERROR_MESSAGE;
+import static com.samsung.SSDConstant.MAX_LBA;
 
 public class WriteCommandValidator implements CommandValidator {
     @Override
@@ -16,10 +19,10 @@ public class WriteCommandValidator implements CommandValidator {
             return error();
         }
         if (lba < 0 || lba > MAX_LBA) return error();
-        return new CmdData(COMMAND_WRITE, lba, cmdParam[2]);
+        return new CmdData(WRITE, lba, cmdParam[2]);
     }
 
     private CmdData error() {
-        return new CmdData(COMMAND_ERROR, -1, COMMAND_ERROR);
+        return new CmdData(ERROR, -1, ERROR_MESSAGE);
     }
 }

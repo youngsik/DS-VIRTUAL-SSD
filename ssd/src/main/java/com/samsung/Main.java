@@ -1,5 +1,7 @@
 package com.samsung;
 
+import com.samsung.file.FileManager;
+import com.samsung.file.FileManagerInterface;
 import com.samsung.validator.CmdValidChecker;
 
 class Main {
@@ -14,7 +16,7 @@ class Main {
     }
 
     public static void run(CmdData cmdData) {
-        SSDManager ssdManager = new SSDManager(cmdData.getCommand(), cmdData.getLba(), cmdData.getValue());
+        SSDManager ssdManager = new SSDManager(cmdData, FileManager.getInstance());
         ssdManager.cmdExecute();
     }
 

@@ -1,6 +1,6 @@
-package com.samsung.validator;
+package com.samsung.command.support;
 
-public class ArgumentsValidator {
+public class CommandValidator {
 
     public static void validateOneArgs(String[] cmdArgs) {
         if (cmdArgs.length != 1) {

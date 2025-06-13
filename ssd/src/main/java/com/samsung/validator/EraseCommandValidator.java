@@ -2,6 +2,8 @@ package com.samsung.validator;
 
 import com.samsung.CmdData;
 
+import static com.samsung.CommandType.ERASE;
+import static com.samsung.CommandType.ERROR;
 import static com.samsung.SSDConstant.*;
 
 public class EraseCommandValidator implements CommandValidator {
@@ -18,10 +20,10 @@ public class EraseCommandValidator implements CommandValidator {
         if (lba < 0 || lba > MAX_LBA) return error();
         if (size < 0 || size > MAX_ERASE_SIZE) return error();
         if (lba + size > 100) return error();
-        return new CmdData(COMMAND_ERASE, lba, cmdParam[2]);
+        return new CmdData(ERASE, lba, cmdParam[2]);
     }
 
     private CmdData error() {
-        return new CmdData(COMMAND_ERROR, -1, COMMAND_ERROR);
+        return new CmdData(ERROR, -1, ERROR_MESSAGE);
     }
 }

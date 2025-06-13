@@ -1,8 +1,14 @@
 package com.samsung.command.testshell;
 
+import com.samsung.command.support.ArgumentResolver;
 import com.samsung.command.Command;
+import com.samsung.command.support.CommandValidator;
 
 public class EraseCommand implements Command {
+
+    private static final int LBA_INDEX = 1;
+    private static final int ERASE_SIZE_INDEX = 2;
+
     private final TestShellManager testShellManager;
 
     public EraseCommand(TestShellManager testShellManager) {
@@ -11,24 +17,17 @@ public class EraseCommand implements Command {
 
     @Override
     public void execute(String[] cmdArgs) {
-        if(cmdArgs.length != 3) {
-            throw new RuntimeException("INVALID COMMAND PARAMETER");
-        }
+        CommandValidator.validateThreeArgs(cmdArgs);
+        testShellManager.erase(
+                extractValidatedEraseLba(cmdArgs),
+                extractValidatedEraseSize(cmdArgs));
+    }
 
-        int eraseLBA;
-        int eraseSize;
+    private Integer extractValidatedEraseLba(String[] cmdArgs) {
+        return ArgumentResolver.resolveLba(cmdArgs[LBA_INDEX]);
+    }
 
-        try{
-            eraseLBA = Integer.parseInt(cmdArgs[1]);
-            eraseSize = Integer.parseInt(cmdArgs[2]);
-        }catch(NumberFormatException e) {
-            throw new RuntimeException("INVALID ERASE START LOCATION");
-        }
-
-        if(eraseLBA < 0 || eraseLBA > 99) {
-            throw new RuntimeException("INVALID ERASE START LOCATION");
-        }
-
-        testShellManager.erase(eraseLBA, eraseSize);
+    private Integer extractValidatedEraseSize(String[] cmdArgs) {
+        return ArgumentResolver.toInt(cmdArgs[ERASE_SIZE_INDEX]);
     }
 }

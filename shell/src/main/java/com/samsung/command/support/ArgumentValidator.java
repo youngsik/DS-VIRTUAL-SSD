@@ -1,6 +1,6 @@
-package com.samsung.validator;
+package com.samsung.command.support;
 
-public class CommandValidator {
+public class ArgumentValidator {
 
     public static void validateNull(Object object) {
         if (object == null) {
