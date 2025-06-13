@@ -24,6 +24,6 @@ public class EraseCommandValidator implements CommandValidator {
     }
 
     private CmdData error() {
-        return new CmdData(ERROR, -1, COMMAND_ERROR);
+        return new CmdData(ERROR, -1, ERROR_MESSAGE);
     }
 }

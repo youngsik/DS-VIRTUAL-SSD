@@ -4,7 +4,7 @@ import com.samsung.CmdData;
 
 import static com.samsung.CommandType.ERROR;
 import static com.samsung.CommandType.FLUSH;
-import static com.samsung.SSDConstant.COMMAND_ERROR;
+import static com.samsung.SSDConstant.ERROR_MESSAGE;
 
 public class FlushCommandValidator implements CommandValidator {
     @Override
@@ -14,6 +14,6 @@ public class FlushCommandValidator implements CommandValidator {
     }
 
     private CmdData error() {
-        return new CmdData(ERROR, -1, COMMAND_ERROR);
+        return new CmdData(ERROR, -1, ERROR_MESSAGE);
     }
 }

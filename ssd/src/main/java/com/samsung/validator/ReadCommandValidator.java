@@ -4,7 +4,7 @@ import com.samsung.CmdData;
 
 import static com.samsung.CommandType.ERROR;
 import static com.samsung.CommandType.READ;
-import static com.samsung.SSDConstant.COMMAND_ERROR;
+import static com.samsung.SSDConstant.ERROR_MESSAGE;
 import static com.samsung.SSDConstant.MAX_LBA;
 
 public class ReadCommandValidator implements CommandValidator {
@@ -22,6 +22,6 @@ public class ReadCommandValidator implements CommandValidator {
     }
 
     private CmdData error() {
-        return new CmdData(ERROR, -1, COMMAND_ERROR);
+        return new CmdData(ERROR, -1, ERROR_MESSAGE);
     }
 }
