@@ -1,29 +1,17 @@
 package com.samsung.validator;
 
-import com.samsung.ssd.CmdData;
+import com.samsung.common.CmdData;
+import com.samsung.resolver.ArgumentResolver;
 
-import static com.samsung.ssd.CommandType.ERASE;
-import static com.samsung.ssd.CommandType.ERROR;
-import static com.samsung.ssd.SSDConstant.*;
+import static com.samsung.common.CommandType.ERASE;
 
 public class EraseCommandValidator implements CommandValidator {
     @Override
     public CmdData validate(String[] cmdParam) {
-        if (cmdParam.length != 3) return error();
-        int lba, size;
-        try {
-            lba = Integer.parseInt(cmdParam[1]);
-            size = Integer.parseInt(cmdParam[2]);
-        } catch (NumberFormatException e) {
-            return error();
-        }
-        if (lba < 0 || lba > MAX_LBA) return error();
-        if (size < 0 || size > MAX_ERASE_SIZE) return error();
-        if (lba + size > 100) return error();
+        ArgumentCountValidator.validateThreeArgs(cmdParam);
+        int lba = ArgumentResolver.resolveLba(cmdParam[1]);
+        int size = ArgumentResolver.resolveSize(cmdParam[2]);
+        if (lba + size > 100) throw new RuntimeException();
         return new CmdData(ERASE, lba, cmdParam[2]);
-    }
-
-    private CmdData error() {
-        return new CmdData(ERROR, -1, ERROR_MESSAGE);
     }
 }

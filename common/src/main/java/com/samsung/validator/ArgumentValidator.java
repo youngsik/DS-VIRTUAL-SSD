@@ -1,4 +1,4 @@
-package com.samsung.command.support;
+package com.samsung.validator;
 
 public class ArgumentValidator {
 
@@ -16,6 +16,12 @@ public class ArgumentValidator {
 
     public static void validateLbaRange(Integer lba) {
         if (lba < 0 || lba > 99) {
+            throw new RuntimeException("INVALID COMMAND");
+        }
+    }
+
+    public static void validateEraseRange(Integer lba) {
+        if (lba < 0 || lba > 10) {
             throw new RuntimeException("INVALID COMMAND");
         }
     }

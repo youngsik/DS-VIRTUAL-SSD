@@ -2,7 +2,7 @@ package com.samsung;
 
 import com.samsung.buffer.BufferProcessor;
 import com.samsung.file.FileManager;
-import com.samsung.ssd.CmdData;
+import com.samsung.common.CmdData;
 import com.samsung.ssd.SSDManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.samsung.ssd.CommandType.*;
+import static com.samsung.common.CommandType.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

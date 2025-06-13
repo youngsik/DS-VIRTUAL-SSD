@@ -1,12 +1,12 @@
 package com.samsung.buffer;
 
 
-import com.samsung.ssd.CmdData;
-import com.samsung.ssd.CommandType;
 import com.samsung.buffer.handler.CommandHandler;
 import com.samsung.buffer.handler.EraseCommandHandler;
 import com.samsung.buffer.handler.ReadCommandHandler;
 import com.samsung.buffer.handler.WriteCommandHandler;
+import com.samsung.common.CmdData;
+import com.samsung.common.CommandType;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,7 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.samsung.ssd.CommandType.*;
+import static com.samsung.common.CommandType.*;
+
 
 @Slf4j
 public class BufferProcessor {

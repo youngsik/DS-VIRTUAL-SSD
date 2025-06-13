@@ -2,23 +2,31 @@ package com.samsung;
 
 import com.samsung.buffer.BufferProcessor;
 import com.samsung.file.FileManager;
-import com.samsung.ssd.CmdData;
+import com.samsung.resolver.CommandResolver;
+import com.samsung.common.CmdData;
 import com.samsung.ssd.SSDManager;
-import com.samsung.validator.CmdValidChecker;
 
 class Main {
     public static void main(String[] args) {
-        CmdData cmdData = cmdValidCheck(args);
+        CmdData cmdData = getCmdData(args);
+        if (cmdData == null) return;
         run(cmdData);
     }
 
-    public static CmdData cmdValidCheck(String[] args) {
-        CmdValidChecker cmdValidChecker = new CmdValidChecker();
-        return cmdValidChecker.cmdValidCheckAndParsing(args);
+    public static CmdData getCmdData(String[] args) {
+        CmdData cmdData = null;
+        try {
+            CommandResolver commandResolver = new CommandResolver();
+            cmdData = commandResolver.cmdValidCheckAndParsing(args);
+        }catch (RuntimeException e){
+            FileManager fileManager = FileManager.getInstance();
+            fileManager.writeOnOutputFile("ERROR");
+        }
+        return cmdData;
     }
 
     public static void run(CmdData cmdData) {
-        SSDManager ssdManager = new SSDManager(cmdData, FileManager.getInstance(), new BufferProcessor());
+        com.samsung.ssd.SSDManager ssdManager = new SSDManager(cmdData, FileManager.getInstance(), new BufferProcessor());
         ssdManager.cmdExecuteFromBuffer();
     }
 

@@ -1,21 +1,20 @@
-package com.samsung.validator;
+package com.samsung.resolver;
 
-import com.samsung.ssd.CmdData;
-import com.samsung.ssd.CommandType;
+import com.samsung.common.CmdData;
+import com.samsung.common.CommandType;
+import com.samsung.validator.CommandValidator;
 
-import static com.samsung.ssd.CommandType.ERROR;
-
-public class CmdValidChecker {
+public class CommandResolver {
     public CmdData cmdValidCheckAndParsing(String[] cmdParam) {
         if (cmdParam.length == 0) {
-            return new CmdData(ERROR, -1, ERROR.name());
+            throw new RuntimeException();
         }
         try {
             CommandValidator validator = CommandType.fromCode(cmdParam[0]).getCommandValidator();
             validator.validate(cmdParam);
             return validator.validate(cmdParam);
         } catch (IllegalArgumentException e) {
-            return new CmdData(ERROR, -1, ERROR.name());
+            throw new RuntimeException();
         }
     }
 }

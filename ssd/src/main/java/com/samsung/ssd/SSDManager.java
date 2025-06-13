@@ -1,6 +1,9 @@
 package com.samsung.ssd;
 
 import com.samsung.buffer.BufferProcessor;
+import com.samsung.common.CmdData;
+import com.samsung.common.CommandType;
+import com.samsung.common.SSDConstant;
 import com.samsung.file.FileManager;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,7 +19,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.samsung.file.FileConstants.BLANK_DATA;
-import static com.samsung.ssd.CommandType.*;
+import static com.samsung.common.CommandType.*;
 
 @Slf4j
 public class SSDManager {

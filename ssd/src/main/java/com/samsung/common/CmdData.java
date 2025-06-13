@@ -1,4 +1,4 @@
-package com.samsung.ssd;
+package com.samsung.common;
 
 import lombok.Getter;
 import lombok.Setter;

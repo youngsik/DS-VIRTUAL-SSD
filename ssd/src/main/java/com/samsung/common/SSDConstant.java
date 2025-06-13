@@ -1,4 +1,4 @@
-package com.samsung.ssd;
+package com.samsung.common;
 
 public class SSDConstant {
     private SSDConstant() {}

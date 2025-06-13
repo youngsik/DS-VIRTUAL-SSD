@@ -1,15 +1,17 @@
 package com.samsung.buffer.handler;
 
 
-import com.samsung.ssd.CmdData;
+
+import com.samsung.common.CmdData;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-import static com.samsung.ssd.CommandType.ERASE;
-import static com.samsung.ssd.CommandType.WRITE;
+import static com.samsung.common.CommandType.ERASE;
+import static com.samsung.common.CommandType.WRITE;
+
 
 public class EraseCommandHandler implements CommandHandler {
     private final List<CmdData> buffer;

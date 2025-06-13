@@ -1,5 +1,4 @@
-package com.samsung.ssd;
-
+package com.samsung.common;
 import com.samsung.validator.*;
 import lombok.Getter;
 
@@ -14,17 +13,17 @@ public enum CommandType {
     ERROR("ERROR", null);
 
     private final String code;
-    private final CommandValidator commandValidator;
+    private final CommandValidator CommandValidator;
 
-    CommandType(String code, CommandValidator commandValidator) {
+    CommandType(String code, CommandValidator CommandValidator) {
         this.code = code;
-        this.commandValidator = commandValidator;
+        this.CommandValidator = CommandValidator;
     }
 
     public static CommandType fromCode(String code) {
         return Arrays.stream(values())
                 .filter(c -> c.code.equals(code))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Unknown command: " + code));
+                .orElseThrow(RuntimeException::new);
     }
 }
