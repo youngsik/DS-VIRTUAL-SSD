@@ -61,7 +61,8 @@ public class FileManager {
     }
 
     public void writeOnOutputFile(String result) {
-        try(RandomAccessFile file = new RandomAccessFile(SSD_OUTPUT_FILE_NAME, "rw");) {
+        try(RandomAccessFile file = new RandomAccessFile(SSD_OUTPUT_FILE_NAME, "rw")) {
+            file.setLength(0);
             file.writeBytes(result);
         } catch (IOException e) {
 
@@ -72,7 +73,7 @@ public class FileManager {
         if(new File(SSD_NAND_FILE_NAME).exists())
             return;
         try(RandomAccessFile file = new RandomAccessFile(SSD_NAND_FILE_NAME, "rw")) {
-            for (int i = 0; i < 98; i++) {
+            for (int i = 0; i < 99; i++) {
                 file.writeBytes(BLANK_DATA + "\n");
             }
             file.writeBytes(BLANK_DATA);
