@@ -1,10 +1,13 @@
 package com.samsung.command.testshell;
 
+import com.samsung.command.support.ArgumentResolver;
 import com.samsung.command.Command;
-import com.samsung.validator.ArgumentsValidator;
-import com.samsung.validator.CommandValidator;
+import com.samsung.command.support.CommandValidator;
 
 public class WriteCommand implements Command {
+
+    private static final int LBA_INDEX = 1;
+    private static final int VALUE_INDEX = 2;
 
     private final TestShellManager testShellManager;
 
@@ -14,19 +17,17 @@ public class WriteCommand implements Command {
 
     @Override
     public void execute(String[] cmdArgs) {
-        ArgumentsValidator.validateThreeArgs(cmdArgs);
-        try {
-            Integer index = Integer.parseInt(cmdArgs[1]);
-            String value = cmdArgs[2];
-
-            CommandValidator.validateLbaRange(index);
-            CommandValidator.validateNull(value);
-            CommandValidator.validateValueFormat(value);
-
-            testShellManager.write(index, value);
-        } catch (NumberFormatException e) {
-            throw new RuntimeException("INVALID COMMAND");
-        }
+        CommandValidator.validateThreeArgs(cmdArgs);
+        testShellManager.write(
+                extractValidatedLba(cmdArgs),
+                extractValidatedValue(cmdArgs));
     }
 
+    private Integer extractValidatedLba(String[] cmdArgs) {
+        return ArgumentResolver.resolveLba(cmdArgs[LBA_INDEX]);
+    }
+
+    private String extractValidatedValue(String[] cmdArgs) {
+        return ArgumentResolver.resolveValue(cmdArgs[VALUE_INDEX]);
+    }
 }

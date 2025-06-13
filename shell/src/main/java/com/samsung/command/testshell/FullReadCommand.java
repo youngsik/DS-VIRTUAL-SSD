@@ -1,7 +1,7 @@
 package com.samsung.command.testshell;
 
 import com.samsung.command.Command;
-import com.samsung.validator.ArgumentsValidator;
+import com.samsung.command.support.CommandValidator;
 
 public class FullReadCommand implements Command {
 
@@ -13,7 +13,7 @@ public class FullReadCommand implements Command {
 
     @Override
     public void execute(String[] cmdArgs) {
-        ArgumentsValidator.validateOneArgs(cmdArgs);
+        CommandValidator.validateOneArgs(cmdArgs);
         testShellManager.fullread();
     }
 

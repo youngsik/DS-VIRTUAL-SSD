@@ -1,7 +1,14 @@
 package com.samsung.command.testshell;
+
+import com.samsung.command.support.ArgumentResolver;
 import com.samsung.command.Command;
+import com.samsung.command.support.CommandValidator;
 
 public class EraseRangeCommand implements Command {
+
+    private static final int BEGIN_LBA_INDEX = 1;
+    private static final int END_LBA_INDEX = 2;
+
     private final TestShellManager testShellManager;
 
     public EraseRangeCommand(TestShellManager testShellManager) {
@@ -10,28 +17,17 @@ public class EraseRangeCommand implements Command {
 
     @Override
     public void execute(String[] cmdArgs) {
-        if(cmdArgs.length != 3) {
-            throw new RuntimeException("INVALID COMMAND PARAMETER");
-        }
-
-        int beginLBA;
-        int endLBA;
-
-        try{
-            beginLBA = Integer.parseInt(cmdArgs[1]);
-            endLBA = Integer.parseInt(cmdArgs[2]);
-        } catch(NumberFormatException e) {
-            throw new RuntimeException("INVALID COMMAND PARAMETER");
-        }
-
-        if(!isLBAValid(beginLBA) || !isLBAValid(endLBA)) {
-            throw new RuntimeException("INVALID COMMAND PARMETER");
-        }
-
-        testShellManager.eraseRange(beginLBA, endLBA);
+        CommandValidator.validateThreeArgs(cmdArgs);
+        testShellManager.eraseRange(
+                extractValidatedBeginLba(cmdArgs),
+                extractValidatedEndLba(cmdArgs));
     }
 
-    private boolean isLBAValid(int LBA) {
-        return LBA >= 0 && LBA < 100;
+    private Integer extractValidatedBeginLba(String[] cmdArgs) {
+        return ArgumentResolver.resolveLba(cmdArgs[BEGIN_LBA_INDEX]);
+    }
+
+    private Integer extractValidatedEndLba(String[] cmdArgs) {
+        return ArgumentResolver.resolveLba(cmdArgs[END_LBA_INDEX]);
     }
 }
