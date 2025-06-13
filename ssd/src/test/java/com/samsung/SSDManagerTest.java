@@ -40,22 +40,22 @@ public class SSDManagerTest {
     @Test
     @DisplayName("읽기 테스트")
     public void readTest() {
-        readSsdManager.cmdExecute();
+        readSsdManager.cmdExecuteFromBuffer();
         verify(fileManager, times(1)).readFile(LBA);
     }
 
     @Test
     @DisplayName("읽기 2번 테스트")
     public void readTwiceTest() {
-        readSsdManager.cmdExecute();
-        readSsdManager.cmdExecute();
+        readSsdManager.cmdExecuteFromBuffer();
+        readSsdManager.cmdExecuteFromBuffer();
         verify(fileManager, times(2)).readFile(LBA);
     }
 
     @Test
     @DisplayName("ERROR 처리 테스트")
     void valueErrorTest() {
-        invalidValueSsdManager.cmdExecute();
+        invalidValueSsdManager.cmdExecuteFromBuffer();
         verify(fileManager, times(1)).writeOnOutputFile(ERROR_VALUE);
     }
 

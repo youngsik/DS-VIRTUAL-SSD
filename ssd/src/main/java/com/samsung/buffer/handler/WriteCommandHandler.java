@@ -5,6 +5,8 @@ import com.samsung.CmdData;
 import java.util.List;
 import java.util.Map;
 
+import static com.samsung.CommandType.WRITE;
+
 public class WriteCommandHandler implements CommandHandler {
     private final List<CmdData> buffer;
     private final Map<Integer, String> memory;
@@ -17,6 +19,7 @@ public class WriteCommandHandler implements CommandHandler {
     @Override
     public String handle(CmdData cmd) {
         memory.put(cmd.getLba(), cmd.getValue());
+        buffer.removeIf(c -> c.getCommand() == WRITE && c.getLba() == cmd.getLba());
         buffer.add(cmd);
         return "void";
     }

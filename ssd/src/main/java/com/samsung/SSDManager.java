@@ -1,7 +1,6 @@
 package com.samsung;
 
 import com.samsung.buffer.BufferProcessor;
-import com.samsung.file.FileManager;
 import com.samsung.file.FileManagerInterface;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,16 +12,19 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static com.samsung.CommandType.*;
 
 @Slf4j
 class SSDManager {
+    public static final int FULL_BUFFER = -1;
     private CmdData cmdData;
     private final FileManagerInterface fileManager;
     private final BufferProcessor bufferProcessor;
 
-    private static final String BUFFER_DIR = "./ssd/buffer";
+    private static final String BUFFER_DIR = "./buffer";
     private final CmdData[] commandBuffer = new CmdData[SSDConstant.MAX_BUFFER_INDEX];
 
     public SSDManager(CmdData cmdData, FileManagerInterface fileManager, BufferProcessor bufferProcessor) {
@@ -32,31 +34,46 @@ class SSDManager {
 
         createBufferDirectory();
         createEmptyFiles();
+        applyBufferAlgorithm();
     }
 
     public void cmdExecuteFromBuffer() {
-        CommandType command = cmdData.getCommand();
-        if (command.equals(ERROR)) fileErrorOutput();
-        else if (command.equals(READ)) fileManager.readFile(cmdData.getLba());
-        else if (command.equals(WRITE)) fileManager.writeFile(cmdData.getLba(), cmdData.getValue());
-        else if (command.equals(ERASE)) fileErase(cmdData.getLba(), Integer.parseInt(cmdData.getValue()));
-        else if (command.equals(FLUSH)) flush();
+        executeSingleCommand(cmdData);
 
+        if (cmdData.getCommand().equals(READ)) return;
         applyBufferAlgorithm();
+    }
+
+    private void executeSingleCommand(CmdData cmd) {
+        CommandType command = cmd.getCommand();
+        switch (command) {
+            case ERROR -> fileErrorOutput();
+            case READ  -> handleRead(cmd);
+            case WRITE, ERASE -> executeCommandInBuffer(cmd);
+            case FLUSH -> flush();
+        }
+    }
+
+    private void handleRead(CmdData cmd) {
+        String result = bufferProcessor.process(cmd);
+        if ("0x00000000".equals(result)) {
+            fileManager.readFile(cmd.getLba());
+        }
     }
 
     private void applyBufferAlgorithm() {
         List<CmdData> loadedCmdList = loadCommandsFromBuffer();
-
         for (CmdData command : loadedCmdList) {
             bufferProcessor.process(command);
         }
-        List<CmdData> calculatedCmcList = bufferProcessor.getBuffer();
 
-        deleteFiles();
+        List<CmdData> calculatedCmdList = bufferProcessor.getBuffer();
+
+        deleteBuffer();
         createEmptyFiles();
-        for (CmdData command : calculatedCmcList) {
-            processCommand(command);
+
+        for (CmdData command : calculatedCmdList) {
+            executeCommandInBuffer(command);
         }
     }
 
@@ -131,17 +148,20 @@ class SSDManager {
                 }
             }
         }
-        return new ArrayList<>(List.of(commandBuffer));
+        return Arrays.stream(commandBuffer)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public void processCommand(CmdData cmdData) {
-        int availableIndex = findAvailableFileIndex();
-        if (availableIndex == -SSDConstant.MIN_BUFFER_INDEX) {
-            return;
+    public void executeCommandInBuffer(CmdData cmdData) {
+        int availableIndex = findAvailableBufferIndex();
+        if (availableIndex == FULL_BUFFER) {
+            flush();
+            availableIndex = 1;
         }
 
         String newFileName = String.format("%d_%s_%d_%s.txt",
-                availableIndex, cmdData.getCommand(), cmdData.getLba(), cmdData.getValue());
+                availableIndex, cmdData.getCommand().getCode(), cmdData.getLba(), cmdData.getValue());
         Path oldFilePath = Paths.get(BUFFER_DIR, availableIndex + "_empty.txt");
         Path newFilePath = Paths.get(BUFFER_DIR, newFileName);
 
@@ -152,7 +172,7 @@ class SSDManager {
         }
     }
 
-    private int findAvailableFileIndex() {
+    private int findAvailableBufferIndex() {
         for (int i = SSDConstant.MIN_BUFFER_INDEX; i <= SSDConstant.MAX_BUFFER_INDEX; i++) {
             Path filePath = Paths.get(BUFFER_DIR, i + "_empty.txt");
             File file = filePath.toFile();
@@ -161,24 +181,23 @@ class SSDManager {
                 return i;
             }
         }
-        flush();
-        return SSDConstant.MIN_BUFFER_INDEX;
+        return FULL_BUFFER;
     }
 
     public void flush(){
-        loadCommandsFromBuffer();
+        List<CmdData> cmdDataList = loadCommandsFromBuffer();
 
-        for (CmdData cmd : commandBuffer) {
-            if(cmd == null) break;
-            this.cmdData = cmd;
-
-            cmdExecuteFromBuffer();
+        for (CmdData cmd : cmdDataList) {
+            CommandType command = cmd.getCommand();
+            if (command.equals(WRITE)) fileManager.writeFile(cmd.getLba(), cmd.getValue());
+            else if (command.equals(ERASE)) fileErase(cmd.getLba(), Integer.parseInt(cmd.getValue()));
         }
-        deleteFiles();
-        createEmptyFiles();  // 빈 파일 다시 생성
+
+        deleteBuffer();
+        createEmptyFiles();
     }
 
-    public void deleteFiles() {
+    public void deleteBuffer() {
         File bufferDir = new File(BUFFER_DIR);
         File[] files = bufferDir.listFiles((dir, name) -> name.matches("\\d+_.+\\.txt"));
 
