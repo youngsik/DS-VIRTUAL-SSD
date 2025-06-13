@@ -1,6 +1,7 @@
 package com.samsung.buffer;
 
 import com.samsung.common.CmdData;
+import com.samsung.common.CommandType;
 import com.samsung.common.SSDConstant;
 import lombok.extern.slf4j.Slf4j;
 
@@ -9,6 +10,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 public class BufferFolderManager {
@@ -53,6 +56,31 @@ public class BufferFolderManager {
         }
     }
 
+    public List<CmdData> getCmdDataFromBuffer(int index) {
+        File bufferDir = new File(BUFFER_DIR);
+        File[] files = bufferDir.listFiles((dir, name) -> name.matches("\\d+_.+\\.txt"));
+
+        List<CmdData> list = new ArrayList<>();
+        if (files != null) {
+            for (File file : files) {
+                if (index >= SSDConstant.MAX_BUFFER_INDEX) {
+                    break;
+                }
+
+                String fileName = file.getName();
+                String[] parts = fileName.split("_");
+
+                if (parts.length == 4) {
+                    CommandType command = CommandType.fromCode(parts[1]);
+                    int lba = Integer.parseInt(parts[2]);
+                    String value = parts[3].replace(".txt", "");
+
+                    list.add(new CmdData(command, lba, value));
+                }
+            }
+        }
+        return list;
+    }
 
     public void deleteBuffer() {
         File targetDir = new File(BUFFER_DIR);

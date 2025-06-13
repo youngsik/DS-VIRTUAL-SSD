@@ -9,10 +9,6 @@ import com.samsung.file.FileManager;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +26,6 @@ public class SSDManager {
     private final BufferProcessor bufferProcessor;
     private final BufferFolderManager bufferFolderManager;
 
-    private static final String BUFFER_DIR = "./buffer";
     private final CmdData[] commandBuffer = new CmdData[SSDConstant.MAX_BUFFER_INDEX];
 
     public SSDManager(CmdData cmdData, FileManager fileManager, BufferProcessor bufferProcessor) {
@@ -99,30 +94,14 @@ public class SSDManager {
     }
 
     public List<CmdData> loadCommandsFromBuffer() {
-        File bufferDir = new File(BUFFER_DIR);
-        File[] files = bufferDir.listFiles((dir, name) -> name.matches("\\d+_.+\\.txt"));
-
         Arrays.fill(commandBuffer, null);
 
         int index = 0;
-        if (files != null) {
-            for (File file : files) {
-                if (index >= SSDConstant.MAX_BUFFER_INDEX) {
-                    break;
-                }
-
-                String fileName = file.getName();
-                String[] parts = fileName.split("_");
-
-                if (parts.length == 4) {
-                    CommandType command = CommandType.fromCode(parts[1]);
-                    int lba = Integer.parseInt(parts[2]);
-                    String value = parts[3].replace(".txt", "");
-
-                    commandBuffer[index++] = new CmdData(command, lba, value);
-                }
-            }
+        List<CmdData> list = bufferFolderManager.getCmdDataFromBuffer(index);
+        for(CmdData cmdData : list){
+            commandBuffer[index++] = cmdData;
         }
+
         return Arrays.stream(commandBuffer)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toCollection(ArrayList::new));
