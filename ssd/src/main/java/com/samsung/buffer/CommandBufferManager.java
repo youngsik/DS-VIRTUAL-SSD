@@ -150,7 +150,7 @@ public class CommandBufferManager {
     }
 
     // buffer에 저장된 명령어들을 정리하는 함수
-    public void ignoreCommand() {
+    public void organizeCommand() {
         // 1) 현재 buffer에 저장된 명령어들을 가져온다.
         loadCommandsFromBuffer();
 
@@ -170,6 +170,19 @@ public class CommandBufferManager {
             }
         }
     }
+
+    private void ignoreCommand() {
+
+    }
+
+    private void mergeCommand() {
+
+    }
+
+    public String fastRead() {
+        return "";
+    }
+
 
 }
 
