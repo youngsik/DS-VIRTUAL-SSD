@@ -9,6 +9,7 @@ version = "unspecified"
 tasks {
     shadowJar {
         destinationDirectory = rootDir
+        archiveFileName = "ssd.jar"
         manifest {
             attributes["Main-Class"] = "com.samsung.Main"
         }
