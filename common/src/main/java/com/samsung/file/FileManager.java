@@ -34,7 +34,6 @@ public class FileManager {
             byte[] buf = new byte[10];
             file.read(buf);
             result = new String(buf);
-            file.close();
         } catch (IOException e) {
 
         }
@@ -68,7 +67,6 @@ public class FileManager {
             RandomAccessFile file = new RandomAccessFile(SSD_NAND_FILE_NAME, "rw");
             file.seek(index * OFFSET);
             file.writeBytes(value);
-            file.close();
         } catch (IOException e) {
 
         }
