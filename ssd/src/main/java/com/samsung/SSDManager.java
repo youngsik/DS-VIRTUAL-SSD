@@ -1,5 +1,6 @@
 package com.samsung;
 
+import com.samsung.buffer.BufferProcessor;
 import com.samsung.file.FileManager;
 import lombok.extern.slf4j.Slf4j;
 
@@ -8,7 +9,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static com.samsung.CommandType.*;
 
@@ -16,23 +19,18 @@ import static com.samsung.CommandType.*;
 class SSDManager {
     private CmdData cmdData;
     private final FileManager fileManager;
+    private final BufferProcessor bufferProcessor;
 
     private static final String BUFFER_DIR = "./ssd/buffer";
-    private CmdData[] commandBuffer = new CmdData[SSDConstant.MAX_BUFFER_INDEX];
+    private final CmdData[] commandBuffer = new CmdData[SSDConstant.MAX_BUFFER_INDEX];
 
-    public SSDManager(CmdData cmdData, FileManager fileManager) {
+    public SSDManager(CmdData cmdData, FileManager fileManager, BufferProcessor bufferProcessor) {
         this.cmdData = cmdData;
         this.fileManager = fileManager;
+        this.bufferProcessor =  bufferProcessor;
 
         createBufferDirectory();
         createEmptyFiles();
-    }
-
-    public void cmdExecute() {
-        if (cmdData.getCommand().equals(ERROR)) fileErrorOutput();
-        else if (cmdData.getCommand().equals(READ)) fileManager.readFile(cmdData.getLba());
-        else if (cmdData.getCommand().equals(WRITE)) fileManager.writeFile(cmdData.getLba(), cmdData.getValue());
-        else if (cmdData.getCommand().equals(ERASE)) fileErase(cmdData.getLba(), Integer.parseInt(cmdData.getValue()));
     }
 
     public void cmdExecuteFromBuffer() {
@@ -40,6 +38,23 @@ class SSDManager {
         else if (cmdData.getCommand().equals(READ)) fileManager.readFile(cmdData.getLba());
         else if (cmdData.getCommand().equals(WRITE)) fileManager.writeFile(cmdData.getLba(), cmdData.getValue());
         else if (cmdData.getCommand().equals(ERASE)) fileErase(cmdData.getLba(), Integer.parseInt(cmdData.getValue()));
+        else if (cmdData.getCommand().equals(FLUSH)) flush();
+        applyBufferAlgorithm();
+    }
+
+    private void applyBufferAlgorithm() {
+        List<CmdData> loadedCmdList = loadCommandsFromBuffer();
+
+        for (CmdData command : loadedCmdList) {
+            bufferProcessor.process(command);
+        }
+        List<CmdData> calculatedCmcList = bufferProcessor.getBuffer();
+
+        deleteFiles();
+        createEmptyFiles();
+        for (CmdData command : calculatedCmcList) {
+            processCommand(command);
+        }
     }
 
     private void fileErase(int startLba, int size) {
@@ -88,7 +103,7 @@ class SSDManager {
         }
     }
 
-    public void loadCommandsFromBuffer() {
+    public List<CmdData> loadCommandsFromBuffer() {
         File bufferDir = new File(BUFFER_DIR);
         File[] files = bufferDir.listFiles((dir, name) -> name.matches("\\d+_.+\\.txt"));
 
@@ -113,15 +128,17 @@ class SSDManager {
                 }
             }
         }
+        return new ArrayList<>(List.of(commandBuffer));
     }
 
-    public void processCommand(String command, int lba, String value) {
+    public void processCommand(CmdData cmdData) {
         int availableIndex = findAvailableFileIndex();
         if (availableIndex == -SSDConstant.MIN_BUFFER_INDEX) {
             return;
         }
 
-        String newFileName = String.format("%d_%s_%d_%s.txt", availableIndex, command, lba, value);
+        String newFileName = String.format("%d_%s_%d_%s.txt",
+                availableIndex, cmdData.getCommand(), cmdData.getLba(), cmdData.getValue());
         Path oldFilePath = Paths.get(BUFFER_DIR, availableIndex + "_empty.txt");
         Path newFilePath = Paths.get(BUFFER_DIR, newFileName);
 
@@ -168,21 +185,4 @@ class SSDManager {
             }
         }
     }
-
-    // buffer에 저장된 명령어들을 정리하는 함수
-    public void organizeCommand() {
-    }
-
-    private void ignoreCommand() {
-
-    }
-
-    private void mergeCommand() {
-
-    }
-
-    public String fastRead(int lba) {
-        return "";
-    }
-
 }

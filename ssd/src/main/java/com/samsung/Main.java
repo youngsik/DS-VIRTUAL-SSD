@@ -1,5 +1,6 @@
 package com.samsung;
 
+import com.samsung.buffer.BufferProcessor;
 import com.samsung.file.FileManager;
 import com.samsung.validator.CmdValidChecker;
 
@@ -15,8 +16,8 @@ class Main {
     }
 
     public static void run(CmdData cmdData) {
-        SSDManager ssdManager = new SSDManager(cmdData, FileManager.getInstance());
-        ssdManager.cmdExecute();
+        SSDManager ssdManager = new SSDManager(cmdData, FileManager.getInstance(), new BufferProcessor());
+        ssdManager.cmdExecuteFromBuffer();
     }
 
 }

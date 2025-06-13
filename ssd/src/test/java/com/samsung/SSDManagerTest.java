@@ -1,5 +1,6 @@
 package com.samsung;
 
+import com.samsung.buffer.BufferProcessor;
 import com.samsung.file.FileManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +21,8 @@ public class SSDManagerTest {
 
     @Mock
     FileManager fileManager;
+    @Mock
+    BufferProcessor bufferProcessor;
     SSDManager writeSsdManager;
     SSDManager readSsdManager;
     SSDManager invalidValueSsdManager;
@@ -27,10 +30,10 @@ public class SSDManagerTest {
 
     @BeforeEach
     void setUp() {
-        writeSsdManager = new SSDManager(new CmdData(WRITE, LBA, WRITE_VALUE), fileManager);
-        readSsdManager = new SSDManager(new CmdData(READ, LBA, WRITE_VALUE), fileManager);
-        invalidValueSsdManager = new SSDManager(new CmdData(ERROR, -1, ERROR_VALUE), fileManager);
-        eraseSsdManager = new SSDManager(new CmdData(ERASE, 0, "9"), fileManager);
+        writeSsdManager = new SSDManager(new CmdData(WRITE, LBA, WRITE_VALUE), fileManager, bufferProcessor);
+        readSsdManager = new SSDManager(new CmdData(READ, LBA, WRITE_VALUE), fileManager, bufferProcessor);
+        invalidValueSsdManager = new SSDManager(new CmdData(ERROR, -1, ERROR_VALUE), fileManager, bufferProcessor);
+        eraseSsdManager = new SSDManager(new CmdData(ERASE, 0, "9"), fileManager, bufferProcessor);
     }
 
 
