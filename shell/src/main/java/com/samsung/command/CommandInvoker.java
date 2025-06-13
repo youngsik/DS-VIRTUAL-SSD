@@ -46,6 +46,7 @@ public class CommandInvoker {
         register("help", new HelpCommand(testShellManager));
         register("fullwrite", new FullWriteCommand(testShellManager));
         register("fullread", new FullReadCommand(testShellManager));
+        register("flush", new FlushCommand(testShellManager));
     }
 
     private void register(String commandName, Command command) {

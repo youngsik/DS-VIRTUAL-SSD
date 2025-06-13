@@ -18,6 +18,10 @@ public class JarExecutor {
         executeCommand("E", startLba.toString(), length.toString());
     }
 
+    public void executeFlush() {
+        executeCommand("F");
+    }
+
     private void executeCommand(String... args) {
         try {
             List<String> command = new ArrayList<>();
