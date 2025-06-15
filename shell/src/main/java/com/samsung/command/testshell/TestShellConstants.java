@@ -1,7 +1,7 @@
 package com.samsung.command.testshell;
 
 public class TestShellConstants {
-    public static String[] helpMessage = new String[]{
+    public static String[] HELP_MESSAGE = new String[]{
             "제작자",
             "팀명: DeviceSolution",
             "팀원: 김영식, 박준경, 권희정, 권성민, 이상훈, 오시훈, 추준성",
