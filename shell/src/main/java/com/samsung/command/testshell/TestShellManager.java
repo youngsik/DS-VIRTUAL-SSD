@@ -31,7 +31,6 @@ public class TestShellManager {
         String head = "[Read] LBA";
         String location = String.format("%02d", index);
 
-        Long requestCommandTime = System.currentTimeMillis();
         jarExecutor.executeRead(index);
         String value = fileManager.getResultFromOutputFile();
 
@@ -62,7 +61,6 @@ public class TestShellManager {
         String head = "[Full Read] LBA";
 
         for(int i = 0; i < 100; i++) {
-            Long requestCommandTime = System.currentTimeMillis();
             jarExecutor.executeRead(i);
             String value = fileManager.getResultFromOutputFile();
 
