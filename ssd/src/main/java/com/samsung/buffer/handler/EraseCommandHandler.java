@@ -11,7 +11,7 @@ import java.util.Map;
 
 import static com.samsung.common.CommandType.ERASE;
 import static com.samsung.common.CommandType.WRITE;
-import static com.samsung.common.SSDConstant.MAX_ERASE_SIZE;
+import static com.samsung.common.SSDConstants.MAX_ERASE_SIZE;
 
 
 public class EraseCommandHandler implements CommandHandler {

@@ -4,7 +4,7 @@ import com.samsung.buffer.BufferFolderManager;
 import com.samsung.buffer.BufferProcessor;
 import com.samsung.common.CmdData;
 import com.samsung.common.CommandType;
-import com.samsung.common.SSDConstant;
+import com.samsung.common.SSDConstants;
 import com.samsung.file.FileManager;
 import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class SSDManager {
     private final BufferProcessor bufferProcessor;
     private final BufferFolderManager bufferFolderManager;
 
-    private final CmdData[] commandBuffer = new CmdData[SSDConstant.MAX_BUFFER_INDEX];
+    private final CmdData[] commandBuffer = new CmdData[SSDConstants.MAX_BUFFER_INDEX];
 
     public SSDManager(CmdData cmdData, FileManager fileManager, BufferProcessor bufferProcessor) {
         this.cmdData = cmdData;
@@ -112,8 +112,8 @@ public class SSDManager {
     private void fileErase(int startLba, int size) {
         int endLba = startLba + size;
         for (int currentLba = startLba; currentLba < endLba; currentLba++) {
-            if (currentLba > SSDConstant.MAX_LBA) break;
-            fileManager.writeFile(currentLba, SSDConstant.EMPTY_VALUE);
+            if (currentLba > SSDConstants.MAX_LBA) break;
+            fileManager.writeFile(currentLba, SSDConstants.EMPTY_VALUE);
         }
     }
 

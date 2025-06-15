@@ -7,7 +7,7 @@ import com.samsung.common.CmdData;
 import com.samsung.ssd.SSDManager;
 import lombok.extern.slf4j.Slf4j;
 
-import static com.samsung.common.SSDConstant.ERROR_MESSAGE;
+import static com.samsung.common.SSDConstants.ERROR_MESSAGE;
 
 @Slf4j
 class Main {

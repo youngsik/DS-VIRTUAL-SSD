@@ -2,7 +2,7 @@ package com.samsung.buffer;
 
 import com.samsung.common.CmdData;
 import com.samsung.common.CommandType;
-import com.samsung.common.SSDConstant;
+import com.samsung.common.SSDConstants;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -38,11 +38,11 @@ public class BufferFolderManager {
         File bufferDir = new File(BUFFER_DIR);
         File[] files = bufferDir.listFiles((dir, name) -> name.endsWith(".txt"));
 
-        if (files != null && files.length >= SSDConstant.MAX_BUFFER_INDEX) {
+        if (files != null && files.length >= SSDConstants.MAX_BUFFER_INDEX) {
             return;
         }
 
-        for (int i = SSDConstant.MIN_BUFFER_INDEX; i <= SSDConstant.MAX_BUFFER_INDEX; i++) {
+        for (int i = SSDConstants.MIN_BUFFER_INDEX; i <= SSDConstants.MAX_BUFFER_INDEX; i++) {
             Path filePath = Paths.get(BUFFER_DIR, i + "_empty.txt");
             File file = filePath.toFile();
 
@@ -63,7 +63,7 @@ public class BufferFolderManager {
         List<CmdData> list = new ArrayList<>();
         if (files != null) {
             for (File file : files) {
-                if (index >= SSDConstant.MAX_BUFFER_INDEX) {
+                if (index >= SSDConstants.MAX_BUFFER_INDEX) {
                     break;
                 }
 
@@ -115,7 +115,7 @@ public class BufferFolderManager {
     }
 
     public int findAvailableBufferIndex() {
-        for (int i = SSDConstant.MIN_BUFFER_INDEX; i <= SSDConstant.MAX_BUFFER_INDEX; i++) {
+        for (int i = SSDConstants.MIN_BUFFER_INDEX; i <= SSDConstants.MAX_BUFFER_INDEX; i++) {
             Path filePath = Paths.get(BUFFER_DIR, i + "_empty.txt");
             File file = filePath.toFile();
 
