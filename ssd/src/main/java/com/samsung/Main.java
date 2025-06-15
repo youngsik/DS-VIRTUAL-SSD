@@ -7,6 +7,8 @@ import com.samsung.common.CmdData;
 import com.samsung.ssd.SSDManager;
 import lombok.extern.slf4j.Slf4j;
 
+import static com.samsung.common.SSDConstant.ERROR_MESSAGE;
+
 @Slf4j
 class Main {
     public static void main(String[] args) {
@@ -22,7 +24,7 @@ class Main {
             cmdData = commandResolver.cmdValidCheckAndParsing(args);
         }catch (RuntimeException e){
             FileManager fileManager = FileManager.getInstance();
-            fileManager.writeOnOutputFile("ERROR");
+            fileManager.writeOnOutputFile(ERROR_MESSAGE);
             log.info("[fileErrorOutput] Error output 생성");
         }
         return cmdData;

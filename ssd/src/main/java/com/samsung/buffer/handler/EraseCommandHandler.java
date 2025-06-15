@@ -11,6 +11,7 @@ import java.util.Map;
 
 import static com.samsung.common.CommandType.ERASE;
 import static com.samsung.common.CommandType.WRITE;
+import static com.samsung.common.SSDConstant.MAX_ERASE_SIZE;
 
 
 public class EraseCommandHandler implements CommandHandler {
@@ -82,8 +83,8 @@ public class EraseCommandHandler implements CommandHandler {
                 }
             }
 
-            for (int s = start; s <= end; s += 10) {
-                int len = Math.min(10, end - s + 1);
+            for (int s = start; s <= end; s += MAX_ERASE_SIZE) {
+                int len = Math.min(MAX_ERASE_SIZE, end - s + 1);
                 merged.add(new CmdData(ERASE, s, String.valueOf(len)));
             }
         }

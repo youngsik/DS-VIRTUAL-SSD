@@ -113,7 +113,7 @@ public class SSDManager {
         int endLba = startLba + size;
         for (int currentLba = startLba; currentLba < endLba; currentLba++) {
             if (currentLba > SSDConstant.MAX_LBA) break;
-            fileManager.writeFile(currentLba, SSDConstant.ERASE_VALUE);
+            fileManager.writeFile(currentLba, SSDConstant.EMPTY_VALUE);
         }
     }
 
