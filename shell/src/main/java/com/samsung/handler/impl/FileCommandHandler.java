@@ -35,12 +35,7 @@ public class FileCommandHandler implements CommandHandler {
 
     private void executeCommand(String commandName) {
         System.out.print(commandName + "  ---  Run... ");
-        try {
-            String[] cmdArgs = { commandName };
-            commandInvoker.execute(cmdArgs);
-            System.out.println("PASS");
-        } catch (RuntimeException e) {
-            throw new RuntimeException("FAIL!");
-        }
+        String[] cmdArgs = { commandName };
+        commandInvoker.execute(cmdArgs);
     }
 }
