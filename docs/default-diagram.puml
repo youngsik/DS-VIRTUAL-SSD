@@ -1,0 +1,18 @@
+@startuml
+!include  https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(user, "user")
+
+System_Boundary(system, "Virtual SSD System"){
+    Container(ssd, "SSD Module")
+    Container(shell, "Shell Module")
+    Container(common, "Common Module")
+}
+Rel_U(common, ssd, "uses")
+Rel_U(common, shell, "uses")
+Rel_R(ssd, shell, "", "java -jar")
+
+Rel(user, ssd, "read/write" ,"java -jar")
+Rel(user, shell, "read/write", "java -jar")
+
+@enduml

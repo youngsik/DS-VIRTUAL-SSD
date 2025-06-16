@@ -12,6 +12,14 @@ Device Solution 팀의 가상 SSD 제작 프로젝트
     - Test Shell 안에서 구현되는
       SSD 테스트 코드
 
+# Diagrams
+![전체 다이어그램](docs/default-diagram.png)
+## SSD
+![SSD 모듈 다이어그램](docs/ssd-diagram.png)
+
+## Shell & Shell Script
+![Shell 모듈 다이어그램](docs/shell-diagram.png)
+
 # How to Use
 ssd.jar와 shell.jar 빌드
 ```shell
@@ -26,9 +34,23 @@ ssd.jar와 shell.jar 빌드
   ```shell
   java -jar ssd.jar R {LBA}
   ```
+- LBA에 있는 내용 지우기
+  ```shell
+  java -jar ssd.jar E {LBA} {SIZE}
+  ```
+- 버퍼 내용 flush 하기
+  ```shell
+    java -jar ssd.jar F
+  ```
 ## Test Shell
+```shell
+java -jar shell.jar
+Shell> 
+```
 - write
 - read
+- erase
+- flush
 - exit
 - help
 - fullwrite
@@ -39,15 +61,20 @@ shell.jar 빌드 선행 후 실행
 - Testcase 1 실행
   ```shell
   java -jar shell.jar
-  SHEll> [1_FullWriteAndReadCompare|1_]
+  Shell > [1_FullWriteAndReadCompare|1_]
   ```
 - Testcase 2 실행
   ```shell
   java -jar shell.jar
-  SHEll> [2_PartialLBAWrite|2_]
+  Shell > [2_PartialLBAWrite|2_]
   ```
 - Testcase 3 실행
   ```shell
   java -jar shell.jar
-  SHEll> [3_WriteReadAging|3_]
+  Shell > [3_WriteReadAging|3_]
+  ```
+- Testcase 4 실행
+  ```shell
+  java -jar shell.jar
+  Shell > [4_EraseAndWriteAging|4_]
   ```

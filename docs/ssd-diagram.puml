@@ -1,0 +1,55 @@
+@startuml
+!include  https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Container(main, "Main")
+Container_Ext(fileManager, "File Manager")
+
+Container(ssdmanager, "SSD Manager")
+
+Rel_D(main, ssdmanager, "execute")
+Rel_L(ssdmanager, fileManager,  "")
+SystemDb_Ext(db, "File")
+Rel(fileManager, db, "read/write")
+
+System_Boundary(buffer, "Buffer"){
+    Container(bufferManager, "Buffer Manager")
+    Container(bufferProcessor, "Buffer Processor")
+}
+
+Container(commandHandler, "Command Handler")
+System_Boundary(buffer_handling, "Buffer Handlers"){
+    Container(writeCommandHandler, "Write Command Handler")
+    Container(readCommandHandler, "Read Command Handler")
+    Container(eraseCommandHandler, "Erase Command Handler")
+}
+Rel_D(commandHandler,buffer_handling,"")
+Rel_D(bufferProcessor,commandHandler,"handling command including buffer")
+
+Rel_D(ssdmanager, bufferManager, "")
+Rel_D(ssdmanager, bufferProcessor, "")
+
+System_Boundary(resolver, "Resolver"){
+    Container(commandResolver, "Command Resolver")
+    Container(commandType, "Command Type")
+    Rel_R(commandResolver, commandType, "")
+}
+
+Rel_D(main, commandResolver, "parsing and validating command")
+
+System_Boundary(validators, "Command Validator"){
+    Container(writeCommandValidator, "Write Command Validator")
+    Container(readCommandValidator, "Read Command Validator")
+    Container(eraseCommandValidator, "Erase Command Validator")
+    Container(flushCommandValidator, "Flush Command Validator")
+}
+
+System_Boundary(argument, "Argument Validator"){
+    Container_Ext(argumentResolver, "Argument Resolver")
+    Container_Ext(argumentCount, "Argument Count Validator")
+    Container_Ext(argumentValidator, "Argument Validator")
+}
+
+Rel(argument, validators, "")
+Rel_D(commandType, validators, "")
+
+@enduml

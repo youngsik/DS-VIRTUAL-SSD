@@ -1,0 +1,62 @@
+@startuml
+!include  https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Container(app, "Test Shell Application")
+Container(factory,"Command Handler Factory")
+Rel_R(app, factory, "")
+
+System_Boundary(commandHandler, "Command Handler"){
+    Container(fileHandler, "File Command Handler")
+    Container(interactiveHandler, "Interactive Command Handler")
+}
+Rel_D(factory, commandHandler,  "")
+Rel_D(app, commandHandler, "command handling")
+
+Container(commandInvoker, "Command Invoker")
+Container(commandRegistry, "Command Registry")
+Rel_L( commandRegistry, commandInvoker, "")
+Rel_D(commandHandler, commandInvoker, "invoke command")
+
+System_Boundary(command, "Command"){
+    Container(readCommand, "Read Command")
+    Container(writeCommand, "Write Command")
+    Container(eraseCommand, "Erase Command")
+    Container(eraserangeCommand, "Erase Range Command")
+    Container(flushCommand, "Flush Command")
+    Container(exitCommand, "Exit Command")
+    Container(helpCommand, "Help Command")
+    Container(fullWriteCommand, "Full Read Command")
+    Container(fullReadCommand, "Full Write Command")
+    Container(test1Script, "Test Script 1 Command")
+    Container(test2Script, "Test Script 2 Command")
+    Container(test3Script, "Test Script 3 Command")
+    Container(test4Script, "Test Script 4 Command")
+}
+
+System_Boundary(argument, "Argument Validator"){
+    Container_Ext(argumentResolver, "Argument Resolver")
+    Container_Ext(argumentCount, "Argument Count Validator")
+    Container_Ext(argumentValidator, "Argument Validator")
+}
+
+Rel_R(argument, command, "validating command")
+
+Rel_D(commandInvoker, command, "execute command")
+Container(shellManager, "Test Shell Manager")
+Rel_D(command, shellManager, "execute")
+
+Container(scriptManager, "Script Manager")
+Rel_D(command, scriptManager, "execute")
+
+Container_Ext(fileManager, "File Manager")
+Container(jarExecutor, "Jar Executor")
+SystemDb_Ext(db, "File")
+Rel(fileManager, db, "read/write")
+
+Rel(shellManager, jarExecutor, "")
+Rel(scriptManager, jarExecutor, "")
+
+Rel(shellManager, fileManager, "read")
+Rel(scriptManager, fileManager, "read")
+
+@enduml
