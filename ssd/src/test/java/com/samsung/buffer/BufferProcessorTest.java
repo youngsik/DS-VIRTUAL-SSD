@@ -340,14 +340,7 @@ class BufferProcessorTest {
                 new CmdData(ERASE, 0, "6")
         );
 
-        assertEquals(expected.size(), processor.getBuffer().size());
-        for (int i = 0; i < expected.size(); i++) {
-            CmdData e = expected.get(i);
-            CmdData a = processor.getBuffer().get(i);
-            assertEquals(e.getCommand(), a.getCommand());
-            assertEquals(e.getLba(), a.getLba());
-            assertEquals(e.getValue(), a.getValue());
-        }
+        assertEqualBuffers(expected, processor);
     }
 
     @Test
@@ -361,14 +354,7 @@ class BufferProcessorTest {
                 new CmdData(ERASE, 2, "1")
         );
 
-        assertEquals(expected.size(), processor.getBuffer().size());
-        for (int i = 0; i < expected.size(); i++) {
-            CmdData e = expected.get(i);
-            CmdData a = processor.getBuffer().get(i);
-            assertEquals(e.getCommand(), a.getCommand());
-            assertEquals(e.getLba(), a.getLba());
-            assertEquals(e.getValue(), a.getValue());
-        }
+        assertEqualBuffers(expected, processor);
     }
 
     @Test
@@ -383,14 +369,7 @@ class BufferProcessorTest {
                 new CmdData(ERASE, 1, "4")
         );
 
-        assertEquals(expected.size(), processor.getBuffer().size());
-        for (int i = 0; i < expected.size(); i++) {
-            CmdData e = expected.get(i);
-            CmdData a = processor.getBuffer().get(i);
-            assertEquals(e.getCommand(), a.getCommand());
-            assertEquals(e.getLba(), a.getLba());
-            assertEquals(e.getValue(), a.getValue());
-        }
+        assertEqualBuffers(expected, processor);
     }
 
     @Test
@@ -404,14 +383,7 @@ class BufferProcessorTest {
                 new CmdData(ERASE, 0, "7")
         );
 
-        assertEquals(expected.size(), processor.getBuffer().size());
-        for (int i = 0; i < expected.size(); i++) {
-            CmdData e = expected.get(i);
-            CmdData a = processor.getBuffer().get(i);
-            assertEquals(e.getCommand(), a.getCommand());
-            assertEquals(e.getLba(), a.getLba());
-            assertEquals(e.getValue(), a.getValue());
-        }
+        assertEqualBuffers(expected, processor);
     }
 
     @Test
@@ -426,14 +398,7 @@ class BufferProcessorTest {
                 new CmdData(ERASE, 10, "5")
         );
 
-        assertEquals(expected.size(), processor.getBuffer().size());
-        for (int i = 0; i < expected.size(); i++) {
-            CmdData e = expected.get(i);
-            CmdData a = processor.getBuffer().get(i);
-            assertEquals(e.getCommand(), a.getCommand());
-            assertEquals(e.getLba(), a.getLba());
-            assertEquals(e.getValue(), a.getValue());
-        }
+        assertEqualBuffers(expected, processor);
     }
 
     @Test
@@ -448,14 +413,7 @@ class BufferProcessorTest {
                 new CmdData(ERASE, 5, "2")
         );
 
-        assertEquals(expected.size(), processor.getBuffer().size());
-        for (int i = 0; i < expected.size(); i++) {
-            CmdData e = expected.get(i);
-            CmdData a = processor.getBuffer().get(i);
-            assertEquals(e.getCommand(), a.getCommand());
-            assertEquals(e.getLba(), a.getLba());
-            assertEquals(e.getValue(), a.getValue());
-        }
+        assertEqualBuffers(expected, processor);
     }
 
     @Test
@@ -469,14 +427,7 @@ class BufferProcessorTest {
                 new CmdData(ERASE, 0, "4")
         );
 
-        assertEquals(expected.size(), processor.getBuffer().size());
-        for (int i = 0; i < expected.size(); i++) {
-            CmdData e = expected.get(i);
-            CmdData a = processor.getBuffer().get(i);
-            assertEquals(e.getCommand(), a.getCommand());
-            assertEquals(e.getLba(), a.getLba());
-            assertEquals(e.getValue(), a.getValue());
-        }
+        assertEqualBuffers(expected, processor);
     }
 
     @Test
@@ -493,14 +444,7 @@ class BufferProcessorTest {
                 new CmdData(WRITE, 5, "0x0000CCCC")
         );
 
-        assertEquals(expected.size(), processor.getBuffer().size());
-        for (int i = 0; i < expected.size(); i++) {
-            CmdData e = expected.get(i);
-            CmdData a = processor.getBuffer().get(i);
-            assertEquals(e.getCommand(), a.getCommand());
-            assertEquals(e.getLba(), a.getLba());
-            assertEquals(e.getValue(), a.getValue());
-        }
+        assertEqualBuffers(expected, processor);
     }
 
     @Test
@@ -515,14 +459,7 @@ class BufferProcessorTest {
                 new CmdData(ERASE, 1, "2")
         );
 
-        assertEquals(expected.size(), processor.getBuffer().size());
-        for (int i = 0; i < expected.size(); i++) {
-            CmdData e = expected.get(i);
-            CmdData a = processor.getBuffer().get(i);
-            assertEquals(e.getCommand(), a.getCommand());
-            assertEquals(e.getLba(), a.getLba());
-            assertEquals(e.getValue(), a.getValue());
-        }
+        assertEqualBuffers(expected, processor);
     }
 
     @Test
@@ -536,14 +473,7 @@ class BufferProcessorTest {
                 new CmdData(ERASE, 0, "4")
         );
 
-        assertEquals(expected.size(), processor.getBuffer().size());
-        for (int i = 0; i < expected.size(); i++) {
-            CmdData e = expected.get(i);
-            CmdData a = processor.getBuffer().get(i);
-            assertEquals(e.getCommand(), a.getCommand());
-            assertEquals(e.getLba(), a.getLba());
-            assertEquals(e.getValue(), a.getValue());
-        }
+        assertEqualBuffers(expected, processor);
     }
 
     @Test
@@ -562,6 +492,10 @@ class BufferProcessorTest {
                 new CmdData(WRITE, 15, "0x12121212")
         );
 
+        assertEqualBuffers(expected, processor);
+    }
+
+    private void assertEqualBuffers(List<CmdData> expected, BufferProcessor processor) {
         assertEquals(expected.size(), processor.getBuffer().size());
         for (int i = 0; i < expected.size(); i++) {
             CmdData e = expected.get(i);
