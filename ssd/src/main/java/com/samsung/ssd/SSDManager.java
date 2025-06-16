@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 import static com.samsung.common.CommandType.*;
 import static com.samsung.common.SSDConstants.EMPTY_VALUE;
+import static com.samsung.common.SSDConstants.NODATA_VALUE;
 
 @Slf4j
 public class SSDManager {
@@ -74,10 +75,12 @@ public class SSDManager {
 
     private void handleRead(CmdData cmd) {
         String result = bufferProcessor.process(cmd);
-        if (EMPTY_VALUE.equals(result)) {
+        fileManager.writeOnOutputFile(result);
+
+        if (NODATA_VALUE.equals(result)) {
             fileManager.readFile(cmd.getLba());
         }
-        fileManager.writeOnOutputFile(result);
+
     }
 
     private void executeCommandInBuffer(CmdData cmdData) {
