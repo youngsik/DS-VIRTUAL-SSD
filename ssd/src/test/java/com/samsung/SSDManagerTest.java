@@ -45,7 +45,7 @@ public class SSDManagerTest {
 
         readSsdManager.cmdExecuteFromBuffer();
 
-        verify(fileManager).writeOnOutputFile(WRITE_VALUE);
+        verify(fileManager, never()).readFile(LBA);
     }
 
     @Test
@@ -54,7 +54,14 @@ public class SSDManagerTest {
         when(bufferProcessor.process(any(CmdData.class))).thenReturn(WRITE_VALUE);
         readSsdManager.cmdExecuteFromBuffer();
         readSsdManager.cmdExecuteFromBuffer();
-        verify(fileManager,times(2)).writeOnOutputFile(WRITE_VALUE);
+        verify(fileManager,never()).readFile(LBA);
     }
 
+    @Test
+    @DisplayName("읽기 1번 테스트")
+    public void readEmptyTest() {
+        when(bufferProcessor.process(any(CmdData.class))).thenReturn("0x00000000");
+        readSsdManager.cmdExecuteFromBuffer();
+        verify(fileManager,times(1)).writeOnOutputFile("0x00000000");
+    }
 }

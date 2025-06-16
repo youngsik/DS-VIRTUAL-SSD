@@ -59,6 +59,7 @@ public class SSDManager {
     }
 
     private void applyBufferAlgorithm() {
+        bufferProcessor.clear();
         List<CmdData> loadedCmdList = loadCommandsFromBuffer();
         for (CmdData command : loadedCmdList) {
             bufferProcessor.process(command);
@@ -80,7 +81,6 @@ public class SSDManager {
         if (NODATA_VALUE.equals(result)) {
             fileManager.readFile(cmd.getLba());
         }
-
     }
 
     private void executeCommandInBuffer(CmdData cmdData) {
