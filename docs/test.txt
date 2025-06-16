@@ -1,0 +1,61 @@
+[SSD]
+java -jar ssd.jar W 0 0x11111111
+java -jar ssd.jar F
+-> ssd_nand.txt 파일 1번째 줄에 0x11111111
+
+java -jar ssd.jar R 0
+-> ssd_output.txt 파일에 0x11111111
+
+java -jar ssd.jar W 99 0x99999999
+java -jar ssd.jar F
+-> buffer 파일명 1_W_99_0x99999999 로 변경
+
+java -jar ssd.jar R 99
+-> ssd_output.txt 파일에 0x99999999
+
+java -jar ssd.jar W -1 0x00000002
+-> ssd_output.txt 파일에 ERROR
+
+java -jar ssd.jar R -10
+-> ssd_output.txt 파일에 ERROR
+
+java -jar ssd.jar E 0 1
+-> buffer 파일명 2_E_0_1 변경
+
+java -jar ssd.jar E 0 -1
+-> ssd_output.txt 파일에 ERROR
+
+java -jar ssd.jar E 0 10
+-> buffer 파일명 2_E_0_10 변경
+
+
+
+[SHELL]
+처음에 java -jar shell.jar 입력
+-> Shell > 출력
+
+help
+-> 명령어 목록 출력
+
+erase 0 99
+-> ssd_nand.txt 파일 초기화
+
+write 0 0x00000002
+flush
+-> ssd_nand.txt 파일 1번째 줄 0x00000002로 변경됨
+
+read 0
+-> [Read] LBA 00 0x00000001 출력됨
+
+fullwrite 0x00000003
+-> ssd_nand.txt 파일이 전부 0x00000003로 변경
+
+fullread
+-> 0x00000003 100개 출력
+
+erase_range 75 53
+-> 54번째 줄에서 76번째 줄까지 모두 erase
+
+
+exit
+-> 프로그램 종료
