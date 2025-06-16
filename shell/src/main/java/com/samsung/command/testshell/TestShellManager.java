@@ -5,6 +5,7 @@ import com.samsung.file.JarExecutor;
 import lombok.extern.slf4j.Slf4j;
 
 import static com.samsung.command.testshell.TestShellConstants.HELP_MESSAGE;
+import static com.samsung.command.testshell.TestShellConstants.MAX_FILE_LENGTH;
 
 @Slf4j
 public class TestShellManager {
@@ -51,7 +52,7 @@ public class TestShellManager {
         String head = "[Full Write]";
         String pass = "Done";
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < MAX_FILE_LENGTH; i++) {
             jarExecutor.executeWrite(i, value);
         }
         System.out.println(head + " " + pass);
@@ -60,7 +61,7 @@ public class TestShellManager {
     public void fullread() {
         String head = "[Full Read] LBA";
 
-        for(int i = 0; i < 100; i++) {
+        for(int i = 0; i < MAX_FILE_LENGTH; i++) {
             jarExecutor.executeRead(i);
             String value = fileManager.getResultFromOutputFile();
 

@@ -1,12 +1,8 @@
 package com.samsung.file;
 
-import com.samsung.handler.ExceptionHandlingProxy;
-
 import java.io.*;
-import java.lang.reflect.Proxy;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 
 import static com.samsung.file.FileConstants.*;
 
@@ -57,9 +53,7 @@ public class FileManager{
     }
 
     public void writeFile(int index, String value) {
-        RandomAccessFile file = null;
-        try {
-            file = new RandomAccessFile(SSD_NAND_FILE_NAME, "rw");
+        try (RandomAccessFile file = new RandomAccessFile(SSD_NAND_FILE_NAME, "rw")){
             file.seek((long) index * OFFSET);
             file.writeBytes(value);
         } catch (IOException e) {

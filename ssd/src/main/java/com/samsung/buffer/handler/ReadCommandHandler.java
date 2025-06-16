@@ -5,6 +5,8 @@ import com.samsung.common.CmdData;
 
 import java.util.Map;
 
+import static com.samsung.common.SSDConstants.EMPTY_VALUE;
+
 public class ReadCommandHandler implements CommandHandler {
     private final Map<Integer, String> memory;
 
@@ -14,6 +16,6 @@ public class ReadCommandHandler implements CommandHandler {
 
     @Override
     public String handle(CmdData cmd) {
-        return memory.getOrDefault(cmd.getLba(), "0x00000000");
+        return memory.getOrDefault(cmd.getLba(), EMPTY_VALUE);
     }
 }
