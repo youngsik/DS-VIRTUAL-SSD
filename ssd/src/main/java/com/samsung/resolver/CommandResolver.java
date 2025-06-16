@@ -11,7 +11,6 @@ public class CommandResolver {
         }
         try {
             CommandValidator validator = CommandType.fromCode(cmdParam[0]).getCommandValidator();
-            validator.validate(cmdParam);
             return validator.validate(cmdParam);
         } catch (IllegalArgumentException e) {
             throw new RuntimeException();
