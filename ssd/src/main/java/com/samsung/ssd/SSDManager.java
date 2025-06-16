@@ -8,15 +8,14 @@ import com.samsung.common.SSDConstant;
 import com.samsung.file.FileManager;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.samsung.file.FileConstants.BLANK_DATA;
 import static com.samsung.common.CommandType.*;
+import static com.samsung.file.FileConstants.BLANK_DATA;
 
 @Slf4j
 public class SSDManager {
@@ -83,6 +82,7 @@ public class SSDManager {
         for (CmdData command : calculatedCmdList) {
             executeCommandInBuffer(command);
         }
+        bufferProcessor.clear();
     }
 
     private void fileErase(int startLba, int size) {
