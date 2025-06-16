@@ -5,7 +5,6 @@ import com.samsung.common.CmdData;
 
 import java.util.Map;
 
-import static com.samsung.common.SSDConstants.EMPTY_VALUE;
 import static com.samsung.common.SSDConstants.NODATA_VALUE;
 
 public class ReadCommandHandler implements CommandHandler {

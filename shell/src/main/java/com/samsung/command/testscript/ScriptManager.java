@@ -40,7 +40,6 @@ public class ScriptManager {
     public boolean testScript3() {
         log.info("[Script3] LBA_FIRST & LBA_LAST 무작위 쓰기/검증 시작");
         for (int i = 0; i < LOOP_100 * 2; i++) {
-            System.out.println(i);
             boolean firstOk = writeAndVerify(LBA_FIRST, randomHex.getRandomValue());
             boolean lastOk = writeAndVerify(LBA_LAST, randomHex.getRandomValue());
             if (!(firstOk && lastOk)) return false;

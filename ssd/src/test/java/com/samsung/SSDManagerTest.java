@@ -58,11 +58,10 @@ public class SSDManagerTest {
     }
 
     @Test
-    @DisplayName("읽기 2번 테스트")
+    @DisplayName("읽기 1번 테스트")
     public void readEmptyTest() {
         when(bufferProcessor.process(any(CmdData.class))).thenReturn("0x00000000");
         readSsdManager.cmdExecuteFromBuffer();
         verify(fileManager,times(1)).readFile(LBA);
     }
-
 }
