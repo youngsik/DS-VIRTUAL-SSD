@@ -2,15 +2,24 @@
 Device Solution 팀의 가상 SSD 제작 프로젝트
 
 ## Components
-- SSD 모듈
+- Common 모듈 ([common/](common/))
+  - FileManager
+    - 파일 입출력 관리
+  - Validator
+    - 명령어 포맷 검증
+  - Log
+- SSD 모듈 ([ssd/](ssd/))
   - SSD
     - file을 읽고 쓰는 장치 (SW적 구현)
-- Shell 모듈
+- Shell 모듈 ([shell/](shell/))
   - Test Shell
     - SSD를 테스트하는 프로그램
   - Test Script
     - Test Shell 안에서 구현되는
       SSD 테스트 코드
+- 문서 ([docs/](docs/))
+  - 다이어그램
+  - ppt
 
 # Diagrams
 ![전체 다이어그램](docs/default-diagram.png)

@@ -10,7 +10,7 @@ System_Boundary(commandHandler, "Command Handler"){
     Container(interactiveHandler, "Interactive Command Handler")
 }
 Rel_D(factory, commandHandler,  "")
-Rel_D(app, commandHandler, "command handling")
+Rel_D(app, commandHandler, "handling command")
 
 Container(commandInvoker, "Command Invoker")
 Container(commandRegistry, "Command Registry")
