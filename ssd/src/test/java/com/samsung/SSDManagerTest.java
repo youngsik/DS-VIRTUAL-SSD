@@ -62,6 +62,6 @@ public class SSDManagerTest {
     public void readEmptyTest() {
         when(bufferProcessor.process(any(CmdData.class))).thenReturn("0x00000000");
         readSsdManager.cmdExecuteFromBuffer();
-        verify(fileManager,times(1)).readFile(LBA);
+        verify(fileManager,times(1)).writeOnOutputFile("0x00000000");
     }
 }
