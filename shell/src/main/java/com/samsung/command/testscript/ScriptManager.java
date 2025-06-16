@@ -81,14 +81,16 @@ public class ScriptManager {
     }
 
     private boolean isVerifyValue(int lba, String expected) {
-        String actual = fileManager.getValueFromFile(lba);
+        jarExecutor.executeRead(lba);
+        String actual = fileManager.getResultFromOutputFile();
         return expected.equals(actual);
     }
 
     private boolean verifyRange(int startLba, int length, String expected) {
         for (int offset = 0; offset < length; offset++) {
             int lba = startLba + offset;
-            String actual = fileManager.getValueFromFile(lba);
+            jarExecutor.executeRead(lba);
+            String actual = fileManager.getResultFromOutputFile();
             if (!expected.equals(actual)) {
                 log.warn("Verification failed at LBA {}: expected={}, actual={}", lba, expected, actual);
                 return false;
