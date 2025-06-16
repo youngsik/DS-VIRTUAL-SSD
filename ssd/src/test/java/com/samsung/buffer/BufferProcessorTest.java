@@ -477,7 +477,7 @@ class BufferProcessorTest {
     }
 
     @Test
-    @DisplayName("Test 42: Buffer Verification Test 10: Contained erase is ignored")
+    @DisplayName("Test 42: Buffer Verification Test 11")
     void bufferVerificationTest_11() {
         BufferProcessor processor = new BufferProcessor();
         processor.process(new CmdData(ERASE, 0, "10"));
@@ -490,6 +490,25 @@ class BufferProcessorTest {
                 new CmdData(WRITE, 5, "0x55555555"),
                 new CmdData(ERASE, 15, "5"),
                 new CmdData(WRITE, 15, "0x12121212")
+        );
+
+        assertEqualBuffers(expected, processor);
+    }
+
+    @Test
+    @DisplayName("Test 43: Buffer Verification Test 12")
+    void bufferVerificationTest_12() {
+        BufferProcessor processor = new BufferProcessor();
+        processor.process(new CmdData(WRITE, 1, "0x12341234"));
+        processor.process(new CmdData(ERASE, 5, "3"));
+        processor.process(new CmdData(WRITE, 5, "0x12312312"));
+        processor.process(new CmdData(ERASE, 6, "5"));
+
+        List<CmdData> expected = List.of(
+                new CmdData(WRITE, 1, "0x12341234"),
+                new CmdData(ERASE, 5, "3"),
+                new CmdData(WRITE, 5, "0x12312312"),
+                new CmdData(ERASE, 6, "5")
         );
 
         assertEqualBuffers(expected, processor);
