@@ -322,11 +322,11 @@ class BufferProcessorTest {
     void test_31() {
         BufferProcessor processor = new BufferProcessor();
         String result = processor.process(new CmdData(READ, 1, null));
-        assertEquals("0x00000000", result);
+        assertEquals("-1", result);
         result = processor.process(new CmdData(READ, 5, null));
-        assertEquals("0x00000000", result);
+        assertEquals("-1", result);
         result = processor.process(new CmdData(READ, 8, null));
-        assertEquals("0x00000000", result);
+        assertEquals("-1", result);
     }
 
     @Test
