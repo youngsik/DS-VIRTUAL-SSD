@@ -21,7 +21,7 @@ public class TestScript3Command implements Command {
             System.out.println("PASS");
             return;
         }
-        System.out.println("FAIL");
+        throw new RuntimeException("FAIL");
     }
 
 }
