@@ -40,6 +40,7 @@ public class ScriptManager {
     public boolean testScript3() {
         log.info("[Script3] LBA_FIRST & LBA_LAST 무작위 쓰기/검증 시작");
         for (int i = 0; i < LOOP_100 * 2; i++) {
+            System.out.println(i);
             boolean firstOk = writeAndVerify(LBA_FIRST, randomHex.getRandomValue());
             boolean lastOk = writeAndVerify(LBA_LAST, randomHex.getRandomValue());
             if (!(firstOk && lastOk)) return false;
@@ -81,14 +82,16 @@ public class ScriptManager {
     }
 
     private boolean isVerifyValue(int lba, String expected) {
-        String actual = fileManager.getValueFromFile(lba);
+        jarExecutor.executeRead(lba);
+        String actual = fileManager.getResultFromOutputFile();
         return expected.equals(actual);
     }
 
     private boolean verifyRange(int startLba, int length, String expected) {
         for (int offset = 0; offset < length; offset++) {
             int lba = startLba + offset;
-            String actual = fileManager.getValueFromFile(lba);
+            jarExecutor.executeRead(lba);
+            String actual = fileManager.getResultFromOutputFile();
             if (!expected.equals(actual)) {
                 log.warn("Verification failed at LBA {}: expected={}, actual={}", lba, expected, actual);
                 return false;
