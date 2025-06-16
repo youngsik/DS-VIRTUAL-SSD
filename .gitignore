@@ -1,7 +1,6 @@
 logs/
 **/*.log
 **/*.jar
-**/*.txt
 **/*.zip
 .idea/
 .gradle
