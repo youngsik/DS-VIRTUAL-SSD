@@ -70,7 +70,6 @@ public class SSDManager {
         for (CmdData command : calculatedCmdList) {
             executeCommandInBuffer(command);
         }
-        bufferProcessor.clear();
     }
 
     private void handleRead(CmdData cmd) {
