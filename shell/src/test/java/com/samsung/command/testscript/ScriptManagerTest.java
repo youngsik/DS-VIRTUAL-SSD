@@ -38,7 +38,7 @@ public class ScriptManagerTest {
     @Test
     @DisplayName("testScript1 - 기본값 0xAAAABBBB를 100개에 걸쳐 검증")
     void testScript1() {
-        doReturn(VALUE).when(fileManager).getValueFromFile(anyInt());
+        doReturn(VALUE).when(fileManager).getResultFromOutputFile();
         boolean result = scriptManager.testScript1();
 
         assertTrue(result);
@@ -48,14 +48,14 @@ public class ScriptManagerTest {
     @Test
     @DisplayName("testScript2 - script2LbaOrder 값들 반복적으로 write 후 검증")
     void testScript2() {
-        doReturn(VALUE).when(fileManager).getValueFromFile(anyInt());
+        doReturn(VALUE).when(fileManager).getResultFromOutputFile();
         boolean result = scriptManager.testScript2();
 
         assertTrue(result);
         for (int i = 0; i <= 4; i++) {
             verify(jarExecutor, atLeastOnce()).executeWrite(eq(i), eq(VALUE));
         }
-        verify(fileManager, atLeast(30 * 5)).getValueFromFile(anyInt()); // 최소 150회 호출 예상
+        verify(fileManager, atLeast(30 * 5)).getResultFromOutputFile(); // 최소 150회 호출 예상
     }
 
     @Test
@@ -63,23 +63,21 @@ public class ScriptManagerTest {
     void testScript3() {
         when(randomHex.getRandomValue()).thenReturn(VALUE);
 
-        doReturn(VALUE).when(fileManager).getValueFromFile(anyInt());
+        doReturn(VALUE).when(fileManager).getResultFromOutputFile();
 
         boolean result = scriptManager.testScript3();
 
         assertTrue(result);
         verify(jarExecutor, times(200)).executeWrite(eq(0), anyString());
         verify(jarExecutor, times(200)).executeWrite(eq(99), anyString());
-        verify(fileManager, times(200)).getValueFromFile(0);
-        verify(fileManager, times(200)).getValueFromFile(99);
-        verify(fileManager, atLeast(400)).getValueFromFile(anyInt());
+        verify(fileManager, atLeast(400)).getResultFromOutputFile();
     }
 
 
     @Test
     @DisplayName("testScript4 - write, overwrite 후 erase → EMPTY_VALUE 검증")
     void testScript4() {
-        doReturn(EMPTY_VALUE).when(fileManager).getValueFromFile(anyInt());
+        doReturn(EMPTY_VALUE).when(fileManager).getResultFromOutputFile();
         stubEraseJar();
 
         boolean result = scriptManager.testScript4();
@@ -88,7 +86,7 @@ public class ScriptManagerTest {
         verify(jarExecutor, times(1)).executeErase(eq(0), eq(3));
         verify(jarExecutor, times(31)).executeErase(anyInt(), eq(3));
         verify(jarExecutor, times(30 * 2)).executeWrite(anyInt(), anyString());
-        verify(fileManager, times(30 * 3)).getValueFromFile(anyInt());
+        verify(fileManager, times(30 * 3)).getResultFromOutputFile();
     }
 
     private void stubEraseJar() {
