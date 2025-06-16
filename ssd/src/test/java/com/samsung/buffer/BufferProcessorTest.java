@@ -545,4 +545,30 @@ class BufferProcessorTest {
             assertEquals(e.getValue(), a.getValue());
         }
     }
+
+    @Test
+    @DisplayName("Test 42: Buffer Verification Test 10: Contained erase is ignored")
+    void bufferVerificationTest_11() {
+        BufferProcessor processor = new BufferProcessor();
+        processor.process(new CmdData(ERASE, 0, "10"));
+        processor.process(new CmdData(WRITE, 5, "0x55555555"));
+        processor.process(new CmdData(ERASE, 15, "5"));
+        processor.process(new CmdData(WRITE, 15, "0x12121212"));
+
+        List<CmdData> expected = List.of(
+                new CmdData(ERASE, 0, "10"),
+                new CmdData(WRITE, 5, "0x55555555"),
+                new CmdData(ERASE, 15, "5"),
+                new CmdData(WRITE, 15, "0x12121212")
+        );
+
+        assertEquals(expected.size(), processor.getBuffer().size());
+        for (int i = 0; i < expected.size(); i++) {
+            CmdData e = expected.get(i);
+            CmdData a = processor.getBuffer().get(i);
+            assertEquals(e.getCommand(), a.getCommand());
+            assertEquals(e.getLba(), a.getLba());
+            assertEquals(e.getValue(), a.getValue());
+        }
+    }
 }

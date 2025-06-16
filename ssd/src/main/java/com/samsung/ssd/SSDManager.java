@@ -7,14 +7,15 @@ import com.samsung.common.CommandType;
 import com.samsung.common.SSDConstants;
 import com.samsung.file.FileManager;
 import lombok.extern.slf4j.Slf4j;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.samsung.file.FileConstants.BLANK_DATA;
 import static com.samsung.common.CommandType.*;
+import static com.samsung.common.SSDConstants.EMPTY_VALUE;
 
 @Slf4j
 public class SSDManager {
@@ -69,11 +70,12 @@ public class SSDManager {
         for (CmdData command : calculatedCmdList) {
             executeCommandInBuffer(command);
         }
+        bufferProcessor.clear();
     }
 
     private void handleRead(CmdData cmd) {
         String result = bufferProcessor.process(cmd);
-        if (BLANK_DATA.equals(result)) {
+        if (EMPTY_VALUE.equals(result)) {
             fileManager.readFile(cmd.getLba());
         }
         fileManager.writeOnOutputFile(result);
@@ -113,7 +115,7 @@ public class SSDManager {
         int endLba = startLba + size;
         for (int currentLba = startLba; currentLba < endLba; currentLba++) {
             if (currentLba > SSDConstants.MAX_LBA) break;
-            fileManager.writeFile(currentLba, SSDConstants.EMPTY_VALUE);
+            fileManager.writeFile(currentLba, EMPTY_VALUE);
         }
     }
 
