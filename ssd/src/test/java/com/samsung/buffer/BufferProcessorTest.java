@@ -340,14 +340,7 @@ class BufferProcessorTest {
                 new CmdData(ERASE, 0, "6")
         );
 
-        assertEquals(expected.size(), processor.getBuffer().size());
-        for (int i = 0; i < expected.size(); i++) {
-            CmdData e = expected.get(i);
-            CmdData a = processor.getBuffer().get(i);
-            assertEquals(e.getCommand(), a.getCommand());
-            assertEquals(e.getLba(), a.getLba());
-            assertEquals(e.getValue(), a.getValue());
-        }
+        assertEqualBuffers(expected, processor);
     }
 
     @Test
@@ -361,14 +354,7 @@ class BufferProcessorTest {
                 new CmdData(ERASE, 2, "1")
         );
 
-        assertEquals(expected.size(), processor.getBuffer().size());
-        for (int i = 0; i < expected.size(); i++) {
-            CmdData e = expected.get(i);
-            CmdData a = processor.getBuffer().get(i);
-            assertEquals(e.getCommand(), a.getCommand());
-            assertEquals(e.getLba(), a.getLba());
-            assertEquals(e.getValue(), a.getValue());
-        }
+        assertEqualBuffers(expected, processor);
     }
 
     @Test
@@ -383,14 +369,7 @@ class BufferProcessorTest {
                 new CmdData(ERASE, 1, "4")
         );
 
-        assertEquals(expected.size(), processor.getBuffer().size());
-        for (int i = 0; i < expected.size(); i++) {
-            CmdData e = expected.get(i);
-            CmdData a = processor.getBuffer().get(i);
-            assertEquals(e.getCommand(), a.getCommand());
-            assertEquals(e.getLba(), a.getLba());
-            assertEquals(e.getValue(), a.getValue());
-        }
+        assertEqualBuffers(expected, processor);
     }
 
     @Test
@@ -404,14 +383,7 @@ class BufferProcessorTest {
                 new CmdData(ERASE, 0, "7")
         );
 
-        assertEquals(expected.size(), processor.getBuffer().size());
-        for (int i = 0; i < expected.size(); i++) {
-            CmdData e = expected.get(i);
-            CmdData a = processor.getBuffer().get(i);
-            assertEquals(e.getCommand(), a.getCommand());
-            assertEquals(e.getLba(), a.getLba());
-            assertEquals(e.getValue(), a.getValue());
-        }
+        assertEqualBuffers(expected, processor);
     }
 
     @Test
@@ -426,14 +398,7 @@ class BufferProcessorTest {
                 new CmdData(ERASE, 10, "5")
         );
 
-        assertEquals(expected.size(), processor.getBuffer().size());
-        for (int i = 0; i < expected.size(); i++) {
-            CmdData e = expected.get(i);
-            CmdData a = processor.getBuffer().get(i);
-            assertEquals(e.getCommand(), a.getCommand());
-            assertEquals(e.getLba(), a.getLba());
-            assertEquals(e.getValue(), a.getValue());
-        }
+        assertEqualBuffers(expected, processor);
     }
 
     @Test
@@ -448,14 +413,7 @@ class BufferProcessorTest {
                 new CmdData(ERASE, 5, "2")
         );
 
-        assertEquals(expected.size(), processor.getBuffer().size());
-        for (int i = 0; i < expected.size(); i++) {
-            CmdData e = expected.get(i);
-            CmdData a = processor.getBuffer().get(i);
-            assertEquals(e.getCommand(), a.getCommand());
-            assertEquals(e.getLba(), a.getLba());
-            assertEquals(e.getValue(), a.getValue());
-        }
+        assertEqualBuffers(expected, processor);
     }
 
     @Test
@@ -469,14 +427,7 @@ class BufferProcessorTest {
                 new CmdData(ERASE, 0, "4")
         );
 
-        assertEquals(expected.size(), processor.getBuffer().size());
-        for (int i = 0; i < expected.size(); i++) {
-            CmdData e = expected.get(i);
-            CmdData a = processor.getBuffer().get(i);
-            assertEquals(e.getCommand(), a.getCommand());
-            assertEquals(e.getLba(), a.getLba());
-            assertEquals(e.getValue(), a.getValue());
-        }
+        assertEqualBuffers(expected, processor);
     }
 
     @Test
@@ -493,14 +444,7 @@ class BufferProcessorTest {
                 new CmdData(WRITE, 5, "0x0000CCCC")
         );
 
-        assertEquals(expected.size(), processor.getBuffer().size());
-        for (int i = 0; i < expected.size(); i++) {
-            CmdData e = expected.get(i);
-            CmdData a = processor.getBuffer().get(i);
-            assertEquals(e.getCommand(), a.getCommand());
-            assertEquals(e.getLba(), a.getLba());
-            assertEquals(e.getValue(), a.getValue());
-        }
+        assertEqualBuffers(expected, processor);
     }
 
     @Test
@@ -515,14 +459,7 @@ class BufferProcessorTest {
                 new CmdData(ERASE, 1, "2")
         );
 
-        assertEquals(expected.size(), processor.getBuffer().size());
-        for (int i = 0; i < expected.size(); i++) {
-            CmdData e = expected.get(i);
-            CmdData a = processor.getBuffer().get(i);
-            assertEquals(e.getCommand(), a.getCommand());
-            assertEquals(e.getLba(), a.getLba());
-            assertEquals(e.getValue(), a.getValue());
-        }
+        assertEqualBuffers(expected, processor);
     }
 
     @Test
@@ -536,18 +473,11 @@ class BufferProcessorTest {
                 new CmdData(ERASE, 0, "4")
         );
 
-        assertEquals(expected.size(), processor.getBuffer().size());
-        for (int i = 0; i < expected.size(); i++) {
-            CmdData e = expected.get(i);
-            CmdData a = processor.getBuffer().get(i);
-            assertEquals(e.getCommand(), a.getCommand());
-            assertEquals(e.getLba(), a.getLba());
-            assertEquals(e.getValue(), a.getValue());
-        }
+        assertEqualBuffers(expected, processor);
     }
 
     @Test
-    @DisplayName("Test 42: Buffer Verification Test 10: Contained erase is ignored")
+    @DisplayName("Test 42: Buffer Verification Test 11")
     void bufferVerificationTest_11() {
         BufferProcessor processor = new BufferProcessor();
         processor.process(new CmdData(ERASE, 0, "10"));
@@ -562,6 +492,29 @@ class BufferProcessorTest {
                 new CmdData(WRITE, 15, "0x12121212")
         );
 
+        assertEqualBuffers(expected, processor);
+    }
+
+    @Test
+    @DisplayName("Test 43: Buffer Verification Test 12")
+    void bufferVerificationTest_12() {
+        BufferProcessor processor = new BufferProcessor();
+        processor.process(new CmdData(WRITE, 1, "0x12341234"));
+        processor.process(new CmdData(ERASE, 5, "3"));
+        processor.process(new CmdData(WRITE, 5, "0x12312312"));
+        processor.process(new CmdData(ERASE, 6, "5"));
+
+        List<CmdData> expected = List.of(
+                new CmdData(WRITE, 1, "0x12341234"),
+                new CmdData(ERASE, 5, "3"),
+                new CmdData(WRITE, 5, "0x12312312"),
+                new CmdData(ERASE, 6, "5")
+        );
+
+        assertEqualBuffers(expected, processor);
+    }
+
+    private void assertEqualBuffers(List<CmdData> expected, BufferProcessor processor) {
         assertEquals(expected.size(), processor.getBuffer().size());
         for (int i = 0; i < expected.size(); i++) {
             CmdData e = expected.get(i);
